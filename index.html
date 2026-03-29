@@ -1412,8 +1412,8 @@ function renderDropdown(q) {
           <div class="dd-name">${item.name}</div>
           <div class="dd-meta">${item.meta}</div>
         </div>${pill}`;
-      // clicking a row opens overlay pre-filtered to the same chip tab
-      d.onclick = (e) => { e.stopPropagation(); openOverlay(q, ddActiveChip); };
+      // clicking a row goes directly to the detail page — no intermediate overlay
+      d.onclick = (e) => { e.stopPropagation(); gsDrop.classList.remove('open'); navigateTo(item); };
       grp.appendChild(d);
     });
     gsDrop.insertBefore(grp, footer);
@@ -1512,8 +1512,8 @@ function openOverlay(q, tabHint) {
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────
-gsInput.value = 'Facility';
-renderDropdown('Facility');
+gsInput.value = '';
+
 </script>
 <!-- DETAIL PAGE -->
 <div id="detailPage" style="display:none;position:fixed;inset:0;background:var(--secondary-100);z-index:300;overflow-y:auto;flex-direction:column;">
