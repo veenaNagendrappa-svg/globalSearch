@@ -885,10 +885,7 @@
       <div class="op-tab" data-tab="request">Requests</div>
     </div>
     <div class="op-body">
-      <div class="op-results" id="opResults"></div>
-      <div class="op-panel" id="opPanel">
-        <div style="color:var(--secondary-500);font-size:12px;margin-top:20px;text-align:center;">Select a result to preview</div>
-      </div>
+      <div class="op-results" id="opResults" style="flex:1;border-right:none;"></div>
     </div>
     <div class="op-hints">
       <div class="op-hint"><kbd>↑↓</kbd> Navigate</div>
@@ -903,7 +900,7 @@
 
 const DATA = {
   student: [
-    { id:'s1', initials:'RL', name:'Raquel Lacey',     meta:'Deakin · BN Year 1 · Aged Care Nursing · Week 13',      pill:'Active',            pillClass:'pill-active',
+    { id:'s1', initials:'RL', name:'Raquel Lacey',     meta:'Deakin · BN Year 1 · Aged Care',        pill:'Active',            pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Discipline',         v:'Aged Care Nursing'},
@@ -914,7 +911,7 @@ const DATA = {
         {l:'Roster',             v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s2', initials:'RR', name:'Raquel Racey',     meta:'Deakin · BN Year 1 · Aged Care Nursing · Week 13',      pill:'Active',            pillClass:'pill-active',
+    { id:'s2', initials:'RR', name:'Raquel Racey',     meta:'Deakin · BN Year 1 · Aged Care',        pill:'Active',            pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Discipline',         v:'Aged Care Nursing'},
@@ -925,7 +922,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s3', initials:'RC', name:'Raquel Chriz',     meta:'Deakin · BN Year 1 · Aged Care Nursing · Week 13',      pill:'Supervisor needed',  pillClass:'pill-error',
+    { id:'s3', initials:'RC', name:'Raquel Chriz',     meta:'Deakin · BN Year 1 · Aged Care',        pill:'Supervisor needed',  pillClass:'pill-error',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Discipline',         v:'Aged Care Nursing'},
@@ -936,7 +933,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor'] }},
-    { id:'s4', initials:'RS', name:'Raquel Student',   meta:'La Trobe · Midwifery · Antenatal · Week 31',            pill:'No course',         pillClass:'pill-warning',
+    { id:'s4', initials:'RS', name:'Raquel Student',   meta:'La Trobe · Midwifery',                  pill:'No course',         pillClass:'pill-warning',
       panel:{ type:'Student', sub:'No course assigned', fields:[
         {l:'Education provider', v:'La Trobe University'},
         {l:'Discipline',         v:'Midwifery'},
@@ -947,7 +944,7 @@ const DATA = {
         {l:'Roster',             v:'Not specified'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','View roster'] }},
-    { id:'s5', initials:'JM', name:'James Mitchell',   meta:'Monash · BN Year 2 · Physiotherapy · Week 6',           pill:'Active',            pillClass:'pill-active',
+    { id:'s5', initials:'JM', name:'James Mitchell',   meta:'Monash · BN Year 2 · Physiotherapy',    pill:'Active',            pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 2', fields:[
         {l:'Education provider', v:'Monash University'},
         {l:'Discipline',         v:'Physiotherapy'},
@@ -958,7 +955,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s6', initials:'SP', name:'Sarah Patel',      meta:'Melbourne Uni · MN Year 1 · Allied Health · Week 8',    pill:'Pending',           pillClass:'pill-warning',
+    { id:'s6', initials:'SP', name:'Sarah Patel',      meta:'Melbourne Uni · MN Year 1',             pill:'Pending',           pillClass:'pill-warning',
       panel:{ type:'Student', sub:'MN Year 1', fields:[
         {l:'Education provider', v:'University of Melbourne'},
         {l:'Discipline',         v:'Allied Health assistance'},
@@ -971,7 +968,7 @@ const DATA = {
       ], actions:['View student profile','Assign to placement'] }},
   ],
   placement: [
-    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', meta:'Aged Care Nursing · Raquel Lacey · 01/01/2026 – 31/10/2026',      pill:'Active',           pillClass:'pill-active',
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', meta:'Aged Care Nursing · Raquel Lacey',        pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Facility Centre'},
@@ -982,7 +979,7 @@ const DATA = {
         {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        meta:'Aged Care Nursing · Raquel Racey, Raquel Chriz · 01/01/2026 – 31/12/2026', pill:'Active',  pillClass:'pill-active',
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        meta:'Aged Care Nursing · Raquel Racey, Raquel Chriz', pill:'Active',  pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP HealthCare Ward', cls:'link'},
         {l:'Ward / unit',     v:'Ward 1 Centre'},
@@ -993,7 +990,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          meta:'Midwifery · Raquel Student · 30/08/2025 – 08/03/2027',              pill:'Active',           pillClass:'pill-active',
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          meta:'Midwifery · Raquel Student',             pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
         {l:'Agency',          v:'8131 Educ Cycle 2', cls:'link'},
         {l:'Ward / unit',     v:'Antenatal'},
@@ -1004,7 +1001,7 @@ const DATA = {
         {l:'Roster',          v:'Not specified'},
         {l:'Outstanding',     v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    meta:'Allied Health · James Mitchell · 16/02/2026 – 30/04/2026',          pill:'Roster required',  pillClass:'pill-warning',
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    meta:'Allied Health · James Mitchell',         pill:'Roster required',  pillClass:'pill-warning',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Prerequisite (10208)'},
@@ -1015,7 +1012,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       meta:'Emergency Nursing · Sarah Patel · 01/03/2026 – 31/08/2026',         pill:'Active',           pillClass:'pill-active',
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       meta:'Emergency Nursing · Sarah Patel',        pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
         {l:'Agency',          v:'St Vincents Hospital', cls:'link'},
         {l:'Ward / unit',     v:'Intensive Care Unit'},
@@ -1028,87 +1025,147 @@ const DATA = {
       ], actions:['View placement','Edit placement','View roster','Approve timesheet'] }},
   ],
   personnel: [
-    { id:'pe1', initials:'5419', name:'Personnel HEI 5419',    meta:'La Trobe · Midwifery Supervisor · Raquel Student · 1 active placement',         pill:'Active', pillClass:'pill-active',
+    { id:'pe1', initials:'RA', name:'Rachel Andrews',        meta:'Royal Melbourne · Agency Supervisor',       pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
+        {l:'Organisation',        v:'Royal Melbourne Hospital'},
+        {l:'Role',                v:'Agency Supervisor'},
+        {l:'Discipline area',     v:'Aged Care Nursing'},
+        {l:'Active placements',   v:'3', cls:'link'},
+        {l:'Students supervised', v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
+        {l:'Prerequisite status', v:'Completed'},
+        {l:'Contact',             v:'r.andrews@rmh.org.au'},
+      ], actions:['View profile','View supervised placements','Send message'] }},
+    { id:'pe2', initials:'RB', name:'Ramon Baxter',          meta:'RP Health Care · Agency Supervisor',        pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
+        {l:'Organisation',        v:'RP Health Care Facility'},
+        {l:'Role',                v:'Agency Supervisor – Allied Health'},
+        {l:'Discipline area',     v:'Allied Health, Physiotherapy'},
+        {l:'Active placements',   v:'2', cls:'link'},
+        {l:'Students supervised', v:'James Mitchell', cls:'link'},
+        {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
+        {l:'Contact',             v:'r.baxter@rphealthcare.com.au'},
+      ], actions:['View profile','View supervised placements','Send message'] }},
+    { id:'pe3', initials:'5419', name:'Personnel HEI 5419',  meta:'La Trobe · Midwifery Supervisor',           pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
         {l:'Organisation',        v:'La Trobe University'},
-        {l:'Role',                v:'Agency Supervisor'},
+        {l:'Role',                v:'Agency Supervisor – Midwifery'},
+        {l:'Discipline area',     v:'Midwifery'},
         {l:'Active placements',   v:'1 (Antenatal)', cls:'link'},
         {l:'Students supervised', v:'Raquel Student', cls:'link'},
-        {l:'Discipline area',     v:'Midwifery'},
         {l:'Prerequisite status', v:'Completed'},
         {l:'Contact',             v:'personnel5419@latrobe.edu.au'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe2', initials:'LT',   name:'Dr. Linda Tran',         meta:'St Vincents · ICU Supervisor · Sarah Patel, James Mitchell · 2 active placements', pill:'Active', pillClass:'pill-active',
+    { id:'pe4', initials:'LT', name:'Dr. Linda Tran',        meta:'St Vincents · ICU Supervisor',              pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
         {l:'Organisation',        v:'St Vincents Hospital'},
         {l:'Role',                v:'ICU Charge Nurse / Supervisor'},
+        {l:'Discipline area',     v:'Emergency Nursing, Physiotherapy'},
         {l:'Active placements',   v:'2', cls:'link'},
         {l:'Students supervised', v:'Sarah Patel, James Mitchell', cls:'link'},
-        {l:'Discipline area',     v:'Emergency Nursing, Physiotherapy'},
         {l:'Prerequisite status', v:'Completed'},
         {l:'Contact',             v:'l.tran@svh.org.au'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe3', initials:'MK',   name:'Mark Kowalski',          meta:'Monash Health · Allied Health Supervisor · James Mitchell · 1 active placement', pill:'Active', pillClass:'pill-active',
+    { id:'pe5', initials:'MK', name:'Mark Kowalski',         meta:'Monash Health · EP Supervisor',             pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'EP Supervisor', fields:[
         {l:'Organisation',        v:'Monash Health'},
         {l:'Role',                v:'EP Supervisor – Allied Health'},
+        {l:'Discipline area',     v:'Physiotherapy, Allied Health'},
         {l:'Active placements',   v:'1 (Physiotherapy)', cls:'link'},
         {l:'Students supervised', v:'James Mitchell', cls:'link'},
-        {l:'Discipline area',     v:'Physiotherapy, Allied Health'},
         {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
         {l:'Contact',             v:'m.kowalski@monashhealth.org'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe4', initials:'AW',   name:'Angela Wong',            meta:'Royal Melbourne · Nursing Supervisor · Raquel Lacey, Raquel Racey, Raquel Chriz · 3 active placements', pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
-        {l:'Organisation',        v:'Royal Melbourne Hospital'},
-        {l:'Role',                v:'Nursing Supervisor'},
-        {l:'Active placements',   v:'3', cls:'link'},
-        {l:'Students supervised', v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
-        {l:'Discipline area',     v:'Aged Care Nursing, General Nursing'},
+    { id:'pe6', initials:'RP', name:'Raj Patel',             meta:'Deakin University · EP Coordinator',        pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'EP Coordinator', fields:[
+        {l:'Organisation',        v:'Deakin University'},
+        {l:'Role',                v:'EP Placement Coordinator'},
+        {l:'Discipline area',     v:'Nursing, Aged Care Nursing'},
+        {l:'Active placements',   v:'4', cls:'link'},
+        {l:'Students supervised', v:'Raquel Lacey, Raquel Racey, Raquel Chriz, Sarah Patel', cls:'link'},
         {l:'Prerequisite status', v:'Completed'},
-        {l:'Contact',             v:'a.wong@rmh.org.au'},
+        {l:'Contact',             v:'r.patel@deakin.edu.au'},
       ], actions:['View profile','View supervised placements','Send message'] }},
   ],
   agency: [
-    { id:'a1', initials:'AG', name:'RP Health Care Facility',  meta:'3 active placements · Allied Health, Nursing, Physiotherapy',   pill:null, pillClass:'',
+    { id:'a1', initials:'RP', name:'RP Health Care Facility',      meta:'Werribee, VIC · 3 active placements · Allied Health, Nursing, Physiotherapy',  pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'RP Health Care Centre, Victoria'},
-        {l:'Type',               v:'Allied Health, Nursing'},
+        {l:'Location',           v:'Werribee, Victoria'},
+        {l:'Disciplines',        v:'Allied Health, Nursing, Physiotherapy'},
         {l:'Active placements',  v:'3', cls:'link'},
         {l:'Active students',    v:'Raquel Lacey, James Mitchell', cls:'link'},
-        {l:'Supervisors',        v:'Not allocated (2 needed)', cls:'err'},
+        {l:'Supervisors',        v:'Ramon Baxter', cls:'link'},
         {l:'Open requests',      v:'2'},
         {l:'Agreement status',   v:'Current – expires 30/06/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a2', initials:'AG', name:'RP HealthCare Ward',        meta:'2 active placements · Aged Care Nursing',                       pill:null, pillClass:'',
+    { id:'a2', initials:'RP', name:'RP HealthCare Ward',           meta:'Werribee, VIC · 2 active placements · Aged Care Nursing',                      pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'RP HealthCare Complex, Victoria'},
-        {l:'Type',               v:'Aged Care Nursing'},
+        {l:'Location',           v:'Werribee, Victoria'},
+        {l:'Disciplines',        v:'Aged Care Nursing'},
         {l:'Active placements',  v:'2 (Ward 1 Centre)', cls:'link'},
         {l:'Active students',    v:'Raquel Racey, Raquel Chriz', cls:'link'},
         {l:'Supervisors',        v:'Not allocated', cls:'err'},
         {l:'Open requests',      v:'0'},
         {l:'Agreement status',   v:'Current – expires 31/12/2026'},
       ], actions:['View agency','View placements','View requests'] }},
-    { id:'a3', initials:'AG', name:'St Vincents Hospital',      meta:'2 active placements · Emergency, ICU',                          pill:null, pillClass:'',
+    { id:'a3', initials:'SV', name:'St Vincents Hospital',         meta:'Fitzroy, VIC · 2 active placements · Emergency Nursing, ICU',                  pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
         {l:'Location',           v:'Fitzroy, Victoria'},
-        {l:'Type',               v:'Emergency Nursing, ICU'},
+        {l:'Disciplines',        v:'Emergency Nursing, ICU'},
         {l:'Active placements',  v:'2', cls:'link'},
         {l:'Active students',    v:'Sarah Patel', cls:'link'},
         {l:'Supervisors',        v:'Dr. Linda Tran', cls:'link'},
         {l:'Open requests',      v:'1'},
         {l:'Agreement status',   v:'Current – expires 30/06/2027'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a4', initials:'AG', name:'Royal Melbourne Hospital',  meta:'5 active placements · General Nursing, Midwifery',              pill:null, pillClass:'',
+    { id:'a4', initials:'RM', name:'Royal Melbourne Hospital',     meta:'Parkville, VIC · 5 active placements · General Nursing, Midwifery',             pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
         {l:'Location',           v:'Parkville, Victoria'},
-        {l:'Type',               v:'General Nursing, Midwifery, Allied Health'},
+        {l:'Disciplines',        v:'General Nursing, Midwifery, Allied Health'},
         {l:'Active placements',  v:'5', cls:'link'},
-        {l:'Active students',    v:'Multiple – see placements', cls:'link'},
-        {l:'Supervisors',        v:'Angela Wong + 2 others', cls:'link'},
+        {l:'Active students',    v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
+        {l:'Supervisors',        v:'Rachel Andrews', cls:'link'},
         {l:'Open requests',      v:'3'},
         {l:'Agreement status',   v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a5', initials:'MH', name:'Monash Health',                meta:'Clayton, VIC · 4 active placements · Allied Health, Physiotherapy',             pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'Clayton, Victoria'},
+        {l:'Disciplines',        v:'Allied Health, Physiotherapy, General Nursing'},
+        {l:'Active placements',  v:'4', cls:'link'},
+        {l:'Active students',    v:'James Mitchell, Sarah Patel', cls:'link'},
+        {l:'Supervisors',        v:'Mark Kowalski', cls:'link'},
+        {l:'Open requests',      v:'2'},
+        {l:'Agreement status',   v:'Current – expires 28/02/2027'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a6', initials:'AU', name:'Austin Health',                meta:'Heidelberg, VIC · 2 active placements · General Nursing, Midwifery',            pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'Heidelberg, Victoria'},
+        {l:'Disciplines',        v:'General Nursing, Midwifery'},
+        {l:'Active placements',  v:'2', cls:'link'},
+        {l:'Active students',    v:'1 student – see placements', cls:'link'},
+        {l:'Supervisors',        v:'Raj Patel', cls:'link'},
+        {l:'Open requests',      v:'1'},
+        {l:'Agreement status',   v:'Current – expires 30/06/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a7', initials:'AL', name:'Albury Wodonga Health',        meta:'Albury, NSW/VIC · 1 active placement · Rural Nursing',                         pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'Albury, NSW / Wodonga, VIC'},
+        {l:'Disciplines',        v:'Rural Nursing, General Nursing'},
+        {l:'Active placements',  v:'1', cls:'link'},
+        {l:'Active students',    v:'No student assigned', cls:'err'},
+        {l:'Supervisors',        v:'Not allocated', cls:'err'},
+        {l:'Open requests',      v:'0'},
+        {l:'Agreement status',   v:'Expiring – 30/04/2026', cls:'err'},
+      ], actions:['View agency','View placements','View agreements'] }},
+    { id:'a8', initials:'BH', name:'Ballarat Health Services',     meta:'Ballarat, VIC · 3 active placements · Aged Care, General Nursing',              pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'Ballarat, Victoria'},
+        {l:'Disciplines',        v:'Aged Care Nursing, General Nursing'},
+        {l:'Active placements',  v:'3', cls:'link'},
+        {l:'Active students',    v:'2 students – see placements', cls:'link'},
+        {l:'Supervisors',        v:'Rachel Andrews (acting)', cls:'link'},
+        {l:'Open requests',      v:'1'},
+        {l:'Agreement status',   v:'Current – expires 31/12/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
   ],
   request: [
@@ -1214,7 +1271,8 @@ function search(q, entityTypeHint) {
     // Panel field values — only search key identifying fields, not all
     if (e.panel && e.panel.fields) {
       const keyFields = e.panel.fields.filter(f =>
-        ['Student','Students','Education provider','Discipline','Agency','Organisation','Role'].includes(f.l)
+        ['Student','Students','Education provider','Discipline','Disciplines',
+         'Agency','Organisation','Role','Location','Active students','Supervisors'].includes(f.l)
       );
       if (keyFields.some(f => f.v.toLowerCase().includes(q))) return true;
     }
@@ -1280,35 +1338,13 @@ function renderResults(q, tab) {
     opResults.appendChild(div);
   });
 
-  // Auto-select first
-  if (firstItem) renderPanel(firstItem.item);
+  // No auto-select — clicks navigate to detail page
 }
 
-// ── RENDER PANEL ───────────────────────────────────────────────────────────
-function renderPanel(item) {
-  const p = item.panel;
-  const fields = p.fields.map(f =>
-    `<div class="sump-field">
-      <div class="sump-lbl">${f.l}</div>
-      <div class="sump-val${f.cls ? ' '+f.cls : ''}">${f.v}</div>
-    </div>`
-  ).join('');
-
-  const actions = p.actions.map(a =>
-    `<button class="sump-btn${PANEL_ACTIONS_CLASS[a]==='primary' ? ' primary' : ''}">${a}</button>`
-  ).join('');
-
-  opPanel.innerHTML = `
-    <div class="sump-name">${item.name}</div>
-    <div class="sump-sub">${p.type} · ${p.sub}</div>
-    ${fields}
-    <div class="sump-actions">${actions}</div>`;
-}
+// ── RENDER PANEL (removed — click navigates to detail page) ───────────────
 
 function selectItem(el, item) {
-  document.querySelectorAll('.op-item').forEach(i => i.classList.remove('sel'));
-  el.classList.add('sel');
-  renderPanel(item);
+  navigateTo(item);
 }
 
 // ── OVERLAY OPEN / CLOSE ───────────────────────────────────────────────────
@@ -1478,6 +1514,319 @@ function openOverlay(q, tabHint) {
 // ── INIT ───────────────────────────────────────────────────────────────────
 gsInput.value = 'Facility';
 renderDropdown('Facility');
+</script>
+<!-- DETAIL PAGE -->
+<div id="detailPage" style="display:none;position:fixed;inset:0;background:var(--secondary-100);z-index:300;overflow-y:auto;flex-direction:column;">
+
+  <!-- Detail top nav — same as main nav but with back button -->
+  <div style="height:var(--top-h);background:var(--primary-900);display:flex;align-items:center;padding:0 16px;gap:14px;flex-shrink:0;">
+    <button onclick="closeDetailPage()" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:4px;padding:0 12px;height:28px;color:var(--white);font-family:var(--font-body);font-size:12px;cursor:pointer;">
+      ← Back to search
+    </button>
+    <div id="detailBreadcrumb" style="font-size:12px;color:rgba(255,255,255,0.6);"></div>
+  </div>
+
+  <!-- Breadcrumb bar -->
+  <div style="background:var(--white);border-bottom:1px solid var(--secondary-300);padding:8px 24px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--secondary-700);">
+    <span style="color:var(--primary-700);cursor:pointer">Home</span>
+    <span>›</span>
+    <span style="color:var(--primary-700);cursor:pointer">Administration</span>
+    <span>›</span>
+    <span id="detailBreadcrumb2" style="color:var(--primary-700);cursor:pointer"></span>
+    <span>›</span>
+    <span id="detailPageTitle" style="color:var(--secondary-700)"></span>
+  </div>
+
+  <div style="display:flex;flex:1;">
+
+    <!-- Left nav (same icon nav) -->
+    <nav class="leftnav" style="flex-shrink:0;">
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9.5L10 3l7 6.5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/></svg><span class="ln-label">Home</span></a>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg><span class="ln-label">Dashboard</span></a>
+      <div class="ln-divider"></div>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14l4-4 3 3 5-6"/></svg><span class="ln-label">Capacity</span></a>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h6l4 3v-3h4a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/></svg><span class="ln-label">Request</span></a>
+      <a class="ln-item active" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6"/></svg><span class="ln-label">Placement</span></a>
+      <div class="ln-divider"></div>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 2h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M7 7h6M7 10h6M7 13h4"/></svg><span class="ln-label">Report</span></a>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="16" height="11" rx="1.5"/><path d="M2 9h16"/></svg><span class="ln-label">Payment</span></a>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h16v10H2z"/><path d="M6 14l-3 3v-3"/></svg><span class="ln-label">Comms</span></a>
+      <div class="ln-divider"></div>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7"/></svg><span class="ln-label">Admin</span></a>
+      <a class="ln-item" href="#"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4"/></svg><span class="ln-label">Config</span></a>
+    </nav>
+
+    <!-- Main detail content -->
+    <div style="flex:1;overflow-y:auto;background:var(--secondary-100);" id="detailContent"></div>
+
+  </div>
+</div>
+
+<style>
+  /* Detail page tabs */
+  .dp-tabs { display:flex; background:var(--white); border-bottom:1px solid var(--secondary-300); padding:0 24px; }
+  .dp-tab { font-size:13px; font-weight:500; padding:12px 18px; cursor:pointer; color:var(--secondary-700); border-bottom:2px solid transparent; transition:all 0.15s; }
+  .dp-tab:hover { color:var(--primary-900); }
+  .dp-tab.on { color:var(--primary-700); border-bottom-color:var(--primary-700); }
+  /* Detail page form sections */
+  .dp-main { padding:20px 24px; max-width:900px; }
+  .dp-section { background:var(--white); border:1px solid var(--secondary-300); border-radius:4px; padding:16px 20px; margin-bottom:14px; }
+  .dp-section-title { font-size:13px; font-weight:500; color:var(--primary-900); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--secondary-200); }
+  .dp-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; }
+  .dp-field { display:flex; flex-direction:column; gap:4px; }
+  .dp-label { font-size:11px; font-weight:500; color:var(--secondary-700); }
+  .dp-value { font-size:13px; color:var(--primary-900); background:var(--secondary-100); border:1px solid var(--secondary-300); border-radius:4px; padding:6px 10px; }
+  .dp-value.empty { color:var(--secondary-500); }
+  .dp-value.err { color:var(--error); background:var(--error-light); border-color:#f5b8b8; }
+  .dp-value.link { color:var(--primary-700); background:var(--primary-050); border-color:var(--primary-200); cursor:pointer; }
+  /* Prerequisite table */
+  .dp-prereq { width:100%; border-collapse:collapse; font-size:12px; }
+  .dp-prereq th { text-align:left; padding:6px 10px; font-size:11px; font-weight:500; color:var(--secondary-700); background:var(--secondary-100); border-bottom:1px solid var(--secondary-300); }
+  .dp-prereq td { padding:8px 10px; border-bottom:1px solid var(--secondary-200); color:var(--primary-900); }
+  .dp-prereq tr:last-child td { border-bottom:none; }
+  /* Avatar */
+  .dp-avatar { width:60px;height:60px;border-radius:50%;background:var(--primary-800);color:var(--white);font-size:20px;font-weight:500;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);flex-shrink:0; }
+  /* Action buttons */
+  .dp-actions { display:flex; gap:10px; padding:16px 24px; background:var(--white); border-top:1px solid var(--secondary-300); }
+</style>
+
+<script>
+// ── DETAIL PAGE ────────────────────────────────────────────────────────────
+
+// Detail page data per entity — mirrors what real pages show
+const DETAIL_PAGES = {
+  s1: () => studentDetailPage({ name:'Raquel Lacey', initials:'RL', code:'RL-2024-001',
+    email:'raquel.lacey@student.deakin.edu.au', status:'Active', firstName:'Raquel', lastName:'Lacey', gender:'Female', dob:'15/03/2002',
+    mobile:'+61 412 345 678', address:'42 Collins Street, Melbourne VIC 3000',
+    ep:'Deakin University', campus:'Burwood', studentCode:'S22448871', discipline:'Nursing', courseType:'Bachelor of Nursing', yearLevel:'Year 1', studentType:'Domestic',
+    epContact:'Raj Patel', epEmail:'r.patel@deakin.edu.au', epPhone:'+61 3 9244 5000',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Completed'},
+      {name:'CPR Certificate',                  status:'Completed'},
+      {name:'Immunisation Record Checklist',    status:'Outstanding'},
+      {name:'COVID Vaccinations (optional)',     status:'Completed'},
+    ],
+    placement:'RP Health Care Facility – Facility Centre', placementDates:'01/01/2026 – 31/10/2026', supervisor:'Not allocated',
+  }),
+  s2: () => studentDetailPage({ name:'Raquel Racey', initials:'RR', code:'RR-2024-002',
+    email:'raquel.racey@student.deakin.edu.au', status:'Active', firstName:'Raquel', lastName:'Racey', gender:'Female', dob:'22/07/2001',
+    mobile:'+61 413 222 333', address:'15 Swanston Street, Melbourne VIC 3000',
+    ep:'Deakin University', campus:'Burwood', studentCode:'S22349901', discipline:'Nursing', courseType:'Bachelor of Nursing', yearLevel:'Year 1', studentType:'Domestic',
+    epContact:'Raj Patel', epEmail:'r.patel@deakin.edu.au', epPhone:'+61 3 9244 5000',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Completed'},
+      {name:'CPR Certificate',                  status:'Completed'},
+      {name:'Immunisation Record Checklist',    status:'Completed'},
+      {name:'COVID Vaccinations (optional)',     status:'Outstanding'},
+    ],
+    placement:'RP HealthCare Ward – Ward 1 Centre', placementDates:'01/01/2026 – 31/12/2026', supervisor:'Not allocated',
+  }),
+  s3: () => studentDetailPage({ name:'Raquel Chriz', initials:'RC', code:'RC-2024-003',
+    email:'raquel.chriz@student.deakin.edu.au', status:'Active', firstName:'Raquel', lastName:'Chriz', gender:'Female', dob:'08/11/2002',
+    mobile:'+61 400 111 222', address:'77 Elizabeth Street, Melbourne VIC 3000',
+    ep:'Deakin University', campus:'Geelong', studentCode:'S22501234', discipline:'Nursing', courseType:'Bachelor of Nursing', yearLevel:'Year 1', studentType:'Domestic',
+    epContact:'Raj Patel', epEmail:'r.patel@deakin.edu.au', epPhone:'+61 3 9244 5000',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Outstanding'},
+      {name:'CPR Certificate',                  status:'Outstanding'},
+      {name:'Immunisation Record Checklist',    status:'Completed'},
+      {name:'COVID Vaccinations (optional)',     status:'Completed'},
+    ],
+    placement:'RP HealthCare Ward – Ward 1 Centre', placementDates:'01/01/2026 – 31/12/2026', supervisor:'Not allocated',
+  }),
+  s4: () => studentDetailPage({ name:'Raquel Student', initials:'RS', code:'RS-2024-004',
+    email:'raquel.student@student.latrobe.edu.au', status:'Active', firstName:'Raquel', lastName:'Student', gender:'Female', dob:'30/05/2000',
+    mobile:'+61 488 777 666', address:'33 La Trobe Street, Melbourne VIC 3000',
+    ep:'La Trobe University', campus:'Bundoora', studentCode:'19876543', discipline:'Midwifery', courseType:'Bachelor of Midwifery', yearLevel:'Not Specified', studentType:'Domestic',
+    epContact:'Personnel HEI 5419', epEmail:'personnel5419@latrobe.edu.au', epPhone:'+61 3 9479 1234',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Completed'},
+      {name:'CPR Certificate',                  status:'Completed'},
+      {name:'Immunisation Record Checklist',    status:'Completed'},
+      {name:'COVID Vaccinations (optional)',     status:'Completed'},
+    ],
+    placement:'Antenatal – La Trobe', placementDates:'30/08/2025 – 08/03/2027', supervisor:'Personnel HEI 5419',
+  }),
+  s5: () => studentDetailPage({ name:'James Mitchell', initials:'JM', code:'JM-2024-005',
+    email:'james.mitchell@student.monash.edu', status:'Active', firstName:'James', lastName:'Mitchell', gender:'Male', dob:'12/09/2001',
+    mobile:'+61 455 888 999', address:'18 Wellington Road, Clayton VIC 3168',
+    ep:'Monash University', campus:'Clayton', studentCode:'30912345', discipline:'Physiotherapy', courseType:'Bachelor of Physiotherapy', yearLevel:'Year 2', studentType:'Domestic',
+    epContact:'Mark Kowalski', epEmail:'m.kowalski@monashhealth.org', epPhone:'+61 3 9902 4000',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Completed'},
+      {name:'CPR Certificate',                  status:'Outstanding'},
+      {name:'Immunisation Record Checklist',    status:'Completed'},
+      {name:'COVID Vaccinations (optional)',     status:'Completed'},
+    ],
+    placement:'10208 – RP Health Care (Physiotherapy)', placementDates:'16/02/2026 – 30/04/2026', supervisor:'Not allocated',
+  }),
+  s6: () => studentDetailPage({ name:'Sarah Patel', initials:'SP', code:'SP-2024-006',
+    email:'sarah.patel@student.unimelb.edu.au', status:'Pending', firstName:'Sarah', lastName:'Patel', gender:'Female', dob:'04/06/2003',
+    mobile:'+61 422 333 444', address:'9 Grattan Street, Carlton VIC 3053',
+    ep:'University of Melbourne', campus:'Parkville', studentCode:'10088765', discipline:'Allied Health', courseType:'Master of Nursing', yearLevel:'Year 1', studentType:'Domestic',
+    epContact:'Raj Patel', epEmail:'r.patel@deakin.edu.au', epPhone:'+61 3 9244 5000',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Outstanding'},
+      {name:'CPR Certificate',                  status:'Outstanding'},
+      {name:'Immunisation Record Checklist',    status:'Outstanding'},
+      {name:'COVID Vaccinations (optional)',     status:'Outstanding'},
+    ],
+    placement:'Not yet assigned', placementDates:'TBC', supervisor:'Not allocated',
+  }),
+};
+
+function studentDetailPage(d) {
+  const prereqRows = d.prereqs.map(p => `
+    <tr>
+      <td>${p.name}</td>
+      <td><span class="status-pill ${p.status==='Completed'?'pill-active':p.status==='Outstanding'?'pill-error':'pill-warning'}">${p.status}</span></td>
+    </tr>`).join('');
+
+  return `
+    <div style="display:flex;align-items:center;gap:16px;background:var(--white);padding:16px 24px;border-bottom:1px solid var(--secondary-300);">
+      <div class="dp-avatar">${d.initials}</div>
+      <div>
+        <div style="font-size:18px;font-weight:500;color:var(--primary-900)">${d.name}</div>
+        <div style="font-size:12px;color:var(--secondary-700);margin-top:2px">${d.ep} · ${d.discipline} · ${d.yearLevel}</div>
+        <div style="margin-top:6px"><span class="status-pill ${d.status==='Active'?'pill-active':'pill-warning'}">${d.status}</span></div>
+      </div>
+    </div>
+    <div class="dp-tabs">
+      <div class="dp-tab on">Details</div>
+      <div class="dp-tab">Account</div>
+      <div class="dp-tab">Placement</div>
+      <div class="dp-tab">Documents</div>
+    </div>
+    <div class="dp-main">
+      <div class="dp-section">
+        <div class="dp-section-title">General</div>
+        <div class="dp-grid">
+          <div class="dp-field"><div class="dp-label">Email</div><div class="dp-value">${d.email}</div></div>
+          <div class="dp-field"><div class="dp-label">Active Status</div><div class="dp-value">${d.status}</div></div>
+          <div class="dp-field"><div class="dp-label">First Name</div><div class="dp-value">${d.firstName}</div></div>
+          <div class="dp-field"><div class="dp-label">Last Name</div><div class="dp-value">${d.lastName}</div></div>
+          <div class="dp-field"><div class="dp-label">Gender</div><div class="dp-value">${d.gender}</div></div>
+          <div class="dp-field"><div class="dp-label">Date of Birth</div><div class="dp-value">${d.dob}</div></div>
+        </div>
+      </div>
+      <div class="dp-section">
+        <div class="dp-section-title">Contact</div>
+        <div class="dp-grid">
+          <div class="dp-field"><div class="dp-label">Mobile Phone</div><div class="dp-value">${d.mobile}</div></div>
+          <div class="dp-field"><div class="dp-label">Address</div><div class="dp-value">${d.address}</div></div>
+        </div>
+      </div>
+      <div class="dp-section">
+        <div class="dp-section-title">Education Provider</div>
+        <div class="dp-grid">
+          <div class="dp-field"><div class="dp-label">Education Provider</div><div class="dp-value link">${d.ep}</div></div>
+          <div class="dp-field"><div class="dp-label">Campus</div><div class="dp-value">${d.campus}</div></div>
+          <div class="dp-field"><div class="dp-label">Student Code</div><div class="dp-value">${d.studentCode}</div></div>
+          <div class="dp-field"><div class="dp-label">Discipline</div><div class="dp-value">${d.discipline}</div></div>
+          <div class="dp-field"><div class="dp-label">Course Type</div><div class="dp-value">${d.courseType}</div></div>
+          <div class="dp-field"><div class="dp-label">Year Level</div><div class="dp-value">${d.yearLevel}</div></div>
+          <div class="dp-field"><div class="dp-label">Student Type</div><div class="dp-value">${d.studentType}</div></div>
+        </div>
+      </div>
+      <div class="dp-section">
+        <div class="dp-section-title">Education Provider Contact</div>
+        <div class="dp-grid">
+          <div class="dp-field"><div class="dp-label">Name</div><div class="dp-value link">${d.epContact}</div></div>
+          <div class="dp-field"><div class="dp-label">Contact Email</div><div class="dp-value">${d.epEmail}</div></div>
+          <div class="dp-field"><div class="dp-label">Contact Phone</div><div class="dp-value">${d.epPhone}</div></div>
+        </div>
+      </div>
+      <div class="dp-section">
+        <div class="dp-section-title">Current Placement</div>
+        <div class="dp-grid">
+          <div class="dp-field"><div class="dp-label">Placement</div><div class="dp-value ${d.placement==='Not yet assigned'?'err':'link'}">${d.placement}</div></div>
+          <div class="dp-field"><div class="dp-label">Placement Dates</div><div class="dp-value">${d.placementDates}</div></div>
+          <div class="dp-field"><div class="dp-label">Supervisor</div><div class="dp-value ${d.supervisor==='Not allocated'?'err':'link'}">${d.supervisor}</div></div>
+        </div>
+      </div>
+      <div class="dp-section">
+        <div class="dp-section-title">Prerequisites</div>
+        <table class="dp-prereq">
+          <thead><tr><th>Name</th><th>Status</th></tr></thead>
+          <tbody>${prereqRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dp-actions">
+      <button class="btn btn-primary">Save</button>
+      <button class="btn btn-outline" onclick="closeDetailPage()">Cancel</button>
+    </div>`;
+}
+
+// Generic detail page for non-student entities
+function genericDetailPage(item) {
+  const p = item.panel;
+  const fields = p.fields.map(f => `
+    <div class="dp-field">
+      <div class="dp-label">${f.l}</div>
+      <div class="dp-value${f.cls?' '+f.cls:''}">${f.v}</div>
+    </div>`).join('');
+  return `
+    <div style="display:flex;align-items:center;gap:16px;background:var(--white);padding:16px 24px;border-bottom:1px solid var(--secondary-300);">
+      <div class="dp-avatar" style="background:${
+        item.entityType==='placement'?'var(--success-dark)':
+        item.entityType==='personnel'?'var(--other-dark)':
+        item.entityType==='agency'?'#5a3e00':
+        'var(--error-dark)'}">${item.initials}</div>
+      <div>
+        <div style="font-size:18px;font-weight:500;color:var(--primary-900)">${item.name}</div>
+        <div style="font-size:12px;color:var(--secondary-700);margin-top:2px">${p.type} · ${p.sub}</div>
+        ${item.pill?`<div style="margin-top:6px"><span class="status-pill ${item.pillClass}">${item.pill}</span></div>`:''}
+      </div>
+    </div>
+    <div class="dp-main">
+      <div class="dp-section">
+        <div class="dp-section-title">Details</div>
+        <div class="dp-grid">${fields}</div>
+      </div>
+    </div>
+    <div class="dp-actions">
+      <button class="btn btn-outline" onclick="closeDetailPage()">← Back to search</button>
+    </div>`;
+}
+
+function navigateTo(item) {
+  closeOverlay();
+  const dp = document.getElementById('detailPage');
+  const dc = document.getElementById('detailContent');
+  const breadcrumb2 = document.getElementById('detailBreadcrumb2');
+  const pageTitle = document.getElementById('detailPageTitle');
+
+  // Set breadcrumb
+  const breadcrumbMap = {
+    student:'Manage Student', placement:'Manage Placement',
+    personnel:'Manage Personnel', agency:'Manage Agency', request:'Manage Request'
+  };
+  if (breadcrumb2) breadcrumb2.textContent = breadcrumbMap[item.entityType] || 'Administration';
+  if (pageTitle) pageTitle.textContent = item.name;
+
+  // Render correct detail page
+  if (DETAIL_PAGES[item.id]) {
+    dc.innerHTML = DETAIL_PAGES[item.id]();
+  } else {
+    dc.innerHTML = genericDetailPage(item);
+  }
+
+  dp.style.display = 'flex';
+  dp.scrollTop = 0;
+
+  // Tab switching within detail page
+  dc.querySelectorAll('.dp-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      dc.querySelectorAll('.dp-tab').forEach(x => x.classList.remove('on'));
+      t.classList.add('on');
+    });
+  });
+}
+
+function closeDetailPage() {
+  document.getElementById('detailPage').style.display = 'none';
+}
 </script>
 </body>
 </html>
