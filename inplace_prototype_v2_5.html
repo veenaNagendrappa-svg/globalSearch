@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InPlace Network — Global Search Prototype v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* Primary palette — from Figma */
+    --primary-900: #00193E;   /* Dark Blue — nav bg, high emphasis text */
+    --primary-800: #003179;   /* Medium dark — nav hover */
+    --primary-700: #0050C7;   /* Bright — buttons, active */
+    --primary-600: #0369FF;
+    --primary-500: #2A80FF;
+    --primary-400: #5298FF;
+    --primary-300: #79AFFF;
+    --primary-200: #A0C6FF;
+    --primary-100: #C7DEFF;
+    --primary-050: #EFF5FF;
+
+    /* Secondary (greys) — from Figma */
+    --secondary-900: #424242;
+    --secondary-800: #5F5F5F;
+    --secondary-700: #7D7D7D;
+    --secondary-600: #A4A4A4;
+    --secondary-500: #C2C2C2;
+    --secondary-400: #D5D5D5;
+    --secondary-300: #DFDFDF;
+    --secondary-200: #E9E9E9;
+    --secondary-100: #F3F3F3;
+    --secondary-050: #FCFCFC;
+
+    /* Accent colours — from Figma */
+    --success:        #5BB85E;
+    --success-dark:   #245225;
+    --success-light:  #E4F3E4;
+    --warning:        #FFC107;
+    --warning-dark:   #FCA000;
+    --warning-light:  #FFF7DF;
+    --error:          #B60000;
+    --error-dark:     #8F0000;
+    --error-light:    #FFEBEB;
+    --other:          #673AB7;
+    --other-dark:     #4527A0;
+    --other-light:    #F9F5FF;
+
+    /* Text — from Figma on-surface/on-primary */
+    --text-high:      rgba(0,25,62,0.87);   /* #00193E at 87% */
+    --text-medium:    rgba(0,25,62,0.74);   /* 74% */
+    --text-disabled:  rgba(0,25,62,0.38);   /* 38% */
+    --text-on-primary: #FFFFFF;
+    --white: #FFFFFF;
+
+    /* Font */
+    --font-body: 'Roboto', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+
+    /* Layout */
+    --top-h: 52px;
+    --leftnav-w: 64px;
+    --sidebar-w: 214px;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--secondary-100);
+    color: var(--text-high);
+    font-size: 13px;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    height: var(--top-h);
+    background: var(--primary-900);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 14px;
+    flex-shrink: 0;
+    z-index: 200;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: var(--primary-700);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+  .logo-text {
+    font-family: var(--font-mono);
+    font-size: 13px; font-weight: 500;
+    color: var(--white);
+    letter-spacing: 0.3px;
+  }
+
+  /* GLOBAL SEARCH */
+  .gs-wrap {
+    flex: 1; max-width: 520px;
+    position: relative;
+  }
+  .gs-input {
+    width: 100%; height: 32px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 0 60px 0 34px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--white);
+    outline: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .gs-input::placeholder { color: rgba(255,255,255,0.5); }
+  .gs-input:focus {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.45);
+  }
+  .gs-icon {
+    position: absolute; left: 9px; top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+  .gs-kbd {
+    position: absolute; right: 8px; top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: var(--font-mono);
+    font-size: 10px; color: rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+
+  /* DROPDOWN */
+  .gs-dropdown {
+    position: absolute; top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--white);
+    border: 1px solid var(--secondary-300);
+    border-radius: 4px;
+    box-shadow: 0 8px 32px rgba(0,25,62,0.16);
+    z-index: 999; overflow: hidden;
+    display: none;
+  }
+  .gs-dropdown.open { display: block; }
+
+  .dd-filters {
+    display: flex; gap: 6px;
+    padding: 8px 12px 7px;
+    border-bottom: 1px solid var(--secondary-200);
+    flex-wrap: wrap;
+  }
+  .dd-chip {
+    font-family: var(--font-body);
+    font-size: 11px; font-weight: 500;
+    padding: 2px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--secondary-300);
+    background: var(--secondary-050);
+    color: var(--secondary-800);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .dd-chip:hover, .dd-chip.on {
+    background: var(--primary-700);
+    color: var(--white);
+    border-color: var(--primary-700);
+  }
+  .dd-chip.assigned {
+    background: var(--warning-light);
+    border-color: var(--warning);
+    color: #5a3e00;
+  }
+  .dd-chip.assigned:hover {
+    background: var(--warning);
+    color: var(--primary-900);
+  }
+
+  .dd-group { padding: 4px 0; }
+  .dd-group + .dd-group { border-top: 1px solid var(--secondary-200); }
+  .dd-glabel {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--secondary-600);
+    padding: 4px 12px 2px;
+  }
+  .dd-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 12px; cursor: pointer;
+    transition: background 0.1s;
+  }
+  .dd-item:hover { background: var(--primary-050); }
+  .dd-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dd-main { flex: 1; min-width: 0; }
+  .dd-name { font-size: 13px; font-weight: 500; color: var(--primary-900); }
+  .dd-meta { font-size: 11px; color: var(--secondary-600); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .status-pill {
+    font-size: 10px; font-weight: 500;
+    padding: 2px 8px; border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .pill-active   { background: var(--success-light); color: var(--success-dark); }
+  .pill-warning  { background: var(--warning-light); color: #5a3e00; }
+  .pill-error    { background: var(--error-light); color: var(--error-dark); }
+
+  .dd-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 12px;
+    border-top: 1px solid var(--secondary-200);
+    background: var(--secondary-100);
+  }
+  .dd-see-all {
+    font-size: 12px; font-weight: 500;
+    color: var(--primary-700); cursor: pointer;
+  }
+  .dd-hint { font-size: 11px; color: var(--secondary-600); }
+
+  /* TOP NAV RIGHT */
+  .tn-right {
+    display: flex; align-items: center; gap: 2px;
+    margin-left: auto; flex-shrink: 0;
+  }
+  .tn-btn {
+    width: 30px; height: 30px;
+    border-radius: 4px; border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.65);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.1s, color 0.1s;
+  }
+  .tn-btn:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+  .tn-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary-700);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+    color: var(--white); cursor: pointer; margin-left: 6px;
+    font-family: var(--font-mono);
+  }
+
+  /* ── BODY ROW ── */
+  .body-row { display: flex; flex: 1; overflow: hidden; }
+
+  /* LEFT ICON NAV */
+  .leftnav {
+    width: var(--leftnav-w);
+    background: var(--primary-800);
+    display: flex; flex-direction: column;
+    align-items: center; padding: 6px 0; gap: 2px;
+    flex-shrink: 0; overflow-y: auto;
+  }
+  .ln-item {
+    width: 52px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    padding: 7px 4px; border-radius: 4px;
+    cursor: pointer; text-decoration: none;
+    color: rgba(255,255,255,0.6);
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+  }
+  .ln-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+  .ln-item.active {
+    background: rgba(255,255,255,0.12);
+    color: var(--white);
+  }
+  .ln-item.active::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; background: var(--warning);
+    border-radius: 0 2px 2px 0;
+  }
+  .ln-label { font-size: 9px; font-weight: 500; letter-spacing: 0.03em; }
+  .ln-badge {
+    position: absolute; top: 4px; right: 4px;
+    background: var(--error); color: var(--white);
+    font-size: 9px; font-weight: 700;
+    border-radius: 8px; padding: 0 3px;
+    min-width: 14px; text-align: center;
+    font-family: var(--font-mono);
+  }
+  .ln-divider { width: 30px; height: 1px; background: rgba(255,255,255,0.1); margin: 3px 0; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--white);
+    border-right: 1px solid var(--secondary-300);
+    overflow-y: auto; flex-shrink: 0;
+    padding: 10px 0;
+  }
+  .sb-title {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--secondary-700);
+    padding: 6px 12px 3px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .sb-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 12px; cursor: pointer;
+    font-size: 12px; color: var(--secondary-800);
+    transition: background 0.1s;
+  }
+  .sb-row:hover { background: var(--primary-050); }
+  .sb-row.alert { color: var(--warning-dark); }
+  .sb-count { font-size: 12px; font-weight: 500; color: var(--secondary-900); }
+  .sb-count.warn { color: var(--warning-dark); }
+  .sb-count.err  { color: var(--error); }
+  .sb-divider { height: 1px; background: var(--secondary-200); margin: 5px 12px; }
+
+  /* MAIN */
+  .main { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .f-input {
+    height: 32px;
+    border: 1px solid var(--secondary-300);
+    border-radius: 4px; padding: 0 10px;
+    font-family: var(--font-body); font-size: 12px;
+    color: var(--text-high); background: var(--white); outline: none;
+    width: 150px;
+  }
+  .f-input:focus { border-color: var(--primary-700); }
+  .f-select {
+    height: 32px;
+    border: 1px solid var(--secondary-300);
+    border-radius: 4px; padding: 0 8px;
+    font-family: var(--font-body); font-size: 12px;
+    color: var(--text-high); background: var(--white); outline: none; cursor: pointer;
+  }
+  .btn {
+    height: 32px; padding: 0 16px;
+    border-radius: 4px; font-family: var(--font-body);
+    font-size: 12px; font-weight: 500; cursor: pointer; border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--primary-700); color: var(--white); }
+  .btn-primary:hover { background: var(--primary-800); }
+  .btn-outline {
+    background: var(--white); color: var(--primary-700);
+    border: 1px solid var(--primary-700);
+  }
+  .btn-outline:hover { background: var(--primary-050); }
+
+  /* STAT CARDS */
+  .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; flex-shrink: 0; }
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--secondary-300);
+    border-radius: 4px; padding: 12px 14px;
+  }
+  .stat-num { font-size: 24px; font-weight: 400; color: var(--primary-900); line-height: 1; margin-bottom: 3px; font-family: var(--font-mono); }
+  .stat-lbl { font-size: 11px; color: var(--secondary-700); }
+
+  /* SECTION HEADER */
+  .sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .sec-title { font-size: 13px; font-weight: 500; color: var(--primary-900); }
+  .week-nav { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--secondary-700); }
+  .wn-btn {
+    width: 22px; height: 22px; border-radius: 3px;
+    border: 1px solid var(--secondary-300); background: var(--white);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--secondary-700); transition: all 0.1s;
+  }
+  .wn-btn:hover { background: var(--primary-050); border-color: var(--primary-700); color: var(--primary-700); }
+  .sec-actions { display: flex; gap: 8px; }
+
+  /* PLACEMENT CARDS */
+  .pl-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .pl-scroll::-webkit-scrollbar { height: 3px; }
+  .pl-scroll::-webkit-scrollbar-track { background: var(--secondary-200); border-radius: 2px; }
+  .pl-scroll::-webkit-scrollbar-thumb { background: var(--secondary-400); border-radius: 2px; }
+
+  .pl-card {
+    min-width: 192px; max-width: 192px;
+    background: var(--white);
+    border: 1px solid var(--secondary-300);
+    border-radius: 4px; padding: 10px;
+    flex-shrink: 0; cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .pl-card:hover { border-color: var(--primary-700); box-shadow: 0 2px 8px rgba(0,80,199,0.1); }
+
+  .pc-week { font-size: 10px; color: var(--secondary-600); font-weight: 400; margin-bottom: 7px; }
+  .pc-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 6px; }
+  .pc-name { font-size: 12px; font-weight: 500; color: var(--primary-900); line-height: 1.3; }
+  .pc-uni  { font-size: 10px; color: var(--secondary-600); margin-top: 1px; }
+  .pc-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--primary-800); color: var(--white);
+    font-size: 11px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-family: var(--font-mono);
+  }
+  .pc-avatar.none { background: var(--secondary-200); color: var(--secondary-600); }
+  .pc-year {
+    display: inline-block; font-size: 10px; font-weight: 400;
+    background: var(--secondary-100); color: var(--secondary-700);
+    padding: 1px 7px; border-radius: 10px; margin-bottom: 5px;
+  }
+  .pc-disc  { font-size: 12px; font-weight: 500; color: var(--primary-900); margin-bottom: 1px; }
+  .pc-sub   { font-size: 10px; color: var(--secondary-600); margin-bottom: 5px; }
+  .pc-loc   { font-size: 10px; color: var(--secondary-700); margin-bottom: 5px; line-height: 1.4; }
+  .pc-alert {
+    font-size: 10px; font-weight: 500; color: var(--error);
+    margin-bottom: 5px; display: flex; align-items: center; gap: 3px;
+  }
+  .pc-dates { font-size: 10px; color: var(--secondary-600); margin-bottom: 5px; }
+  .pc-issue-badge {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    background: var(--warning-light); color: #5a3e00;
+    padding: 1px 7px; border-radius: 3px;
+    border: 1px solid var(--warning); margin-bottom: 5px;
+  }
+
+  .roster-row { display: flex; gap: 3px; margin-bottom: 5px; }
+  .rd { text-align: center; min-width: 26px; }
+  .rd-name { font-size: 9px; color: var(--secondary-500); }
+  .rd-time {
+    font-size: 9px; background: var(--primary-700); color: var(--white);
+    padding: 2px 2px; border-radius: 2px; margin-top: 1px; line-height: 1.3;
+    font-family: var(--font-mono);
+  }
+  .rd-time.off { background: var(--secondary-100); color: var(--secondary-500); }
+
+  .pc-tasks {
+    font-size: 10px; color: var(--secondary-600);
+    padding-top: 5px; border-top: 1px solid var(--secondary-200); margin-top: 3px;
+  }
+  .pc-tasks span { color: var(--secondary-900); font-weight: 500; }
+  .pc-roster-req { font-size: 10px; font-weight: 500; color: var(--error); }
+
+  /* ── FULL SCREEN OVERLAY ── */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,25,62,0.6);
+    z-index: 500;
+    display: none; align-items: flex-start; justify-content: center;
+    padding-top: 72px;
+  }
+  .overlay.open { display: flex; }
+
+  .overlay-panel {
+    width: 760px; max-height: 78vh;
+    background: var(--white);
+    border-radius: 4px;
+    border: 1px solid var(--secondary-300);
+    box-shadow: 0 20px 60px rgba(0,25,62,0.25);
+    overflow: hidden; display: flex; flex-direction: column;
+    animation: fadeUp 0.16s ease;
+  }
+  @keyframes fadeUp {
+    from { transform: translateY(-10px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  .op-search {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--secondary-200);
+  }
+  .op-input {
+    flex: 1; border: none; outline: none;
+    font-family: var(--font-body); font-size: 14px;
+    color: var(--primary-900);
+  }
+  .op-input::placeholder { color: var(--secondary-500); }
+  .op-esc {
+    font-size: 11px; color: var(--secondary-600);
+    background: var(--secondary-100); border: 1px solid var(--secondary-300);
+    border-radius: 3px; padding: 1px 7px; cursor: pointer;
+    font-family: var(--font-mono);
+  }
+
+  .op-tabs {
+    display: flex; gap: 0;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--secondary-200);
+    overflow-x: auto;
+  }
+  .op-tab {
+    font-size: 12px; font-weight: 500;
+    padding: 9px 14px; cursor: pointer;
+    color: var(--secondary-700);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap; transition: all 0.15s;
+  }
+  .op-tab:hover { color: var(--primary-900); }
+  .op-tab.on { color: var(--primary-700); border-bottom-color: var(--primary-700); }
+
+  .op-body { display: flex; flex: 1; overflow: hidden; }
+
+  .op-results { flex: 1; overflow-y: auto; padding: 6px 0; }
+  .op-glabel {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--secondary-600); padding: 6px 14px 3px;
+  }
+  .op-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px; cursor: pointer; transition: background 0.1s;
+  }
+  .op-item:hover, .op-item.sel { background: var(--primary-050); }
+  .op-ico {
+    width: 30px; height: 30px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500; flex-shrink: 0;
+    font-family: var(--font-mono);
+  }
+  .ico-stu  { background: var(--primary-100); color: var(--primary-800); }
+  .ico-pl   { background: var(--success-light); color: var(--success-dark); }
+  .ico-per  { background: var(--other-light); color: var(--other-dark); }
+  .ico-ag   { background: var(--warning-light); color: #5a3e00; }
+  .ico-req  { background: var(--error-light); color: var(--error-dark); }
+  .op-main  { flex: 1; min-width: 0; }
+  .op-name  { font-size: 13px; font-weight: 500; color: var(--primary-900); }
+  .op-meta  { font-size: 11px; color: var(--secondary-600); margin-top: 1px; }
+  .op-divider { height: 1px; background: var(--secondary-200); margin: 4px 14px; }
+
+  /* SUMMARY PANEL */
+  .op-panel {
+    width: 270px; border-left: 1px solid var(--secondary-200);
+    padding: 14px; overflow-y: auto; flex-shrink: 0;
+    background: var(--secondary-050);
+  }
+  .sump-name { font-size: 14px; font-weight: 500; color: var(--primary-900); margin-bottom: 2px; }
+  .sump-sub  { font-size: 11px; color: var(--secondary-700); margin-bottom: 12px; }
+  .sump-field { margin-bottom: 9px; }
+  .sump-lbl  { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--secondary-600); margin-bottom: 2px; }
+  .sump-val  { font-size: 12px; color: var(--secondary-900); }
+  .sump-val.link { color: var(--primary-700); cursor: pointer; }
+  .sump-val.err  { color: var(--error); }
+  .sump-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--secondary-200); }
+  .sump-btn {
+    width: 100%; height: 28px;
+    border-radius: 4px; font-family: var(--font-body);
+    font-size: 11px; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--secondary-300);
+    background: var(--white); color: var(--secondary-900);
+    transition: all 0.1s;
+  }
+  .sump-btn:hover { background: var(--primary-050); border-color: var(--primary-700); color: var(--primary-700); }
+  .sump-btn.primary { background: var(--primary-700); color: var(--white); border-color: var(--primary-700); }
+  .sump-btn.primary:hover { background: var(--primary-800); border-color: var(--primary-800); }
+
+  .op-hints {
+    display: flex; gap: 14px;
+    padding: 7px 14px;
+    border-top: 1px solid var(--secondary-200);
+    background: var(--secondary-100);
+  }
+  .op-hint { font-size: 11px; color: var(--secondary-600); display: flex; align-items: center; gap: 4px; }
+  .op-hint kbd {
+    background: var(--white); border: 1px solid var(--secondary-300);
+    border-radius: 2px; padding: 0 4px;
+    font-size: 10px; font-family: var(--font-mono); color: var(--secondary-700);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <a class="logo" href="#">
+    <div class="logo-mark">IP</div>
+    <span class="logo-text">InPlace</span>
+  </a>
+
+  <div class="gs-wrap">
+    <svg class="gs-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
+    <input class="gs-input" id="gsInput" type="text" placeholder="Search students, placements, agencies, personnel, requests…" autocomplete="off" />
+    <span class="gs-kbd">Ctrl K</span>
+    <div class="gs-dropdown" id="gsDropdown">
+      <div class="dd-filters">
+        <div class="dd-chip on">All</div>
+        <div class="dd-chip">Students</div>
+        <div class="dd-chip">Placements</div>
+        <div class="dd-chip">Personnel</div>
+        <div class="dd-chip">Agencies</div>
+        <div class="dd-chip">Requests</div>
+        <div class="dd-chip assigned">Assigned to me</div>
+      </div>
+      <div class="dd-footer">
+        <span class="dd-see-all">See all results →</span>
+        <span class="dd-hint">↵ to expand</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tn-right">
+    <button class="tn-btn" title="Notifications">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2a4 4 0 0 1 4 4v3l1 1.5H3L4 9V6a4 4 0 0 1 4-4z"/><path d="M6.5 13.5a1.5 1.5 0 0 0 3 0"/></svg>
+    </button>
+    <button class="tn-btn" title="Announcements">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10v9H3zM6 12v1M10 12v1"/></svg>
+    </button>
+    <button class="tn-btn" title="Download">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke-linecap="round"/></svg>
+    </button>
+    <button class="tn-btn" title="Settings">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.1 3.1l1.4 1.4M11.5 11.5l1.4 1.4M3.1 12.9l1.4-1.4M11.5 4.5l1.4-1.4"/></svg>
+    </button>
+    <button class="tn-btn" title="Refresh">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 4A6.5 6.5 0 1 1 7 1.5l2.5 2.5" stroke-linecap="round"/><path d="M9.5 1.5h3v3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="tn-avatar">VN</div>
+  </div>
+</nav>
+
+<!-- BODY -->
+<div class="body-row">
+
+  <!-- LEFT NAV -->
+  <nav class="leftnav">
+    <a class="ln-item active" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9.5L10 3l7 6.5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/></svg>
+      <span class="ln-label">Home</span>
+    </a>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg>
+      <span class="ln-label">Dashboard</span>
+    </a>
+    <div class="ln-divider"></div>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14l4-4 3 3 5-6"/></svg>
+      <span class="ln-label">Capacity</span>
+    </a>
+    <a class="ln-item" href="#">
+      <div class="ln-badge">8</div>
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h6l4 3v-3h4a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/></svg>
+      <span class="ln-label">Request</span>
+    </a>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6"/></svg>
+      <span class="ln-label">Placement</span>
+    </a>
+    <div class="ln-divider"></div>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 2h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>
+      <span class="ln-label">Report</span>
+    </a>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="16" height="11" rx="1.5"/><path d="M2 9h16"/></svg>
+      <span class="ln-label">Payment</span>
+    </a>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h16v10H2z"/><path d="M6 14l-3 3v-3"/></svg>
+      <span class="ln-label">Comms</span>
+    </a>
+    <div class="ln-divider"></div>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7"/></svg>
+      <span class="ln-label">Admin</span>
+    </a>
+    <a class="ln-item" href="#">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4"/></svg>
+      <span class="ln-label">Config</span>
+    </a>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-title">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="4" r="2"/><path d="M2 10c0-2.21 1.79-4 4-4s4 1.79 4 4"/></svg>
+      Placement Preparation
+    </div>
+    <div class="sb-row alert"><span>No student allocated</span><span class="sb-count warn">65</span></div>
+    <div class="sb-row"><span>Outstanding student prerequisites</span><span class="sb-count">29</span></div>
+    <div class="sb-row alert"><span>No supervisor allocated</span><span class="sb-count warn">88</span></div>
+    <div class="sb-row"><span>Outstanding supervisor prerequisites</span><span class="sb-count">2</span></div>
+    <div class="sb-row"><span>Roster required</span><span class="sb-count">82</span></div>
+    <div class="sb-row"><span>Unpublished rosters</span><span class="sb-count">1</span></div>
+    <div class="sb-divider"></div>
+    <div class="sb-title">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 2h10v8H1z"/><path d="M4 10v1M8 10v1"/></svg>
+      Requests
+    </div>
+    <div class="sb-row"><span>Open requests</span><span class="sb-count">8</span></div>
+    <div class="sb-row"><span>Invalid requests</span><span class="sb-count">0</span></div>
+    <div class="sb-row alert"><span>Offers to publish</span><span class="sb-count warn">16</span></div>
+    <div class="sb-row alert"><span>Published offers pending response</span><span class="sb-count warn">22</span></div>
+    <div class="sb-divider"></div>
+    <div class="sb-title">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>
+      Placement Completion
+    </div>
+    <div class="sb-row"><span>Unresolved incidents</span><span class="sb-count">0</span></div>
+    <div class="sb-row alert"><span>Unapproved timesheets</span><span class="sb-count warn">23</span></div>
+    <div class="sb-row"><span>Pending survey response</span><span class="sb-count">0</span></div>
+    <div class="sb-divider"></div>
+    <div class="sb-title">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l2-2 2 2 4-5"/></svg>
+      Needs Attention
+    </div>
+    <div class="sb-row"><span>Agreements expiring</span><span class="sb-count">0</span></div>
+    <div class="sb-row"><span>Expiring standard costs</span><span class="sb-count">0</span></div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="filter-bar">
+      <input class="f-input" type="text" placeholder="Agency" />
+      <select class="f-select">
+        <option>Discipline</option>
+        <option>Nursing</option>
+        <option>Midwifery</option>
+        <option>Physiotherapy</option>
+        <option>Allied Health</option>
+      </select>
+      <input class="f-input" type="text" placeholder="Education Provider" />
+      <button class="btn btn-primary">Refresh</button>
+      <button class="btn btn-outline">Reset</button>
+    </div>
+
+    <div>
+      <div class="sec-title" style="margin-bottom:10px">Placement Overview</div>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-num">81</div><div class="stat-lbl">Active Placements</div></div>
+        <div class="stat-card"><div class="stat-num">16</div><div class="stat-lbl">Recently Finished</div></div>
+        <div class="stat-card"><div class="stat-num">34</div><div class="stat-lbl">Starting next 30 days</div></div>
+        <div class="stat-card"><div class="stat-num">135</div><div class="stat-lbl">All Upcoming</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-hdr">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="sec-title">Current &amp; Upcoming Placements</span>
+          <div class="week-nav">
+            <button class="wn-btn">‹</button>
+            <span>Current Week &nbsp; 23/03/2026 – 29/03/2026</span>
+            <button class="wn-btn">›</button>
+          </div>
+        </div>
+        <div class="sec-actions">
+          <button class="btn btn-outline">View List</button>
+          <button class="btn btn-primary">View Full Roster</button>
+        </div>
+      </div>
+
+      <div class="pl-scroll">
+
+        <div class="pl-card">
+          <div class="pc-week">Week 31</div>
+          <div class="pc-header">
+            <div><div class="pc-name">raquel student</div><div class="pc-uni">La Trobe · No Course</div></div>
+            <div class="pc-avatar">RS</div>
+          </div>
+          <div class="pc-year">Not specified</div>
+          <div class="pc-disc">Antenatal</div>
+          <div class="pc-sub">Midwifery</div>
+          <div class="pc-loc">8131 Educ Cycle 2<br>5419 Personnel HEI</div>
+          <div class="pc-dates">30/08/2025 – 08/03/2027</div>
+          <div class="pc-tasks">Outstanding Tasks<br><span>Assessment Report submitted</span></div>
+        </div>
+
+        <div class="pl-card">
+          <div class="pc-week">Week 13</div>
+          <div class="pc-header">
+            <div><div class="pc-name">raquel lacey</div><div class="pc-uni">Deakin · No Course</div></div>
+            <div class="pc-avatar">RL</div>
+          </div>
+          <div class="pc-year">Year 1</div>
+          <div class="pc-disc">Aged Care</div>
+          <div class="pc-sub">Nursing</div>
+          <div class="pc-loc">RP Health Care Facility – Facility Centre</div>
+          <div class="pc-alert">⚠ Supervisor Allocation Required</div>
+          <div class="pc-dates">01/01/2026 – 31/10/2026</div>
+          <div class="roster-row">
+            <div class="rd"><div class="rd-name">Sat</div><div class="rd-time off">Off</div></div>
+            <div class="rd"><div class="rd-name">Sun</div><div class="rd-time off">Off</div></div>
+            <div class="rd"><div class="rd-name">Mon</div><div class="rd-time">06:00<br>17:30</div></div>
+            <div class="rd"><div class="rd-name">Tue</div><div class="rd-time">06:00<br>17:30</div></div>
+            <div class="rd"><div class="rd-name">Wed</div><div class="rd-time">06:00<br>17:30</div></div>
+          </div>
+          <div class="pc-tasks">Outstanding Tasks<br><span>Assessment Report submitted</span></div>
+        </div>
+
+        <div class="pl-card">
+          <div class="pc-week">Week 13</div>
+          <div class="pc-header">
+            <div><div class="pc-name">Raquel Racey</div><div class="pc-uni">Deakin · No Course</div></div>
+            <div class="pc-avatar">RR</div>
+          </div>
+          <div class="pc-year">Year 1</div>
+          <div class="pc-disc">Aged Care</div>
+          <div class="pc-sub">Nursing</div>
+          <div class="pc-loc">RP HealthCare Ward – Ward 1 Centre</div>
+          <div class="pc-alert">⚠ Supervisor Allocation Required</div>
+          <div class="pc-dates">01/01/2026 – 31/12/2026</div>
+          <div class="pc-roster-req">Roster Required</div>
+        </div>
+
+        <div class="pl-card">
+          <div class="pc-week">Week 13</div>
+          <div class="pc-header">
+            <div><div class="pc-name">raquel chriz</div><div class="pc-uni">Deakin · No Course</div></div>
+            <div class="pc-avatar">RC</div>
+          </div>
+          <div class="pc-year">Year 1</div>
+          <div class="pc-disc">Aged Care</div>
+          <div class="pc-sub">Nursing</div>
+          <div class="pc-loc">RP HealthCare Ward – Ward 1 Centre</div>
+          <div class="pc-alert">⚠ Supervisor Allocation Required</div>
+          <div class="pc-dates">01/01/2026 – 31/12/2026</div>
+          <div class="pc-roster-req">Roster Required</div>
+        </div>
+
+        <div class="pl-card">
+          <div class="pc-week">Week 6</div>
+          <div class="pc-header">
+            <div><div class="pc-name" style="color:var(--secondary-600)">No Student</div><div class="pc-uni">InPlace Curr512a</div></div>
+            <div class="pc-avatar none">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6"/></svg>
+            </div>
+          </div>
+          <div class="pc-year">Year 1</div>
+          <div class="pc-disc">Physiotherapy</div>
+          <div class="pc-sub">Allied Health assistance</div>
+          <div class="pc-loc">10208 – Prerequisite<br>RP Health Care Facility</div>
+          <div class="pc-alert">⚠ Supervisor Allocation Required</div>
+          <div class="pc-dates">16/02/2026 – 30/04/2026</div>
+          <div class="pc-roster-req">Roster Required</div>
+        </div>
+
+        <div class="pl-card">
+          <div class="pc-week">Week 6</div>
+          <div class="pc-header">
+            <div><div class="pc-name" style="color:var(--secondary-600)">No Student</div><div class="pc-uni">InPlace Curr512a</div></div>
+            <div class="pc-avatar none">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6"/></svg>
+            </div>
+          </div>
+          <div class="pc-year">Year 1</div>
+          <div class="pc-disc">Physiotherapy</div>
+          <div class="pc-sub">Allied Health assistance</div>
+          <div class="pc-loc">10208 – Prerequisite<br>RP Health Care Facility</div>
+          <div class="pc-alert">⚠ Supervisor Allocation Required</div>
+          <div class="pc-dates">16/02/2026 – 30/04/2026</div>
+          <div class="pc-roster-req">Roster Required</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- FULL SCREEN OVERLAY -->
+<div class="overlay" id="overlay" onclick="handleOverlay(event)">
+  <div class="overlay-panel" onclick="event.stopPropagation()">
+    <div class="op-search">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--secondary-500)" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
+      <input class="op-input" id="opInput" type="text" placeholder="Search students, placements, agencies, personnel, requests…" autocomplete="off" />
+      <button class="op-esc" onclick="closeOverlay()">Esc</button>
+    </div>
+    <div class="op-tabs">
+      <div class="op-tab on" data-tab="all">All</div>
+      <div class="op-tab" data-tab="student">Students</div>
+      <div class="op-tab" data-tab="placement">Placements</div>
+      <div class="op-tab" data-tab="personnel">Personnel</div>
+      <div class="op-tab" data-tab="agency">Agencies</div>
+      <div class="op-tab" data-tab="request">Requests</div>
+    </div>
+    <div class="op-body">
+      <div class="op-results" id="opResults"></div>
+      <div class="op-panel" id="opPanel">
+        <div style="color:var(--secondary-500);font-size:12px;margin-top:20px;text-align:center;">Select a result to preview</div>
+      </div>
+    </div>
+    <div class="op-hints">
+      <div class="op-hint"><kbd>↑↓</kbd> Navigate</div>
+      <div class="op-hint"><kbd>↵</kbd> Open</div>
+      <div class="op-hint"><kbd>Esc</kbd> Close</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── ENTITY DATA STORE ──────────────────────────────────────────────────────
+
+const DATA = {
+  student: [
+    { id:'s1', initials:'RL', name:'Raquel Lacey',     meta:'Deakin · BN Year 1 · Aged Care Nursing · Week 13',      pill:'Active',            pillClass:'pill-active',
+      panel:{ type:'Student', sub:'BN Year 1', fields:[
+        {l:'Education provider', v:'Deakin University'},
+        {l:'Discipline',         v:'Aged Care Nursing'},
+        {l:'Current placement',  v:'RP Health Care Facility – Facility Centre', cls:'link'},
+        {l:'Placement dates',    v:'01/01/2026 – 31/10/2026'},
+        {l:'Agency',             v:'RP Health Care Facility', cls:'link'},
+        {l:'Supervisor',         v:'Not allocated', cls:'err'},
+        {l:'Roster',             v:'Mon–Wed 06:00–17:30'},
+        {l:'Outstanding tasks',  v:'Assessment report submitted'},
+      ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
+    { id:'s2', initials:'RR', name:'Raquel Racey',     meta:'Deakin · BN Year 1 · Aged Care Nursing · Week 13',      pill:'Active',            pillClass:'pill-active',
+      panel:{ type:'Student', sub:'BN Year 1', fields:[
+        {l:'Education provider', v:'Deakin University'},
+        {l:'Discipline',         v:'Aged Care Nursing'},
+        {l:'Current placement',  v:'RP HealthCare Ward – Ward 1 Centre', cls:'link'},
+        {l:'Placement dates',    v:'01/01/2026 – 31/12/2026'},
+        {l:'Agency',             v:'RP HealthCare Ward', cls:'link'},
+        {l:'Supervisor',         v:'Not allocated', cls:'err'},
+        {l:'Roster',             v:'Roster required', cls:'err'},
+        {l:'Outstanding tasks',  v:'Assessment report submitted'},
+      ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
+    { id:'s3', initials:'RC', name:'Raquel Chriz',     meta:'Deakin · BN Year 1 · Aged Care Nursing · Week 13',      pill:'Supervisor needed',  pillClass:'pill-error',
+      panel:{ type:'Student', sub:'BN Year 1', fields:[
+        {l:'Education provider', v:'Deakin University'},
+        {l:'Discipline',         v:'Aged Care Nursing'},
+        {l:'Current placement',  v:'RP HealthCare Ward – Ward 1 Centre', cls:'link'},
+        {l:'Placement dates',    v:'01/01/2026 – 31/12/2026'},
+        {l:'Agency',             v:'RP HealthCare Ward', cls:'link'},
+        {l:'Supervisor',         v:'Not allocated', cls:'err'},
+        {l:'Roster',             v:'Roster required', cls:'err'},
+        {l:'Outstanding tasks',  v:'None'},
+      ], actions:['View student profile','Jump to placement','Allocate supervisor'] }},
+    { id:'s4', initials:'RS', name:'Raquel Student',   meta:'La Trobe · Midwifery · Antenatal · Week 31',            pill:'No course',         pillClass:'pill-warning',
+      panel:{ type:'Student', sub:'No course assigned', fields:[
+        {l:'Education provider', v:'La Trobe University'},
+        {l:'Discipline',         v:'Midwifery'},
+        {l:'Current placement',  v:'Antenatal – La Trobe', cls:'link'},
+        {l:'Placement dates',    v:'30/08/2025 – 08/03/2027'},
+        {l:'Agency',             v:'8131 Educ Cycle 2', cls:'link'},
+        {l:'Supervisor',         v:'Personnel HEI 5419', cls:'link'},
+        {l:'Roster',             v:'Not specified'},
+        {l:'Outstanding tasks',  v:'Assessment report submitted'},
+      ], actions:['View student profile','Jump to placement','View roster'] }},
+    { id:'s5', initials:'JM', name:'James Mitchell',   meta:'Monash · BN Year 2 · Physiotherapy · Week 6',           pill:'Active',            pillClass:'pill-active',
+      panel:{ type:'Student', sub:'BN Year 2', fields:[
+        {l:'Education provider', v:'Monash University'},
+        {l:'Discipline',         v:'Physiotherapy'},
+        {l:'Current placement',  v:'10208 – RP Health Care Facility', cls:'link'},
+        {l:'Placement dates',    v:'16/02/2026 – 30/04/2026'},
+        {l:'Agency',             v:'RP Health Care Facility', cls:'link'},
+        {l:'Supervisor',         v:'Not allocated', cls:'err'},
+        {l:'Roster',             v:'Roster required', cls:'err'},
+        {l:'Outstanding tasks',  v:'None'},
+      ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
+    { id:'s6', initials:'SP', name:'Sarah Patel',      meta:'Melbourne Uni · MN Year 1 · Allied Health · Week 8',    pill:'Pending',           pillClass:'pill-warning',
+      panel:{ type:'Student', sub:'MN Year 1', fields:[
+        {l:'Education provider', v:'University of Melbourne'},
+        {l:'Discipline',         v:'Allied Health assistance'},
+        {l:'Current placement',  v:'Not yet assigned', cls:'err'},
+        {l:'Placement dates',    v:'TBC'},
+        {l:'Agency',             v:'TBC'},
+        {l:'Supervisor',         v:'Not allocated', cls:'err'},
+        {l:'Roster',             v:'Not set'},
+        {l:'Outstanding tasks',  v:'Prerequisite documents pending'},
+      ], actions:['View student profile','Assign to placement'] }},
+  ],
+  placement: [
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', meta:'Aged Care Nursing · 01/01/2026 – 31/10/2026',     pill:'Active',           pillClass:'pill-active',
+      panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
+        {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
+        {l:'Ward / unit',     v:'Facility Centre'},
+        {l:'Discipline',      v:'Aged Care Nursing'},
+        {l:'Dates',           v:'01/01/2026 – 31/10/2026'},
+        {l:'Student',         v:'Raquel Lacey', cls:'link'},
+        {l:'Supervisor',      v:'Not allocated', cls:'err'},
+        {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
+        {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
+      ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        meta:'Aged Care Nursing · 01/01/2026 – 31/12/2026',     pill:'Active',           pillClass:'pill-active',
+      panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
+        {l:'Agency',          v:'RP HealthCare Ward', cls:'link'},
+        {l:'Ward / unit',     v:'Ward 1 Centre'},
+        {l:'Discipline',      v:'Aged Care Nursing'},
+        {l:'Dates',           v:'01/01/2026 – 31/12/2026'},
+        {l:'Students',        v:'Raquel Racey, Raquel Chriz', cls:'link'},
+        {l:'Supervisor',      v:'Not allocated', cls:'err'},
+        {l:'Roster',          v:'Roster required', cls:'err'},
+        {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
+      ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          meta:'Midwifery · 30/08/2025 – 08/03/2027',             pill:'Active',           pillClass:'pill-active',
+      panel:{ type:'Placement', sub:'Midwifery', fields:[
+        {l:'Agency',          v:'8131 Educ Cycle 2', cls:'link'},
+        {l:'Ward / unit',     v:'Antenatal'},
+        {l:'Discipline',      v:'Midwifery'},
+        {l:'Dates',           v:'30/08/2025 – 08/03/2027'},
+        {l:'Student',         v:'Raquel Student', cls:'link'},
+        {l:'Supervisor',      v:'Personnel HEI 5419', cls:'link'},
+        {l:'Roster',          v:'Not specified'},
+        {l:'Outstanding',     v:'Assessment report submitted'},
+      ], actions:['View placement','Edit placement','View roster'] }},
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    meta:'Allied Health · 16/02/2026 – 30/04/2026',         pill:'Roster required',  pillClass:'pill-warning',
+      panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
+        {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
+        {l:'Ward / unit',     v:'Prerequisite (10208)'},
+        {l:'Discipline',      v:'Physiotherapy'},
+        {l:'Dates',           v:'16/02/2026 – 30/04/2026'},
+        {l:'Student',         v:'No student assigned', cls:'err'},
+        {l:'Supervisor',      v:'Not allocated', cls:'err'},
+        {l:'Roster',          v:'Roster required', cls:'err'},
+        {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
+      ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       meta:'Emergency Nursing · 01/03/2026 – 31/08/2026',     pill:'Active',           pillClass:'pill-active',
+      panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
+        {l:'Agency',          v:'St Vincents Hospital', cls:'link'},
+        {l:'Ward / unit',     v:'Intensive Care Unit'},
+        {l:'Discipline',      v:'Emergency Nursing'},
+        {l:'Dates',           v:'01/03/2026 – 31/08/2026'},
+        {l:'Student',         v:'Sarah Patel', cls:'link'},
+        {l:'Supervisor',      v:'Dr. Linda Tran', cls:'link'},
+        {l:'Roster',          v:'Tue–Fri 07:00–15:00'},
+        {l:'Outstanding',     v:'Timesheet unapproved (Week 3)'},
+      ], actions:['View placement','Edit placement','View roster','Approve timesheet'] }},
+  ],
+  personnel: [
+    { id:'pe1', initials:'5419', name:'Personnel HEI 5419',    meta:'La Trobe · Midwifery Supervisor · Raquel Student · 1 active placement',         pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
+        {l:'Organisation',        v:'La Trobe University'},
+        {l:'Role',                v:'Agency Supervisor'},
+        {l:'Active placements',   v:'1 (Antenatal)', cls:'link'},
+        {l:'Students supervised', v:'Raquel Student', cls:'link'},
+        {l:'Discipline area',     v:'Midwifery'},
+        {l:'Prerequisite status', v:'Completed'},
+        {l:'Contact',             v:'personnel5419@latrobe.edu.au'},
+      ], actions:['View profile','View supervised placements','Send message'] }},
+    { id:'pe2', initials:'LT',   name:'Dr. Linda Tran',         meta:'St Vincents · ICU Supervisor · Sarah Patel, James Mitchell · 2 active placements', pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
+        {l:'Organisation',        v:'St Vincents Hospital'},
+        {l:'Role',                v:'ICU Charge Nurse / Supervisor'},
+        {l:'Active placements',   v:'2', cls:'link'},
+        {l:'Students supervised', v:'Sarah Patel, James Mitchell', cls:'link'},
+        {l:'Discipline area',     v:'Emergency Nursing, Physiotherapy'},
+        {l:'Prerequisite status', v:'Completed'},
+        {l:'Contact',             v:'l.tran@svh.org.au'},
+      ], actions:['View profile','View supervised placements','Send message'] }},
+    { id:'pe3', initials:'MK',   name:'Mark Kowalski',          meta:'Monash Health · Allied Health Supervisor · James Mitchell · 1 active placement', pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'EP Supervisor', fields:[
+        {l:'Organisation',        v:'Monash Health'},
+        {l:'Role',                v:'EP Supervisor – Allied Health'},
+        {l:'Active placements',   v:'1 (Physiotherapy)', cls:'link'},
+        {l:'Students supervised', v:'James Mitchell', cls:'link'},
+        {l:'Discipline area',     v:'Physiotherapy, Allied Health'},
+        {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
+        {l:'Contact',             v:'m.kowalski@monashhealth.org'},
+      ], actions:['View profile','View supervised placements','Send message'] }},
+    { id:'pe4', initials:'AW',   name:'Angela Wong',            meta:'Royal Melbourne · Nursing Supervisor · Raquel Lacey, Raquel Racey, Raquel Chriz · 3 active placements', pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
+        {l:'Organisation',        v:'Royal Melbourne Hospital'},
+        {l:'Role',                v:'Nursing Supervisor'},
+        {l:'Active placements',   v:'3', cls:'link'},
+        {l:'Students supervised', v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
+        {l:'Discipline area',     v:'Aged Care Nursing, General Nursing'},
+        {l:'Prerequisite status', v:'Completed'},
+        {l:'Contact',             v:'a.wong@rmh.org.au'},
+      ], actions:['View profile','View supervised placements','Send message'] }},
+  ],
+  agency: [
+    { id:'a1', initials:'AG', name:'RP Health Care Facility',  meta:'3 active placements · Allied Health, Nursing, Physiotherapy',   pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'RP Health Care Centre, Victoria'},
+        {l:'Type',               v:'Allied Health, Nursing'},
+        {l:'Active placements',  v:'3', cls:'link'},
+        {l:'Active students',    v:'Raquel Lacey, James Mitchell', cls:'link'},
+        {l:'Supervisors',        v:'Not allocated (2 needed)', cls:'err'},
+        {l:'Open requests',      v:'2'},
+        {l:'Agreement status',   v:'Current – expires 30/06/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a2', initials:'AG', name:'RP HealthCare Ward',        meta:'2 active placements · Aged Care Nursing',                       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'RP HealthCare Complex, Victoria'},
+        {l:'Type',               v:'Aged Care Nursing'},
+        {l:'Active placements',  v:'2 (Ward 1 Centre)', cls:'link'},
+        {l:'Active students',    v:'Raquel Racey, Raquel Chriz', cls:'link'},
+        {l:'Supervisors',        v:'Not allocated', cls:'err'},
+        {l:'Open requests',      v:'0'},
+        {l:'Agreement status',   v:'Current – expires 31/12/2026'},
+      ], actions:['View agency','View placements','View requests'] }},
+    { id:'a3', initials:'AG', name:'St Vincents Hospital',      meta:'2 active placements · Emergency, ICU',                          pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'Fitzroy, Victoria'},
+        {l:'Type',               v:'Emergency Nursing, ICU'},
+        {l:'Active placements',  v:'2', cls:'link'},
+        {l:'Active students',    v:'Sarah Patel', cls:'link'},
+        {l:'Supervisors',        v:'Dr. Linda Tran', cls:'link'},
+        {l:'Open requests',      v:'1'},
+        {l:'Agreement status',   v:'Current – expires 30/06/2027'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a4', initials:'AG', name:'Royal Melbourne Hospital',  meta:'5 active placements · General Nursing, Midwifery',              pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+        {l:'Location',           v:'Parkville, Victoria'},
+        {l:'Type',               v:'General Nursing, Midwifery, Allied Health'},
+        {l:'Active placements',  v:'5', cls:'link'},
+        {l:'Active students',    v:'Multiple – see placements', cls:'link'},
+        {l:'Supervisors',        v:'Angela Wong + 2 others', cls:'link'},
+        {l:'Open requests',      v:'3'},
+        {l:'Agreement status',   v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+  ],
+  request: [
+    { id:'r1', initials:'RQ', name:'REQ-2026-0182 — Aged Care Nursing',         meta:'Deakin · 2 students · 01/01/2026 – 31/12/2026',        pill:'Open',     pillClass:'pill-active',
+      panel:{ type:'Request', sub:'Open Request', fields:[
+        {l:'Education provider', v:'Deakin University'},
+        {l:'Discipline',         v:'Aged Care Nursing'},
+        {l:'Students requested', v:'2'},
+        {l:'Period',             v:'01/01/2026 – 31/12/2026'},
+        {l:'Agency preference',  v:'RP Health Care Facility', cls:'link'},
+        {l:'Status',             v:'Offer published – pending response'},
+        {l:'Linked placements',  v:'PL-2026-0088, PL-2026-0089', cls:'link'},
+      ], actions:['View request','Approve','Reject','View linked placements'] }},
+    { id:'r2', initials:'RQ', name:'REQ-2026-0195 — Physiotherapy',             meta:'Monash · 1 student · 16/02/2026 – 30/04/2026',         pill:'Open',     pillClass:'pill-active',
+      panel:{ type:'Request', sub:'Open Request', fields:[
+        {l:'Education provider', v:'Monash University'},
+        {l:'Discipline',         v:'Physiotherapy'},
+        {l:'Students requested', v:'1'},
+        {l:'Period',             v:'16/02/2026 – 30/04/2026'},
+        {l:'Agency preference',  v:'RP Health Care Facility', cls:'link'},
+        {l:'Status',             v:'No student assigned', cls:'err'},
+        {l:'Linked placements',  v:'PL-2026-0104', cls:'link'},
+      ], actions:['View request','Assign student','Reject'] }},
+    { id:'r3', initials:'RQ', name:'REQ-2026-0210 — Emergency Nursing',         meta:'Melbourne Uni · 1 student · 01/03/2026 – 31/08/2026',  pill:'Published', pillClass:'pill-warning',
+      panel:{ type:'Request', sub:'Offer Published', fields:[
+        {l:'Education provider', v:'University of Melbourne'},
+        {l:'Discipline',         v:'Emergency Nursing'},
+        {l:'Students requested', v:'1'},
+        {l:'Period',             v:'01/03/2026 – 31/08/2026'},
+        {l:'Agency preference',  v:'St Vincents Hospital', cls:'link'},
+        {l:'Status',             v:'Pending student response'},
+        {l:'Linked placements',  v:'PL-2026-0112', cls:'link'},
+      ], actions:['View request','Withdraw offer','View linked placements'] }},
+    { id:'r4', initials:'RQ', name:'REQ-2026-0088 — Midwifery Antenatal',       meta:'La Trobe · 1 student · 30/08/2025 – 08/03/2027',       pill:'Fulfilled', pillClass:'pill-active',
+      panel:{ type:'Request', sub:'Fulfilled', fields:[
+        {l:'Education provider', v:'La Trobe University'},
+        {l:'Discipline',         v:'Midwifery'},
+        {l:'Students requested', v:'1'},
+        {l:'Period',             v:'30/08/2025 – 08/03/2027'},
+        {l:'Agency',             v:'8131 Educ Cycle 2', cls:'link'},
+        {l:'Status',             v:'Placement active'},
+        {l:'Linked placements',  v:'Antenatal – La Trobe', cls:'link'},
+      ], actions:['View request','View linked placements'] }},
+  ],
+};
+
+// Flatten all entities for "All" search
+const ALL_ENTITIES = [
+  ...DATA.student.map(e => ({...e, entityType:'student'})),
+  ...DATA.placement.map(e => ({...e, entityType:'placement'})),
+  ...DATA.personnel.map(e => ({...e, entityType:'personnel'})),
+  ...DATA.agency.map(e => ({...e, entityType:'agency'})),
+  ...DATA.request.map(e => ({...e, entityType:'request'})),
+];
+
+const ENTITY_META = {
+  student:   { label:'Students',  icoClass:'ico-stu' },
+  placement: { label:'Placements',icoClass:'ico-pl'  },
+  personnel: { label:'Personnel', icoClass:'ico-per' },
+  agency:    { label:'Agencies',  icoClass:'ico-ag'  },
+  request:   { label:'Requests',  icoClass:'ico-req' },
+};
+
+// Panel actions map per entity type
+const PANEL_ACTIONS_CLASS = {
+  'View student profile':'primary', 'Assign to placement':'',
+  'View placement':'primary',       'Edit placement':'',
+  'View profile':'primary',         'View supervised placements':'',
+  'View agency':'primary',          'View placements':'',
+  'View request':'primary',         'Approve':'',
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let currentQuery = '';
+let currentTab = 'all';
+
+// ── DOM REFS ───────────────────────────────────────────────────────────────
+const gsInput  = document.getElementById('gsInput');
+const gsDrop   = document.getElementById('gsDropdown');
+const overlay  = document.getElementById('overlay');
+const opInput  = document.getElementById('opInput');
+const opResults= document.getElementById('opResults');
+const opPanel  = document.getElementById('opPanel');
+
+// ── SEARCH LOGIC ───────────────────────────────────────────────────────────
+function search(q, entityTypeHint) {
+  q = q.toLowerCase().trim();
+
+  // If no query or very short (1 char), return all entities of the hinted type
+  // or first 8 overall — don't try to match
+  if (!q || q.length < 2) {
+    const pool = entityTypeHint && entityTypeHint !== 'all'
+      ? ALL_ENTITIES.filter(e => e.entityType === entityTypeHint)
+      : ALL_ENTITIES;
+    return pool.slice(0, 10);
+  }
+
+  return ALL_ENTITIES.filter(e => {
+    // Name match — highest priority
+    if (e.name.toLowerCase().includes(q)) return true;
+    // Meta string match
+    if (e.meta.toLowerCase().includes(q)) return true;
+    // Panel field values — only search key identifying fields, not all
+    if (e.panel && e.panel.fields) {
+      const keyFields = e.panel.fields.filter(f =>
+        ['Student','Students','Education provider','Discipline','Agency','Organisation','Role'].includes(f.l)
+      );
+      if (keyFields.some(f => f.v.toLowerCase().includes(q))) return true;
+    }
+    return false;
+  });
+}
+
+function filterByTab(results, tab) {
+  if (tab === 'all') return results;
+  return results.filter(e => e.entityType === tab);
+}
+
+// ── RENDER RESULTS ─────────────────────────────────────────────────────────
+function renderResults(q, tab) {
+  const all = search(q, tab);
+  const filtered = filterByTab(all, tab);
+  opResults.innerHTML = '';
+
+  if (!filtered.length) {
+    opResults.innerHTML = '<div style="padding:24px 14px;color:var(--secondary-500);font-size:12px;text-align:center;">No results found</div>';
+    return;
+  }
+
+  // Group by entity type
+  const groups = tab === 'all'
+    ? ['student','placement','personnel','agency','request']
+    : [tab];
+
+  let firstItem = null;
+
+  groups.forEach(type => {
+    const items = filtered.filter(e => e.entityType === type);
+    if (!items.length) return;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'op-glabel';
+    lbl.textContent = ENTITY_META[type].label;
+    opResults.appendChild(lbl);
+
+    items.forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'op-item' + (firstItem === null ? ' sel' : '');
+      row.setAttribute('data-id', item.id);
+      row.onclick = () => selectItem(row, item);
+
+      const pill = item.pill
+        ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
+
+      row.innerHTML = `
+        <div class="op-ico ${ENTITY_META[type].icoClass}">${item.initials}</div>
+        <div class="op-main">
+          <div class="op-name">${item.name}</div>
+          <div class="op-meta">${item.meta}</div>
+        </div>
+        ${pill}`;
+
+      opResults.appendChild(row);
+      if (firstItem === null) { firstItem = { row, item }; }
+    });
+
+    const div = document.createElement('div');
+    div.className = 'op-divider';
+    opResults.appendChild(div);
+  });
+
+  // Auto-select first
+  if (firstItem) renderPanel(firstItem.item);
+}
+
+// ── RENDER PANEL ───────────────────────────────────────────────────────────
+function renderPanel(item) {
+  const p = item.panel;
+  const fields = p.fields.map(f =>
+    `<div class="sump-field">
+      <div class="sump-lbl">${f.l}</div>
+      <div class="sump-val${f.cls ? ' '+f.cls : ''}">${f.v}</div>
+    </div>`
+  ).join('');
+
+  const actions = p.actions.map(a =>
+    `<button class="sump-btn${PANEL_ACTIONS_CLASS[a]==='primary' ? ' primary' : ''}">${a}</button>`
+  ).join('');
+
+  opPanel.innerHTML = `
+    <div class="sump-name">${item.name}</div>
+    <div class="sump-sub">${p.type} · ${p.sub}</div>
+    ${fields}
+    <div class="sump-actions">${actions}</div>`;
+}
+
+function selectItem(el, item) {
+  document.querySelectorAll('.op-item').forEach(i => i.classList.remove('sel'));
+  el.classList.add('sel');
+  renderPanel(item);
+}
+
+// ── OVERLAY OPEN / CLOSE ───────────────────────────────────────────────────
+function closeOverlay() { overlay.classList.remove('open'); }
+function handleOverlay(e) { if (e.target === overlay) closeOverlay(); }
+
+// ── SEARCH INPUT (overlay) ─────────────────────────────────────────────────
+opInput.addEventListener('input', () => {
+  currentQuery = opInput.value;
+  renderResults(currentQuery, currentTab);
+});
+
+// ── TAB SWITCHING ──────────────────────────────────────────────────────────
+document.querySelectorAll('.op-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.op-tab').forEach(x => x.classList.remove('on'));
+    t.classList.add('on');
+    currentTab = t.dataset.tab;
+    renderResults(currentQuery, currentTab);
+  });
+});
+
+// ── GLOBAL SEARCH BAR ─────────────────────────────────────────────────────
+let ddActiveChip = 'all'; // tracks which chip is active in the dropdown
+
+function renderDropdown(q) {
+  const results = search(q, ddActiveChip);
+
+  // Filter by active chip
+  const filtered = ddActiveChip === 'all'
+    ? results
+    : results.filter(e => e.entityType === ddActiveChip);
+
+  // Group — up to 2 per type
+  const grouped = {};
+  filtered.forEach(e => {
+    if (!grouped[e.entityType]) grouped[e.entityType] = [];
+    if (grouped[e.entityType].length < 2) grouped[e.entityType].push(e);
+  });
+
+  // Rebuild dropdown groups dynamically
+  gsDrop.querySelectorAll('.dd-group').forEach(g => g.remove());
+  const footer = gsDrop.querySelector('.dd-footer');
+
+  const order = ['student','placement','agency','personnel','request'];
+  let totalItems = 0;
+
+  order.forEach(type => {
+    const items = grouped[type];
+    if (!items || !items.length) return;
+    totalItems += items.length;
+
+    const grp = document.createElement('div');
+    grp.className = 'dd-group';
+    grp.innerHTML = `<div class="dd-glabel">${ENTITY_META[type].label}</div>`;
+
+    items.forEach(item => {
+      const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
+      const d = document.createElement('div');
+      d.className = 'dd-item';
+      d.innerHTML = `
+        <div class="dd-dot" style="background:var(--primary-600)"></div>
+        <div class="dd-main">
+          <div class="dd-name">${item.name}</div>
+          <div class="dd-meta">${item.meta}</div>
+        </div>${pill}`;
+      // clicking a row opens overlay pre-filtered to the same chip tab
+      d.onclick = (e) => { e.stopPropagation(); openOverlay(q, ddActiveChip); };
+      grp.appendChild(d);
+    });
+    gsDrop.insertBefore(grp, footer);
+  });
+
+  // Empty state
+  if (totalItems === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'dd-group';
+    empty.innerHTML = `<div style="padding:12px 12px;font-size:12px;color:var(--secondary-500)">No results for "${q}"</div>`;
+    gsDrop.insertBefore(empty, footer);
+  }
+
+  const chipLabel = ddActiveChip === 'all' ? q : ENTITY_META[ddActiveChip].label.toLowerCase();
+  footer.querySelector('.dd-see-all').textContent = `See all results for "${chipLabel}" \u2192`;
+}
+
+gsInput.addEventListener('focus', () => {
+  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); gsDrop.classList.add('open'); }
+});
+gsInput.addEventListener('input', () => {
+  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); gsDrop.classList.add('open'); }
+  else gsDrop.classList.remove('open');
+});
+gsInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { openOverlay(gsInput.value, ddActiveChip); }
+  if (e.key === 'Escape') { gsDrop.classList.remove('open'); gsInput.blur(); }
+});
+document.addEventListener('click', e => {
+  if (!gsInput.closest('.gs-wrap').contains(e.target)) gsDrop.classList.remove('open');
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault(); gsInput.focus(); gsInput.select();
+    if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); gsDrop.classList.add('open'); }
+  }
+  if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
+});
+
+// Dropdown "see all" footer
+gsDrop.querySelector('.dd-see-all').onclick = () => openOverlay(gsInput.value, ddActiveChip);
+
+// ── FILTER CHIPS (dropdown) — now actually filter results ──────────────────
+document.querySelectorAll('.dd-chip:not(.assigned)').forEach(c => {
+  c.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.dd-chip:not(.assigned)').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+
+    // Map chip text to entity type key
+    const chipMap = {
+      'All':'all', 'Students':'student', 'Placements':'placement',
+      'Personnel':'personnel', 'Agencies':'agency', 'Requests':'request'
+    };
+    ddActiveChip = chipMap[c.textContent.trim()] || 'all';
+
+    // Re-render dropdown with new filter
+    if (gsInput.value.length >= 2) {
+      renderDropdown(gsInput.value);
+      gsDrop.classList.add('open');
+    }
+  });
+});
+
+// Assigned to me toggle — filters to only items with "Me" / Veena context
+document.querySelector('.dd-chip.assigned').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const chip = e.currentTarget;
+  chip.classList.toggle('on');
+  // For prototype: "Assigned to me" shows Raquel Lacey + placements at RP Health Care
+  if (chip.classList.contains('on')) {
+    gsInput.value = 'RP Health Care';
+    ddActiveChip = 'all';
+    document.querySelectorAll('.dd-chip:not(.assigned)').forEach(x => x.classList.remove('on'));
+    document.querySelector('.dd-chip:not(.assigned)').classList.add('on');
+    renderDropdown('RP Health Care');
+    gsDrop.classList.add('open');
+  } else {
+    renderDropdown(gsInput.value || 'raquel');
+    gsDrop.classList.add('open');
+  }
+});
+
+// ── OVERLAY OPEN — now accepts tab hint from dropdown chip ─────────────────
+function openOverlay(q, tabHint) {
+  gsDrop.classList.remove('open');
+  overlay.classList.add('open');
+  currentQuery = q || gsInput.value || '';
+  currentTab = tabHint || 'all';
+  opInput.value = currentQuery;
+  document.querySelectorAll('.op-tab').forEach(t =>
+    t.classList.toggle('on', t.dataset.tab === currentTab)
+  );
+  renderResults(currentQuery, currentTab);
+  opInput.focus();
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+gsInput.value = 'Facility';
+renderDropdown('Facility');
+</script>
+</body>
+</html>
