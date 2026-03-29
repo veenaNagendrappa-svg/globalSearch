@@ -971,7 +971,7 @@ const DATA = {
       ], actions:['View student profile','Assign to placement'] }},
   ],
   placement: [
-    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', meta:'Aged Care Nursing · 01/01/2026 – 31/10/2026',     pill:'Active',           pillClass:'pill-active',
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', meta:'Aged Care Nursing · Raquel Lacey · 01/01/2026 – 31/10/2026',      pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Facility Centre'},
@@ -982,7 +982,7 @@ const DATA = {
         {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        meta:'Aged Care Nursing · 01/01/2026 – 31/12/2026',     pill:'Active',           pillClass:'pill-active',
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        meta:'Aged Care Nursing · Raquel Racey, Raquel Chriz · 01/01/2026 – 31/12/2026', pill:'Active',  pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP HealthCare Ward', cls:'link'},
         {l:'Ward / unit',     v:'Ward 1 Centre'},
@@ -993,7 +993,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          meta:'Midwifery · 30/08/2025 – 08/03/2027',             pill:'Active',           pillClass:'pill-active',
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          meta:'Midwifery · Raquel Student · 30/08/2025 – 08/03/2027',              pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
         {l:'Agency',          v:'8131 Educ Cycle 2', cls:'link'},
         {l:'Ward / unit',     v:'Antenatal'},
@@ -1004,7 +1004,7 @@ const DATA = {
         {l:'Roster',          v:'Not specified'},
         {l:'Outstanding',     v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    meta:'Allied Health · 16/02/2026 – 30/04/2026',         pill:'Roster required',  pillClass:'pill-warning',
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    meta:'Allied Health · James Mitchell · 16/02/2026 – 30/04/2026',          pill:'Roster required',  pillClass:'pill-warning',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Prerequisite (10208)'},
@@ -1015,7 +1015,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       meta:'Emergency Nursing · 01/03/2026 – 31/08/2026',     pill:'Active',           pillClass:'pill-active',
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       meta:'Emergency Nursing · Sarah Patel · 01/03/2026 – 31/08/2026',         pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
         {l:'Agency',          v:'St Vincents Hospital', cls:'link'},
         {l:'Ward / unit',     v:'Intensive Care Unit'},
@@ -1342,11 +1342,12 @@ function renderDropdown(q) {
     ? results
     : results.filter(e => e.entityType === ddActiveChip);
 
-  // Group — up to 2 per type
+  // Group — up to 3 per type when chip-filtered, up to 2 for "all"
+  const perTypeCap = ddActiveChip === 'all' ? 2 : 3;
   const grouped = {};
   filtered.forEach(e => {
     if (!grouped[e.entityType]) grouped[e.entityType] = [];
-    if (grouped[e.entityType].length < 2) grouped[e.entityType].push(e);
+    if (grouped[e.entityType].length < perTypeCap) grouped[e.entityType].push(e);
   });
 
   // Rebuild dropdown groups dynamically
