@@ -900,7 +900,7 @@
 
 const DATA = {
   student: [
-    { id:'s1', initials:'RL', name:'Raquel Lacey',     meta:'Deakin · BN Year 1 · Aged Care',        pill:'Active',            pillClass:'pill-active',
+    { id:'s1', initials:'RL', name:'Raquel Lacey',    code:'S22448871', email:'raquel.lacey@student.deakin.edu.au',    meta:'S22448871 · Deakin',          pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Campus',             v:'Burwood, Melbourne'},
@@ -914,7 +914,7 @@ const DATA = {
         {l:'Roster',             v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s2', initials:'RR', name:'Raquel Racey',     meta:'Deakin · BN Year 1 · Aged Care',        pill:'Active',            pillClass:'pill-active',
+    { id:'s2', initials:'RR', name:'Raquel Racey',    code:'S22349901', email:'raquel.racey@student.deakin.edu.au',    meta:'S22349901 · Deakin',          pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Campus',             v:'Burwood, Melbourne'},
@@ -928,7 +928,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s3', initials:'RC', name:'Raquel Chriz',     meta:'Deakin · BN Year 1 · Aged Care',        pill:'Supervisor needed',  pillClass:'pill-error',
+    { id:'s3', initials:'RC', name:'Raquel Chriz',    code:'S22501234', email:'raquel.chriz@student.deakin.edu.au',    meta:'S22501234 · Deakin',          pill:'Supervisor needed', pillClass:'pill-error',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Campus',             v:'Geelong Waterfront'},
@@ -942,7 +942,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor'] }},
-    { id:'s4', initials:'RS', name:'Raquel Student',   meta:'La Trobe · Midwifery',                  pill:'No course',         pillClass:'pill-warning',
+    { id:'s4', initials:'RS', name:'Raquel Student',  code:'19876543',  email:'raquel.student@student.latrobe.edu.au', meta:'19876543 · La Trobe',          pill:'No course',         pillClass:'pill-warning',
       panel:{ type:'Student', sub:'No course assigned', fields:[
         {l:'Education provider', v:'La Trobe University'},
         {l:'Campus',             v:'Bundoora'},
@@ -956,7 +956,7 @@ const DATA = {
         {l:'Roster',             v:'Not specified'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','View roster'] }},
-    { id:'s5', initials:'JM', name:'James Mitchell',   meta:'Monash · BN Year 2 · Physiotherapy',    pill:'Active',            pillClass:'pill-active',
+    { id:'s5', initials:'JM', name:'James Mitchell',  code:'30912345',  email:'james.mitchell@student.monash.edu',    meta:'30912345 · Monash',           pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 2', fields:[
         {l:'Education provider', v:'Monash University'},
         {l:'Campus',             v:'Clayton'},
@@ -970,7 +970,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s6', initials:'SP', name:'Sarah Patel',      meta:'Melbourne Uni · MN Year 1',             pill:'Pending',           pillClass:'pill-warning',
+    { id:'s6', initials:'SP', name:'Sarah Patel',     code:'10088765',  email:'sarah.patel@student.unimelb.edu.au',   meta:'10088765 · Melbourne Uni',    pill:'Pending',          pillClass:'pill-warning',
       panel:{ type:'Student', sub:'MN Year 1', fields:[
         {l:'Education provider', v:'University of Melbourne'},
         {l:'Campus',             v:'Parkville'},
@@ -986,7 +986,7 @@ const DATA = {
       ], actions:['View student profile','Assign to placement'] }},
   ],
   placement: [
-    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', meta:'Aged Care Nursing · Raquel Lacey',        pill:'Active',           pillClass:'pill-active',
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Facility Centre'},
@@ -998,7 +998,7 @@ const DATA = {
         {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        meta:'Aged Care Nursing · Raquel Racey, Raquel Chriz', pill:'Active',  pillClass:'pill-active',
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP HealthCare Ward', cls:'link'},
         {l:'Ward / unit',     v:'Ward 1 Centre'},
@@ -1010,7 +1010,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          meta:'Midwifery · Raquel Student',             pill:'Active',           pillClass:'pill-active',
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
         {l:'Agency',          v:'8131 Educ Cycle 2', cls:'link'},
         {l:'Ward / unit',     v:'Antenatal'},
@@ -1022,7 +1022,7 @@ const DATA = {
         {l:'Roster',          v:'Not specified'},
         {l:'Outstanding',     v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    meta:'Allied Health · James Mitchell',         pill:'Roster required',  pillClass:'pill-warning',
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Roster required',  pillClass:'pill-warning',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Prerequisite (10208)'},
@@ -1034,7 +1034,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       meta:'Emergency Nursing · Sarah Patel',        pill:'Active',           pillClass:'pill-active',
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
         {l:'Agency',          v:'St Vincents Hospital', cls:'link'},
         {l:'Ward / unit',     v:'Intensive Care Unit'},
@@ -1048,7 +1048,7 @@ const DATA = {
       ], actions:['View placement','Edit placement','View roster','Approve timesheet'] }},
   ],
   personnel: [
-    { id:'pe1', initials:'RA', name:'Rachel Andrews',        meta:'Royal Melbourne · Agency Supervisor',       pill:'Active', pillClass:'pill-active',
+    { id:'pe1', initials:'RA', name:'Rachel Andrews',   code:'EMP-0041', email:'r.andrews@rmh.org.au',            meta:'EMP-0041 · Royal Melbourne',  pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
         {l:'Organisation',     v:'Royal Melbourne Hospital'},
         {l:'Campus',           v:'Parkville'},
@@ -1058,7 +1058,7 @@ const DATA = {
         {l:'Students',         v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
         {l:'Prerequisite status', v:'Completed'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe2', initials:'RB', name:'Ramon Baxter',          meta:'RP Health Care · Agency Supervisor',        pill:'Active', pillClass:'pill-active',
+    { id:'pe2', initials:'RB', name:'Ramon Baxter',      code:'EMP-0088', email:'r.baxter@rphealthcare.com.au',   meta:'EMP-0088 · RP Health Care',   pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
         {l:'Organisation',     v:'RP Health Care Facility'},
         {l:'Campus',           v:'Werribee'},
@@ -1068,7 +1068,7 @@ const DATA = {
         {l:'Students',         v:'James Mitchell', cls:'link'},
         {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe3', initials:'5419', name:'Personnel HEI 5419',  meta:'La Trobe · Midwifery Supervisor',           pill:'Active', pillClass:'pill-active',
+    { id:'pe3', initials:'5419', name:'Personnel HEI 5419', code:'5419', email:'personnel5419@latrobe.edu.au',   meta:'5419 · La Trobe',             pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
         {l:'Organisation',     v:'La Trobe University'},
         {l:'Campus',           v:'Bundoora'},
@@ -1078,7 +1078,7 @@ const DATA = {
         {l:'Students',         v:'Raquel Student', cls:'link'},
         {l:'Prerequisite status', v:'Completed'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe4', initials:'LT', name:'Dr. Linda Tran',        meta:'St Vincents · ICU Supervisor',              pill:'Active', pillClass:'pill-active',
+    { id:'pe4', initials:'LT', name:'Dr. Linda Tran',     code:'EMP-0112', email:'l.tran@svh.org.au',             meta:'EMP-0112 · St Vincents',      pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
         {l:'Organisation',     v:'St Vincents Hospital'},
         {l:'Campus',           v:'Fitzroy'},
@@ -1088,7 +1088,7 @@ const DATA = {
         {l:'Students',         v:'Sarah Patel, James Mitchell', cls:'link'},
         {l:'Prerequisite status', v:'Completed'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe5', initials:'MK', name:'Mark Kowalski',         meta:'Monash Health · EP Supervisor',             pill:'Active', pillClass:'pill-active',
+    { id:'pe5', initials:'MK', name:'Mark Kowalski',      code:'EMP-0203', email:'m.kowalski@monashhealth.org',   meta:'EMP-0203 · Monash Health',    pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'EP Supervisor', fields:[
         {l:'Organisation',     v:'Monash Health'},
         {l:'Campus',           v:'Clayton'},
@@ -1098,7 +1098,7 @@ const DATA = {
         {l:'Students',         v:'James Mitchell', cls:'link'},
         {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
       ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe6', initials:'RP', name:'Raj Patel',             meta:'Deakin University · EP Coordinator',        pill:'Active', pillClass:'pill-active',
+    { id:'pe6', initials:'RP', name:'Raj Patel',          code:'EMP-0055', email:'r.patel@deakin.edu.au',         meta:'EMP-0055 · Deakin',           pill:'Active', pillClass:'pill-active',
       panel:{ type:'Personnel', sub:'EP Coordinator', fields:[
         {l:'Organisation',     v:'Deakin University'},
         {l:'Campus',           v:'Burwood'},
@@ -1110,89 +1110,89 @@ const DATA = {
       ], actions:['View profile','View supervised placements','Send message'] }},
   ],
   agency: [
-    { id:'a1', initials:'RP', name:'RP Health Care Facility',      meta:'Werribee, VIC · 3 active placements · Allied Health, Nursing, Physiotherapy',  pill:null, pillClass:'',
+    { id:'a1', initials:'RP', name:'RP Health Care Facility',      code:'A2021-00193', meta:'A2021-00193',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Werribee, Victoria'},
-        {l:'Disciplines',        v:'Allied Health, Nursing, Physiotherapy'},
-        {l:'Active placements',  v:'3', cls:'link'},
-        {l:'Active students',    v:'Raquel Lacey, James Mitchell', cls:'link'},
-        {l:'Supervisors',        v:'Ramon Baxter', cls:'link'},
-        {l:'Open requests',      v:'2'},
-        {l:'Agreement status',   v:'Current – expires 30/06/2026'},
+        {l:'Agency code',       v:'A2021-00193'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Werribee'},
+        {l:'Type',              v:'Health Care Facility'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'3', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/06/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a2', initials:'RP', name:'RP HealthCare Ward',           meta:'Werribee, VIC · 2 active placements · Aged Care Nursing',                      pill:null, pillClass:'',
+    { id:'a2', initials:'RP', name:'RP HealthCare Ward',           code:'A2021-00194', meta:'A2021-00194',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Werribee, Victoria'},
-        {l:'Disciplines',        v:'Aged Care Nursing'},
-        {l:'Active placements',  v:'2 (Ward 1 Centre)', cls:'link'},
-        {l:'Active students',    v:'Raquel Racey, Raquel Chriz', cls:'link'},
-        {l:'Supervisors',        v:'Not allocated', cls:'err'},
-        {l:'Open requests',      v:'0'},
-        {l:'Agreement status',   v:'Current – expires 31/12/2026'},
+        {l:'Agency code',       v:'A2021-00194'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Werribee'},
+        {l:'Type',              v:'Health Care Facility'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'2', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 31/12/2026'},
       ], actions:['View agency','View placements','View requests'] }},
-    { id:'a3', initials:'SV', name:'St Vincents Hospital',         meta:'Fitzroy, VIC · 2 active placements · Emergency Nursing, ICU',                  pill:null, pillClass:'',
+    { id:'a3', initials:'SV', name:'St Vincents Hospital',         code:'A2021-00210', meta:'A2021-00210',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Fitzroy, Victoria'},
-        {l:'Disciplines',        v:'Emergency Nursing, ICU'},
-        {l:'Active placements',  v:'2', cls:'link'},
-        {l:'Active students',    v:'Sarah Patel', cls:'link'},
-        {l:'Supervisors',        v:'Dr. Linda Tran', cls:'link'},
-        {l:'Open requests',      v:'1'},
-        {l:'Agreement status',   v:'Current – expires 30/06/2027'},
+        {l:'Agency code',       v:'A2021-00210'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Fitzroy'},
+        {l:'Type',              v:'Hospital'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'2', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/06/2027'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a4', initials:'RM', name:'Royal Melbourne Hospital',     meta:'Parkville, VIC · 5 active placements · General Nursing, Midwifery',             pill:null, pillClass:'',
+    { id:'a4', initials:'RM', name:'Royal Melbourne Hospital',     code:'A2021-00220', meta:'A2021-00220',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Parkville, Victoria'},
-        {l:'Disciplines',        v:'General Nursing, Midwifery, Allied Health'},
-        {l:'Active placements',  v:'5', cls:'link'},
-        {l:'Active students',    v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
-        {l:'Supervisors',        v:'Rachel Andrews', cls:'link'},
-        {l:'Open requests',      v:'3'},
-        {l:'Agreement status',   v:'Current – expires 30/09/2026'},
+        {l:'Agency code',       v:'A2021-00220'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Parkville'},
+        {l:'Type',              v:'Hospital'},
+        {l:'Level',             v:'Network'},
+        {l:'Active placements', v:'5', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/09/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a5', initials:'MH', name:'Monash Health',                meta:'Clayton, VIC · 4 active placements · Allied Health, Physiotherapy',             pill:null, pillClass:'',
+    { id:'a5', initials:'MH', name:'Monash Health',                code:'A2022-00050', meta:'A2022-00050',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Clayton, Victoria'},
-        {l:'Disciplines',        v:'Allied Health, Physiotherapy, General Nursing'},
-        {l:'Active placements',  v:'4', cls:'link'},
-        {l:'Active students',    v:'James Mitchell, Sarah Patel', cls:'link'},
-        {l:'Supervisors',        v:'Mark Kowalski', cls:'link'},
-        {l:'Open requests',      v:'2'},
-        {l:'Agreement status',   v:'Current – expires 28/02/2027'},
+        {l:'Agency code',       v:'A2022-00050'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Clayton'},
+        {l:'Type',              v:'Health Care Facility'},
+        {l:'Level',             v:'Network'},
+        {l:'Active placements', v:'4', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 28/02/2027'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a6', initials:'AU', name:'Austin Health',                meta:'Heidelberg, VIC · 2 active placements · General Nursing, Midwifery',            pill:null, pillClass:'',
+    { id:'a6', initials:'AU', name:'Austin Health',                code:'A2022-00056', meta:'A2022-00056',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Heidelberg, Victoria'},
-        {l:'Disciplines',        v:'General Nursing, Midwifery'},
-        {l:'Active placements',  v:'2', cls:'link'},
-        {l:'Active students',    v:'1 student – see placements', cls:'link'},
-        {l:'Supervisors',        v:'Raj Patel', cls:'link'},
-        {l:'Open requests',      v:'1'},
-        {l:'Agreement status',   v:'Current – expires 30/06/2026'},
+        {l:'Agency code',       v:'A2022-00056'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Heidelberg'},
+        {l:'Type',              v:'Hospital'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'2', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/06/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a7', initials:'AL', name:'Albury Wodonga Health',        meta:'Albury, NSW/VIC · 1 active placement · Rural Nursing',                         pill:null, pillClass:'',
+    { id:'a7', initials:'AL', name:'Albury Wodonga Health',        code:'A2022-00061', meta:'A2022-00061',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Albury, NSW / Wodonga, VIC'},
-        {l:'Disciplines',        v:'Rural Nursing, General Nursing'},
-        {l:'Active placements',  v:'1', cls:'link'},
-        {l:'Active students',    v:'No student assigned', cls:'err'},
-        {l:'Supervisors',        v:'Not allocated', cls:'err'},
-        {l:'Open requests',      v:'0'},
-        {l:'Agreement status',   v:'Expiring – 30/04/2026', cls:'err'},
+        {l:'Agency code',       v:'A2022-00061'},
+        {l:'Region',            v:'New South Wales'},
+        {l:'Suburb',            v:'Albury'},
+        {l:'Type',              v:'Hospital'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'1', cls:'link'},
+        {l:'Agreement status',  v:'Expiring – 30/04/2026', cls:'err'},
       ], actions:['View agency','View placements','View agreements'] }},
-    { id:'a8', initials:'BH', name:'Ballarat Health Services',     meta:'Ballarat, VIC · 3 active placements · Aged Care, General Nursing',              pill:null, pillClass:'',
+    { id:'a8', initials:'BH', name:'Ballarat Health Services',     code:'A2023-00015', meta:'A2023-00015',       pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Location',           v:'Ballarat, Victoria'},
-        {l:'Disciplines',        v:'Aged Care Nursing, General Nursing'},
-        {l:'Active placements',  v:'3', cls:'link'},
-        {l:'Active students',    v:'2 students – see placements', cls:'link'},
-        {l:'Supervisors',        v:'Rachel Andrews (acting)', cls:'link'},
-        {l:'Open requests',      v:'1'},
-        {l:'Agreement status',   v:'Current – expires 31/12/2026'},
+        {l:'Agency code',       v:'A2023-00015'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Ballarat'},
+        {l:'Type',              v:'Aged Care Facility'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'3', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 31/12/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
   ],
   request: [
-    { id:'r1', initials:'RQ', name:'REQ-2026-0182 — Aged Care Nursing',         meta:'Deakin · 2 students · 01/01/2026 – 31/12/2026',        pill:'Open',     pillClass:'pill-active',
+    { id:'r1', initials:'RQ', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', meta:'REQ-2026-0182 · Deakin',    pill:'Open',      pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Discipline',         v:'Aged Care Nursing'},
@@ -1202,7 +1202,7 @@ const DATA = {
         {l:'Status',             v:'Offer published – pending response'},
         {l:'Linked placements',  v:'PL-2026-0088, PL-2026-0089', cls:'link'},
       ], actions:['View request','Approve','Reject','View linked placements'] }},
-    { id:'r2', initials:'RQ', name:'REQ-2026-0195 — Physiotherapy',             meta:'Monash · 1 student · 16/02/2026 – 30/04/2026',         pill:'Open',     pillClass:'pill-active',
+    { id:'r2', initials:'RQ', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', meta:'REQ-2026-0195 · Monash',    pill:'Open',      pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider', v:'Monash University'},
         {l:'Discipline',         v:'Physiotherapy'},
@@ -1212,7 +1212,7 @@ const DATA = {
         {l:'Status',             v:'No student assigned', cls:'err'},
         {l:'Linked placements',  v:'PL-2026-0104', cls:'link'},
       ], actions:['View request','Assign student','Reject'] }},
-    { id:'r3', initials:'RQ', name:'REQ-2026-0210 — Emergency Nursing',         meta:'Melbourne Uni · 1 student · 01/03/2026 – 31/08/2026',  pill:'Published', pillClass:'pill-warning',
+    { id:'r3', initials:'RQ', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', meta:'REQ-2026-0210 · Melbourne Uni', pill:'Published', pillClass:'pill-warning',
       panel:{ type:'Request', sub:'Offer Published', fields:[
         {l:'Education provider', v:'University of Melbourne'},
         {l:'Discipline',         v:'Emergency Nursing'},
@@ -1222,7 +1222,7 @@ const DATA = {
         {l:'Status',             v:'Pending student response'},
         {l:'Linked placements',  v:'PL-2026-0112', cls:'link'},
       ], actions:['View request','Withdraw offer','View linked placements'] }},
-    { id:'r4', initials:'RQ', name:'REQ-2026-0088 — Midwifery Antenatal',       meta:'La Trobe · 1 student · 30/08/2025 – 08/03/2027',       pill:'Fulfilled', pillClass:'pill-active',
+    { id:'r4', initials:'RQ', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', meta:'REQ-2026-0088 · La Trobe',  pill:'Fulfilled', pillClass:'pill-active',
       panel:{ type:'Request', sub:'Fulfilled', fields:[
         {l:'Education provider', v:'La Trobe University'},
         {l:'Discipline',         v:'Midwifery'},
@@ -1273,12 +1273,13 @@ const opInput  = document.getElementById('opInput');
 const opResults= document.getElementById('opResults');
 const opPanel  = document.getElementById('opPanel');
 
-// ── SEARCH LOGIC ───────────────────────────────────────────────────────────
+// ── SEARCH LOGIC — match unique identifiers only ───────────────────────────
+// Per Felix: keep search specific. No broad attributes (discipline, region,
+// year level etc). Match only: name, email, student code, employee code,
+// placement ID, request ID, agency name, agency code, personnel name.
 function search(q, entityTypeHint) {
   q = q.toLowerCase().trim();
 
-  // If no query or very short (1 char), return all entities of the hinted type
-  // or first 8 overall — don't try to match
   if (!q || q.length < 2) {
     const pool = entityTypeHint && entityTypeHint !== 'all'
       ? ALL_ENTITIES.filter(e => e.entityType === entityTypeHint)
@@ -1287,20 +1288,12 @@ function search(q, entityTypeHint) {
   }
 
   return ALL_ENTITIES.filter(e => {
-    // Name match — highest priority
+    // Always match on entity name (student name, agency name, personnel name etc.)
     if (e.name.toLowerCase().includes(q)) return true;
-    // Meta string match
-    if (e.meta.toLowerCase().includes(q)) return true;
-    // Panel field values — match actual Network entity fields
-    if (e.panel && e.panel.fields) {
-      const keyFields = e.panel.fields.filter(f =>
-        ['Student','Students','Education provider','Discipline','Placement type',
-         'Agency','Organisation','Campus','Personnel role','Region',
-         'Type','Level','Year level'].includes(f.l)
-      );
-      if (keyFields.some(f => f.v.toLowerCase().includes(q))) return true;
-    }
-    if (e.region && e.region.toLowerCase().includes(q)) return true;
+    // Match on the unique code/ID stored in e.code
+    if (e.code && e.code.toLowerCase().includes(q)) return true;
+    // Match on email stored in e.email
+    if (e.email && e.email.toLowerCase().includes(q)) return true;
     return false;
   });
 }
@@ -1308,6 +1301,39 @@ function search(q, entityTypeHint) {
 function filterByTab(results, tab) {
   if (tab === 'all') return results;
   return results.filter(e => e.entityType === tab);
+}
+
+// ── CARD DISPLAY — entity-aware field layout ───────────────────────────────
+// Per Felix: Placement/Request ID is most prominent for those entities.
+// Students: name primary, email + code + EP + discipline secondary.
+// Personnel: name primary, email + code + role secondary.
+// Agencies: name primary, code + region secondary.
+function cardPrimary(item) {
+  if (item.entityType === 'placement') return item.code || item.name;
+  if (item.entityType === 'request')   return item.code || item.name;
+  return item.name;
+}
+function cardSecondary(item) {
+  const f = (label) => {
+    const field = item.panel && item.panel.fields && item.panel.fields.find(x => x.l === label);
+    return field ? field.v : null;
+  };
+  switch (item.entityType) {
+    case 'student':
+      return [item.email, item.code, f('Education provider'), f('Discipline')]
+        .filter(Boolean).join(' · ');
+    case 'placement':
+      return [f('Agency'), f('Student') || f('Students')].filter(Boolean).join(' · ');
+    case 'personnel':
+      return [item.email, item.code, f('Personnel role')].filter(Boolean).join(' · ');
+    case 'agency':
+      return [item.code, f('Suburb'), f('Region')].filter(Boolean).join(' · ');
+    case 'request':
+      return [f('Education provider'), f('Agency preference') || f('Agency')]
+        .filter(Boolean).join(' · ');
+    default:
+      return item.meta || '';
+  }
 }
 
 // ── RENDER RESULTS ─────────────────────────────────────────────────────────
@@ -1349,8 +1375,8 @@ function renderResults(q, tab) {
       row.innerHTML = `
         <div class="op-ico ${ENTITY_META[type].icoClass}">${item.initials}</div>
         <div class="op-main">
-          <div class="op-name">${item.name}</div>
-          <div class="op-meta">${item.meta}</div>
+          <div class="op-name">${cardPrimary(item)}</div>
+          <div class="op-meta">${cardSecondary(item)}</div>
         </div>
         ${pill}`;
 
@@ -1434,8 +1460,8 @@ function renderDropdown(q) {
       d.innerHTML = `
         <div class="dd-dot" style="background:var(--primary-600)"></div>
         <div class="dd-main">
-          <div class="dd-name">${item.name}</div>
-          <div class="dd-meta">${item.meta}</div>
+          <div class="dd-name">${cardPrimary(item)}</div>
+          <div class="dd-meta">${cardSecondary(item)}</div>
         </div>${pill}`;
       // clicking a row goes directly to the detail page — no intermediate overlay
       d.onclick = (e) => { e.stopPropagation(); gsDrop.classList.remove('open'); navigateTo(item); };
