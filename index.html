@@ -626,9 +626,80 @@
     <button class="tn-btn" title="Refresh">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 4A6.5 6.5 0 1 1 7 1.5l2.5 2.5" stroke-linecap="round"/><path d="M9.5 1.5h3v3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
+    <button onclick="toggleTestData()" title="Test data" style="height:24px;padding:0 8px;border-radius:3px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-family:var(--font-mono);font-size:10px;cursor:pointer;letter-spacing:0.03em;margin-left:4px;" id="tdBtn">TEST DATA</button>
     <div class="tn-avatar">VN</div>
   </div>
 </nav>
+
+<!-- TEST DATA DRAWER -->
+<div id="testDrawer" style="position:fixed;top:0;right:-380px;width:360px;height:100vh;background:var(--primary-900);z-index:600;transition:right 0.25s ease;overflow-y:auto;display:flex;flex-direction:column;">
+  <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.9);letter-spacing:0.06em;">TEST DATA</span>
+    <button onclick="toggleTestData()" style="background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:16px;line-height:1;">×</button>
+  </div>
+  <div style="padding:14px 16px;font-family:var(--font-body);font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.08);">
+    Click any row to pre-fill the search bar
+  </div>
+  <div style="padding:10px 0;flex:1;">
+
+    <!-- STUDENTS -->
+    <div style="padding:6px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Students</div>
+    <div class="td-row" onclick="testSearch('Raquel Lacey')"><span class="td-term">Raquel Lacey</span><span class="td-desc">name</span></div>
+    <div class="td-row" onclick="testSearch('S22448871')"><span class="td-term">S22448871</span><span class="td-desc">student code</span></div>
+    <div class="td-row" onclick="testSearch('raquel.lacey@student.deakin.edu.au')"><span class="td-term">raquel.lacey@…deakin</span><span class="td-desc">email</span></div>
+    <div class="td-row" onclick="testSearch('James Mitchell')"><span class="td-term">James Mitchell</span><span class="td-desc">name</span></div>
+    <div class="td-row" onclick="testSearch('30912345')"><span class="td-term">30912345</span><span class="td-desc">student code</span></div>
+    <div class="td-row" onclick="testSearch('Sarah Patel')"><span class="td-term">Sarah Patel</span><span class="td-desc">no placement</span></div>
+    <div class="td-row" onclick="testSearch('Tom Ward')"><span class="td-term">Tom Ward</span><span class="td-desc">disambiguation student</span></div>
+    <div class="td-row" onclick="testSearch('12345678')"><span class="td-term">12345678</span><span class="td-desc">code clashes with PL-1234</span></div>
+
+    <!-- PLACEMENTS -->
+    <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Placements</div>
+    <div class="td-row" onclick="testSearch('PL-2026-76408')"><span class="td-term">PL-2026-76408</span><span class="td-desc">exact placement ID</span></div>
+    <div class="td-row" onclick="testSearch('76408')"><span class="td-term">76408</span><span class="td-desc">partial placement ID</span></div>
+    <div class="td-row" onclick="testSearch('PL-2026-1234')"><span class="td-term">PL-2026-1234</span><span class="td-desc">disambiguation placement</span></div>
+    <div class="td-row" onclick="testSearch('1234')"><span class="td-term">1234</span><span class="td-desc">clashes with code 12345678</span></div>
+    <div class="td-row" onclick="testSearch('PL-2026-82716')"><span class="td-term">PL-2026-82716</span><span class="td-desc">no student assigned</span></div>
+    <div class="td-row" onclick="testSearch('RP Health')"><span class="td-term">RP Health</span><span class="td-desc">agency name → placements</span></div>
+
+    <!-- PERSONNEL -->
+    <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Personnel</div>
+    <div class="td-row" onclick="testSearch('Rachel Andrews')"><span class="td-term">Rachel Andrews</span><span class="td-desc">name</span></div>
+    <div class="td-row" onclick="testSearch('EMP-0041')"><span class="td-term">EMP-0041</span><span class="td-desc">employee code</span></div>
+    <div class="td-row" onclick="testSearch('r.andrews@rmh')"><span class="td-term">r.andrews@rmh</span><span class="td-desc">email</span></div>
+    <div class="td-row" onclick="testSearch('Ramon')"><span class="td-term">Ramon</span><span class="td-desc">name — Ra prefix</span></div>
+    <div class="td-row" onclick="testSearch('5419')"><span class="td-term">5419</span><span class="td-desc">personnel code</span></div>
+
+    <!-- AGENCIES -->
+    <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Agencies</div>
+    <div class="td-row" onclick="testSearch('Royal Melbourne')"><span class="td-term">Royal Melbourne</span><span class="td-desc">agency name</span></div>
+    <div class="td-row" onclick="testSearch('A2021-00220')"><span class="td-term">A2021-00220</span><span class="td-desc">agency code</span></div>
+    <div class="td-row" onclick="testSearch('Ballarat')"><span class="td-term">Ballarat</span><span class="td-desc">agency name</span></div>
+    <div class="td-row" onclick="testSearch('A2023-00015')"><span class="td-term">A2023-00015</span><span class="td-desc">agency code</span></div>
+    <div class="td-row" onclick="testSearch('Monash')"><span class="td-term">Monash</span><span class="td-desc">agency name</span></div>
+
+    <!-- REQUESTS -->
+    <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Requests</div>
+    <div class="td-row" onclick="testSearch('REQ-2026-0182')"><span class="td-term">REQ-2026-0182</span><span class="td-desc">exact request ID</span></div>
+    <div class="td-row" onclick="testSearch('0182')"><span class="td-term">0182</span><span class="td-desc">partial request ID</span></div>
+    <div class="td-row" onclick="testSearch('REQ-2026-0088')"><span class="td-term">REQ-2026-0088</span><span class="td-desc">fulfilled request</span></div>
+    <div class="td-row" onclick="testSearch('Deakin')"><span class="td-term">Deakin</span><span class="td-desc">EP name → requests</span></div>
+
+  </div>
+</div>
+<div id="testOverlay" onclick="toggleTestData()" style="display:none;position:fixed;inset:0;z-index:599;background:rgba(0,25,62,0.3);"></div>
+
+<style>
+  .td-row {
+    display:flex;justify-content:space-between;align-items:center;
+    padding:7px 16px;cursor:pointer;
+    transition:background 0.1s;
+    border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  .td-row:hover { background:rgba(255,255,255,0.07); }
+  .td-term { font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.85); }
+  .td-desc { font-size:10px;color:rgba(255,255,255,0.35);font-style:italic; }
+</style>
 
 <!-- BODY -->
 <div class="body-row">
@@ -984,8 +1055,34 @@ const DATA = {
         {l:'Roster',             v:'Not set'},
         {l:'Outstanding tasks',  v:'Prerequisite documents pending'},
       ], actions:['View student profile','Assign to placement'] }},
+    { id:'s7', initials:'TW', name:'Tom Ward',         code:'12345678',  email:'t.ward@student.rmit.edu.au',           meta:'12345678 · RMIT',             pill:'Active',          pillClass:'pill-active',
+      panel:{ type:'Student', sub:'BN Year 3', fields:[
+        {l:'Education provider', v:'RMIT University'},
+        {l:'Campus',             v:'City'},
+        {l:'Discipline',         v:'General Nursing'},
+        {l:'Course Type',        v:'Bachelor of Nursing'},
+        {l:'Current placement',  v:'Royal Melbourne Hospital – General Ward', cls:'link'},
+        {l:'Placement dates',    v:'01/02/2026 – 30/06/2026'},
+        {l:'Region',             v:'Metro Melbourne'},
+        {l:'Agency',             v:'Royal Melbourne Hospital', cls:'link'},
+        {l:'Supervisor',         v:'Rachel Andrews', cls:'link'},
+        {l:'Roster',             v:'Mon–Fri 07:00–15:00'},
+        {l:'Outstanding tasks',  v:'None'},
+      ], actions:['View student profile','Jump to placement','View roster'] }},
   ],
   placement: [
+    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Active',           pillClass:'pill-active',
+      panel:{ type:'Placement', sub:'General Nursing', fields:[
+        {l:'Agency',          v:'Royal Melbourne Hospital', cls:'link'},
+        {l:'Ward / unit',     v:'General Ward'},
+        {l:'Discipline',      v:'General Nursing'},
+        {l:'Region',          v:'Metro Melbourne – Parkville'},
+        {l:'Dates',           v:'01/02/2026 – 30/06/2026'},
+        {l:'Student',         v:'Tom Ward', cls:'link'},
+        {l:'Supervisor',      v:'Rachel Andrews', cls:'link'},
+        {l:'Roster',          v:'Mon–Fri 07:00–15:00'},
+        {l:'Outstanding',     v:'None'},
+      ], actions:['View placement','Edit placement','View roster'] }},
     { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
@@ -1562,7 +1659,26 @@ function openOverlay(q, tabHint) {
   opInput.focus();
 }
 
-// ── INIT ───────────────────────────────────────────────────────────────────
+// ── TEST DATA DRAWER ───────────────────────────────────────────────────────
+function toggleTestData() {
+  const drawer  = document.getElementById('testDrawer');
+  const overlay = document.getElementById('testOverlay');
+  const btn     = document.getElementById('tdBtn');
+  const open = drawer.style.right === '0px';
+  drawer.style.right  = open ? '-380px' : '0px';
+  overlay.style.display = open ? 'none' : 'block';
+  btn.style.color = open ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,1)';
+  btn.style.background = open ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.18)';
+}
+
+function testSearch(term) {
+  toggleTestData();
+  gsInput.value = term;
+  renderDropdown(term);
+  gsDrop.classList.add('open');
+  gsInput.focus();
+}
+
 gsInput.value = '';
 
 </script>
