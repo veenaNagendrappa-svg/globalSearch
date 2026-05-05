@@ -152,93 +152,184 @@
     pointer-events: none;
   }
 
-  /* DROPDOWN — matches screenshot width/layout */
-  .gs-dropdown {
-    position: fixed; top: var(--top-h);
-    left: var(--leftnav-w); right: 0;
+  /* FULL-SCREEN SEARCH OVERLAY */
+  .fs-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,25,62,0.35);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 500;
+    overflow-y: auto;
+    padding: 48px 0 80px;
+  }
+  .fs-overlay.open { display: block; }
+
+  /* White search panel sits centred over the blurred background */
+  .fs-panel {
+    background: var(--white);
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,25,62,0.2);
+    overflow: hidden;
+    min-height: 300px;
+  }
+
+  .fs-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--secondary-200);
+    padding: 12px 20px 0;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .fs-input-wrap {
+    display: flex; align-items: center; gap: 10px;
+    border: 1.5px solid var(--primary-600);
+    border-radius: 6px;
+    padding: 8px 12px;
+    background: var(--white);
+  }
+  .fs-input-wrap svg { flex-shrink: 0; color: var(--secondary-500); }
+  .fs-input {
+    flex: 1; border: none; outline: none;
+    font-family: var(--font-body);
+    font-size: 14px; color: var(--text-high);
+    background: transparent;
+  }
+  .fs-input::placeholder { color: var(--secondary-500); }
+  .fs-clear {
+    background: none; border: none;
+    font-size: 12px; color: var(--secondary-600);
+    cursor: pointer; padding: 0 4px;
+    font-family: var(--font-body);
+  }
+  .fs-clear:hover { color: var(--primary-700); }
+  .fs-close {
+    background: none; border: none;
+    font-size: 20px; line-height: 1;
+    color: var(--secondary-500); cursor: pointer;
+    padding: 0 2px; flex-shrink: 0;
+  }
+  .fs-close:hover { color: var(--text-high); }
+  .fs-count {
+    margin: 6px 0 0;
+    font-size: 11px; color: var(--secondary-600);
+    padding-bottom: 8px;
+    min-height: 22px;
+  }
+
+  /* Empty state */
+  .fs-body {
+    background: var(--white);
+    min-height: 200px;
+  }
+  .fs-empty {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 60px 24px;
+    gap: 12px;
+  }
+  .fs-empty-title {
+    font-size: 16px; font-weight: 500;
+    color: var(--text-high);
+  }
+  .fs-empty-sub {
+    font-size: 13px; color: var(--secondary-600);
+    text-align: center;
+  }
+
+  /* Results */
+  .fs-results {
+    padding: 16px 20px 32px;
+    background: var(--secondary-050);
+  }
+
+  /* Entity group */
+  .fs-group { margin-bottom: 24px; }
+  .fs-glabel {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--secondary-700);
+    margin-bottom: 8px;
+  }
+  .fs-glabel-icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .ico-stu  { background: var(--primary-100);  color: var(--primary-700); }
+  .ico-pl   { background: var(--success-light); color: var(--success-dark); }
+  .ico-ag   { background: var(--warning-light); color: #5a3e00; }
+  .ico-req  { background: var(--error-light);   color: var(--error-dark); }
+  .fs-count-badge {
+    font-size: 10px; font-weight: 600;
+    background: var(--primary-100); color: var(--primary-700);
+    border-radius: 10px; padding: 1px 7px;
+  }
+
+  /* Result card — matches Lachlan's prototype */
+  .fs-card {
     background: var(--white);
     border: 1px solid var(--secondary-200);
-    border-top: none;
-    box-shadow: 0 8px 24px rgba(0,25,62,0.14);
-    z-index: 400; overflow-y: auto;
-    max-height: calc(100vh - var(--top-h) - 40px);
-    display: none;
-    max-width: 640px;
-  }
-  .gs-dropdown.open { display: block; }
-  .gs-backdrop {
-    display: none; position: fixed; inset: 0;
-    top: var(--top-h); background: rgba(0,25,62,0.3);
-    z-index: 399;
-  }
-  .gs-backdrop.open { display: block; }
-
-  .dd-filters {
-    display: flex; gap: 6px;
-    padding: 8px 12px 7px;
-    border-bottom: 1px solid var(--secondary-200);
-    flex-wrap: wrap;
-  }
-  .dd-chip {
-    font-family: var(--font-body);
-    font-size: 11px; font-weight: 500;
-    padding: 2px 10px;
-    border-radius: 12px;
-    border: 1px solid var(--secondary-300);
-    background: var(--secondary-050);
-    color: var(--secondary-800);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 6px;
     cursor: pointer;
-    transition: all 0.1s;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .dd-chip:hover, .dd-chip.on {
-    background: var(--primary-700);
-    color: var(--white);
-    border-color: var(--primary-700);
+  .fs-card:hover {
+    border-color: var(--primary-400);
+    box-shadow: 0 2px 8px rgba(0,25,62,0.08);
   }
-  .dd-chip.assigned {
-    background: var(--warning-light);
-    border-color: var(--warning);
-    color: #5a3e00;
+  .fs-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 8px;
   }
-  .dd-chip.assigned:hover {
-    background: var(--warning);
+  .fs-card-name {
+    font-size: 13px; font-weight: 600;
     color: var(--primary-900);
   }
+  .fs-card-fields {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3px 16px;
+  }
+  .fs-card-field {
+    font-size: 11px; color: var(--secondary-700);
+    line-height: 1.6;
+  }
+  .fs-card-field-label { color: var(--secondary-500); }
+  .fs-card-flag {
+    font-size: 10px; color: var(--error);
+    font-weight: 500; margin-top: 6px;
+  }
 
-  .dd-group { padding: 4px 0; }
-  .dd-group + .dd-group { border-top: 1px solid var(--secondary-200); }
-  .dd-glabel {
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 0.07em; text-transform: uppercase;
-    color: var(--secondary-600);
-    padding: 6px 16px 3px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .dd-item {
-    padding: 7px 16px; cursor: pointer;
+  /* View More button */
+  .fs-view-more {
+    width: 100%; padding: 10px;
+    background: var(--white);
+    border: 1px solid var(--secondary-200);
+    border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    color: var(--secondary-700);
+    cursor: pointer; text-align: center;
     transition: background 0.1s;
-    border-bottom: 1px solid var(--secondary-100);
+    margin-top: 4px;
+    font-family: var(--font-body);
   }
-  .dd-item:hover { background: var(--primary-050); }
-  .dd-item-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-  .dd-name { font-size: 13px; font-weight: 500; color: var(--primary-900); }
-  .dd-meta { font-size: 11px; color: var(--secondary-600); margin-top: 2px; line-height: 1.5; white-space: normal; }
-  .dd-flag { font-size: 10px; color: var(--error); margin-top: 3px; font-weight: 500; }
-  .dd-view-more-link {
-    padding: 5px 16px 6px;
-    font-size: 11px; font-weight: 500;
-    color: var(--primary-600); cursor: pointer;
-  }
-  .dd-view-more-link:hover { text-decoration: underline; }
+  .fs-view-more:hover { background: var(--secondary-100); }
 
   .status-pill {
     font-size: 10px; font-weight: 500;
     padding: 2px 8px; border-radius: 12px;
-    flex-shrink: 0;
+    flex-shrink: 0; white-space: nowrap;
   }
   .pill-active   { background: var(--success-light); color: var(--success-dark); }
   .pill-warning  { background: var(--warning-light); color: #5a3e00; }
   .pill-error    { background: var(--error-light); color: var(--error-dark); }
+
+  /* Keep dd- classes for any remaining references */
   .dd-hint { font-size: 11px; color: var(--secondary-600); }
 
   /* TOP NAV RIGHT */
@@ -593,22 +684,10 @@
     <span class="logo-text">InPlace</span>
   </a>
 
-  <div class="gs-wrap">
+  <div class="gs-wrap" id="gsWrap">
     <svg class="gs-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
-    <input class="gs-input" id="gsInput" type="text" placeholder="Search students, placements, agencies, requests…" autocomplete="off" />
-    <span class="gs-kbd">Ctrl K</span>
-    <div class="gs-dropdown" id="gsDropdown">
-      <div class="dd-filters">
-        <div class="dd-chip on">All</div>
-        <div class="dd-chip">Students</div>
-        <div class="dd-chip">Placements</div>
-        <div class="dd-chip">Agencies</div>
-        <div class="dd-chip">Requests</div>
-        <div class="dd-chip assigned">Assigned to me</div>
-      </div>
-    </div>
+    <input class="gs-input" id="gsInput" type="text" placeholder="Search students, placements, requests…" autocomplete="off" readonly />
   </div>
-  <div class="gs-backdrop" id="gsBackdrop"></div>
 
   <div class="tn-right">
     <button class="tn-btn" title="Notifications">
@@ -631,6 +710,29 @@
   </div>
 </nav>
 
+<!-- FULL-SCREEN SEARCH OVERLAY -->
+<div class="fs-overlay" id="fsOverlay">
+  <div class="fs-panel">
+    <div class="fs-header">
+      <div class="fs-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
+        <input class="fs-input" id="fsInput" type="text" placeholder="Search students, placements, agencies, requests…" autocomplete="off" />
+        <button class="fs-clear" id="fsClear" style="display:none">Clear</button>
+        <button class="fs-close" id="fsClose">×</button>
+      </div>
+      <div class="fs-count" id="fsCount"></div>
+    </div>
+    <div class="fs-body">
+      <div class="fs-empty" id="fsEmpty">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="var(--secondary-400)" stroke-width="1.5"><circle cx="18" cy="18" r="11"/><path d="M26.5 26.5L34 34" stroke-linecap="round"/></svg>
+        <div class="fs-empty-title">Global Search</div>
+        <div class="fs-empty-sub">Search across students, placements, requests and agencies</div>
+      </div>
+      <div class="fs-results" id="fsResults" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
 <!-- TEST DATA DRAWER -->
 <div id="testDrawer" style="position:fixed;top:0;right:-380px;width:360px;height:100vh;background:var(--primary-900);z-index:600;transition:right 0.25s ease;overflow-y:auto;display:flex;flex-direction:column;">
   <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;">
@@ -651,7 +753,7 @@
     <div class="td-row" onclick="testSearch('30912345')"><span class="td-term">30912345</span><span class="td-desc">student code</span></div>
     <div class="td-row" onclick="testSearch('Sarah Patel')"><span class="td-term">Sarah Patel</span><span class="td-desc">no placement</span></div>
     <div class="td-row" onclick="testSearch('Tom Ward')"><span class="td-term">Tom Ward</span><span class="td-desc">disambiguation student</span></div>
-    <div class="td-row" onclick="testSearch('12345678')"><span class="td-term">12345678</span><span class="td-desc">code clashes with PL-1234</span></div>
+    <div class="td-row" onclick="testSearch('12345678')"><span class="td-term">12345678</span><span class="td-desc">inactive student — hidden by default</span></div>
 
     <!-- PLACEMENTS -->
     <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Placements</div>
@@ -666,18 +768,21 @@
 
     <!-- AGENCIES -->
     <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Agencies</div>
-    <div class="td-row" onclick="testSearch('Royal Melbourne')"><span class="td-term">Royal Melbourne</span><span class="td-desc">agency name</span></div>
-    <div class="td-row" onclick="testSearch('A2021-00220')"><span class="td-term">A2021-00220</span><span class="td-desc">agency code</span></div>
-    <div class="td-row" onclick="testSearch('Ballarat')"><span class="td-term">Ballarat</span><span class="td-desc">agency name</span></div>
+    <div class="td-row" onclick="testSearch('Royal Melbourne')"><span class="td-term">Royal Melbourne</span><span class="td-desc">network → 3 child wards</span></div>
+    <div class="td-row" onclick="testSearch('A2021-00220')"><span class="td-term">A2021-00220</span><span class="td-desc">network agency code</span></div>
+    <div class="td-row" onclick="testSearch('Royal Melbourne — General')"><span class="td-term">Royal Melbourne — General</span><span class="td-desc">ward-level child agency</span></div>
+    <div class="td-row" onclick="testSearch('RP Health')"><span class="td-term">RP Health</span><span class="td-desc">network + 2 facility children</span></div>
+    <div class="td-row" onclick="testSearch('Ballarat')"><span class="td-term">Ballarat</span><span class="td-desc">facility agency with parent</span></div>
     <div class="td-row" onclick="testSearch('A2023-00015')"><span class="td-term">A2023-00015</span><span class="td-desc">agency code</span></div>
-    <div class="td-row" onclick="testSearch('Monash')"><span class="td-term">Monash</span><span class="td-desc">agency name</span></div>
+    <div class="td-row" onclick="testSearch('Albury')"><span class="td-term">Albury</span><span class="td-desc">inactive agency — hidden by default</span></div>
 
     <!-- REQUESTS -->
     <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Requests</div>
     <div class="td-row" onclick="testSearch('REQ-2026-0182')"><span class="td-term">REQ-2026-0182</span><span class="td-desc">exact request ID</span></div>
     <div class="td-row" onclick="testSearch('0182')"><span class="td-term">0182</span><span class="td-desc">partial request ID</span></div>
-    <div class="td-row" onclick="testSearch('REQ-2026-0088')"><span class="td-term">REQ-2026-0088</span><span class="td-desc">fulfilled request</span></div>
+    <div class="td-row" onclick="testSearch('REQ-2026-0088')"><span class="td-term">REQ-2026-0088</span><span class="td-desc">completed request — hidden by default</span></div>
     <div class="td-row" onclick="testSearch('Deakin')"><span class="td-term">Deakin</span><span class="td-desc">EP name → requests</span></div>
+    <div class="td-row" onclick="testSearch('Austin')"><span class="td-term">Austin</span><span class="td-desc">inactive agency + cancelled placement</span></div>
 
   </div>
 </div>
@@ -933,31 +1038,6 @@
   </main>
 </div>
 
-<!-- FULL SCREEN OVERLAY -->
-<div class="overlay" id="overlay" onclick="handleOverlay(event)">
-  <div class="overlay-panel" onclick="event.stopPropagation()">
-    <div class="op-search">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--secondary-500)" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
-      <input class="op-input" id="opInput" type="text" placeholder="Search students, placements, agencies, requests…" autocomplete="off" />
-      <button class="op-esc" onclick="closeOverlay()">Esc</button>
-    </div>
-    <div class="op-tabs">
-      <div class="op-tab on" data-tab="all">All</div>
-      <div class="op-tab" data-tab="student">Students</div>
-      <div class="op-tab" data-tab="placement">Placements</div>
-      <div class="op-tab" data-tab="agency">Agencies</div>
-      <div class="op-tab" data-tab="request">Requests</div>
-    </div>
-    <div class="op-body">
-      <div class="op-results" id="opResults" style="flex:1;border-right:none;"></div>
-    </div>
-    <div class="op-hints">
-      <div class="op-hint"><kbd>↑↓</kbd> Navigate</div>
-      <div class="op-hint"><kbd>↵</kbd> Open</div>
-      <div class="op-hint"><kbd>Esc</kbd> Close</div>
-    </div>
-  </div>
-</div>
 
 <script>
 // ── ENTITY DATA STORE ──────────────────────────────────────────────────────
@@ -970,6 +1050,7 @@ const DATA = {
         {l:'Campus',             v:'Burwood, Melbourne'},
         {l:'Discipline',         v:'Aged Care Nursing'},
         {l:'Course Type',        v:'Bachelor of Nursing'},
+        {l:'Year level',         v:'Year 1'},
         {l:'Current placement',  v:'RP Health Care Facility – Facility Centre', cls:'link'},
         {l:'Placement dates',    v:'01/01/2026 – 31/10/2026'},
         {l:'Region',             v:'Metro Melbourne'},
@@ -984,6 +1065,7 @@ const DATA = {
         {l:'Campus',             v:'Burwood, Melbourne'},
         {l:'Discipline',         v:'Aged Care Nursing'},
         {l:'Course Type',        v:'Bachelor of Nursing'},
+        {l:'Year level',         v:'Year 1'},
         {l:'Current placement',  v:'RP HealthCare Ward – Ward 1 Centre', cls:'link'},
         {l:'Placement dates',    v:'01/01/2026 – 31/12/2026'},
         {l:'Region',             v:'Metro Melbourne'},
@@ -998,6 +1080,7 @@ const DATA = {
         {l:'Campus',             v:'Geelong Waterfront'},
         {l:'Discipline',         v:'Aged Care Nursing'},
         {l:'Course Type',        v:'Bachelor of Nursing'},
+        {l:'Year level',         v:'Year 1'},
         {l:'Current placement',  v:'RP HealthCare Ward – Ward 1 Centre', cls:'link'},
         {l:'Placement dates',    v:'01/01/2026 – 31/12/2026'},
         {l:'Region',             v:'Metro Melbourne'},
@@ -1012,6 +1095,7 @@ const DATA = {
         {l:'Campus',             v:'Bundoora'},
         {l:'Discipline',         v:'Midwifery'},
         {l:'Course Type',        v:'Bachelor of Midwifery'},
+        {l:'Year level',         v:'Year 2'},
         {l:'Current placement',  v:'Antenatal – La Trobe', cls:'link'},
         {l:'Placement dates',    v:'30/08/2025 – 08/03/2027'},
         {l:'Region',             v:'Metro Melbourne'},
@@ -1026,6 +1110,7 @@ const DATA = {
         {l:'Campus',             v:'Clayton'},
         {l:'Discipline',         v:'Physiotherapy'},
         {l:'Course Type',        v:'Bachelor of Physiotherapy'},
+        {l:'Year level',         v:'Year 2'},
         {l:'Current placement',  v:'10208 – RP Health Care Facility', cls:'link'},
         {l:'Placement dates',    v:'16/02/2026 – 30/04/2026'},
         {l:'Region',             v:'Metro Melbourne'},
@@ -1040,6 +1125,7 @@ const DATA = {
         {l:'Campus',             v:'Parkville'},
         {l:'Discipline',         v:'Allied Health'},
         {l:'Course Type',        v:'Master of Nursing'},
+        {l:'Year level',         v:'Year 1'},
         {l:'Current placement',  v:'Not yet assigned', cls:'err'},
         {l:'Placement dates',    v:'TBC'},
         {l:'Region',             v:'Metro Melbourne'},
@@ -1048,14 +1134,13 @@ const DATA = {
         {l:'Roster',             v:'Not set'},
         {l:'Outstanding tasks',  v:'Prerequisite documents pending'},
       ], actions:['View student profile','Assign to placement'] }},
-    { id:'s7', initials:'TW', name:'Tom Ward',         code:'12345678',  email:'t.ward@student.rmit.edu.au',           meta:'12345678 · RMIT',             pill:'Active',          pillClass:'pill-active',
+    { id:'s7', initials:'TW', name:'Tom Ward',         code:'12345678',  email:'t.ward@student.rmit.edu.au',           meta:'12345678 · RMIT',             pill:'Inactive',        pillClass:'pill-error',
       panel:{ type:'Student', sub:'BN Year 3', fields:[
         {l:'Education provider', v:'RMIT University'},
         {l:'Campus',             v:'City'},
         {l:'Discipline',         v:'General Nursing'},
         {l:'Course Type',        v:'Bachelor of Nursing'},
-        {l:'Current placement',  v:'Royal Melbourne Hospital – General Ward', cls:'link'},
-        {l:'Placement dates',    v:'01/02/2026 – 30/06/2026'},
+        {l:'Year level',         v:'Year 3'},
         {l:'Region',             v:'Metro Melbourne'},
         {l:'Agency',             v:'Royal Melbourne Hospital', cls:'link'},
         {l:'Supervisor',         v:'Rachel Andrews', cls:'link'},
@@ -1064,21 +1149,21 @@ const DATA = {
       ], actions:['View student profile','Jump to placement','View roster'] }},
   ],
   placement: [
-    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1',
+    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1', dates:'01/02/2026 – 30/06/2026',
       reqId:'REQ-2026-0099',
       panel:{ type:'Placement', sub:'General Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0099', cls:'link'},
         {l:'Agency',          v:'Royal Melbourne Hospital', cls:'link'},
         {l:'Ward / unit',     v:'General Ward'},
         {l:'Discipline',      v:'General Nursing'},
-        {l:'Region',          v:'Metro Melbourne – Parkville'},
+        {l:'Placement type',  v:'Clinical'},
         {l:'Dates',           v:'01/02/2026 – 30/06/2026'},
         {l:'Student',         v:'Tom Ward', cls:'link'},
         {l:'Supervisor',      v:'Rachel Andrews', cls:'link'},
         {l:'Roster',          v:'Mon–Fri 07:00–15:00'},
         {l:'Outstanding',     v:'None'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Published',        pillClass:'pill-active',  flag:'Supervisor required', group:'2',
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Published',        pillClass:'pill-active',  flag:'Supervisor required', group:'2', dates:'01/01/2026 – 31/10/2026',
       reqId:'REQ-2026-0182',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0182', cls:'link'},
@@ -1092,13 +1177,15 @@ const DATA = {
         {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Accepted',         pillClass:'pill-active',  flag:'Supervisor required · Roster required', group:'2',
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Accepted',         pillClass:'pill-active',  flag:'Supervisor required · Roster required', group:'2', dates:'01/01/2026 – 31/12/2026',
       reqId:'REQ-2026-0195',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0195', cls:'link'},
         {l:'Agency',          v:'RP HealthCare Ward', cls:'link'},
         {l:'Ward / unit',     v:'Ward 1 Centre'},
         {l:'Discipline',      v:'Aged Care Nursing'},
+        {l:'Placement type',  v:'Aged Care'},
+        {l:'Year level',      v:'Year 1'},
         {l:'Region',          v:'Metro Melbourne – Werribee'},
         {l:'Dates',           v:'01/01/2026 – 31/12/2026'},
         {l:'Students',        v:'Raquel Racey, Raquel Chriz', cls:'link'},
@@ -1106,13 +1193,15 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1',
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1', dates:'30/08/2025 – 08/03/2027',
       reqId:'REQ-2026-0088',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
         {l:'Request ID',      v:'REQ-2026-0088', cls:'link'},
         {l:'Agency',          v:'8131 Educ Cycle 2', cls:'link'},
         {l:'Ward / unit',     v:'Antenatal'},
         {l:'Discipline',      v:'Midwifery'},
+        {l:'Placement type',  v:'Antenatal'},
+        {l:'Year level',      v:'Year 2'},
         {l:'Region',          v:'Metro Melbourne – Bundoora'},
         {l:'Dates',           v:'30/08/2025 – 08/03/2027'},
         {l:'Student',         v:'Raquel Student', cls:'link'},
@@ -1120,13 +1209,15 @@ const DATA = {
         {l:'Roster',          v:'Not specified'},
         {l:'Outstanding',     v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Incomplete',       pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required', group:'3',
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Incomplete',       pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required', group:'3', dates:'16/02/2026 – 30/04/2026',
       reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
         {l:'Request ID',      v:'REQ-2026-0210', cls:'link'},
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Prerequisite (10208)'},
         {l:'Discipline',      v:'Physiotherapy'},
+        {l:'Placement type',  v:'Allied Health'},
+        {l:'Year level',      v:'Year 2'},
         {l:'Region',          v:'Metro Melbourne – Werribee'},
         {l:'Dates',           v:'16/02/2026 – 30/04/2026'},
         {l:'Student',         v:'No student assigned', cls:'err'},
@@ -1134,13 +1225,15 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1',
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1', dates:'01/03/2026 – 31/08/2026',
       reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0210', cls:'link'},
         {l:'Agency',          v:'St Vincents Hospital', cls:'link'},
         {l:'Ward / unit',     v:'Intensive Care Unit'},
         {l:'Discipline',      v:'Emergency Nursing'},
+        {l:'Placement type',  v:'Emergency'},
+        {l:'Year level',      v:'Year 3'},
         {l:'Region',          v:'Inner Metro Melbourne – Fitzroy'},
         {l:'Dates',           v:'01/03/2026 – 31/08/2026'},
         {l:'Student',         v:'Sarah Patel', cls:'link'},
@@ -1148,11 +1241,60 @@ const DATA = {
         {l:'Roster',          v:'Tue–Fri 07:00–15:00'},
         {l:'Outstanding',     v:'Timesheet unapproved (Week 3)'},
       ], actions:['View placement','Edit placement','View roster','Approve timesheet'] }},
+    { id:'p6', initials:'PL', name:'Austin Health — General Ward',              code:'PL-2025-44201', meta:'PL-2025-44201',  pill:'Cancelled',        pillClass:'pill-error',   flag:null,   group:'1', dates:'01/06/2025 – 30/11/2025',
+      reqId:'REQ-2025-0310',
+      panel:{ type:'Placement', sub:'General Nursing', fields:[
+        {l:'Request ID',      v:'REQ-2025-0310', cls:'link'},
+        {l:'Agency',          v:'Austin Health', cls:'link'},
+        {l:'Ward / unit',     v:'General Ward'},
+        {l:'Discipline',      v:'General Nursing'},
+        {l:'Placement type',  v:'Clinical'},
+        {l:'Year level',      v:'Year 2'},
+        {l:'Region',          v:'Metro Melbourne – Heidelberg'},
+        {l:'Dates',           v:'01/06/2025 – 30/11/2025'},
+        {l:'Student',         v:'Raquel Lacey', cls:'link'},
+        {l:'Supervisor',      v:'Rachel Andrews', cls:'link'},
+        {l:'Outstanding',     v:'None'},
+      ], actions:['View placement'] }},
   ],
   agency: [
-    { id:'a1', initials:'RP', name:'RP Health Care Facility',      code:'A2021-00193', meta:'A2021-00193',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+    // ── NETWORK LEVEL (no parent) ──────────────────────────────────────────
+    { id:'a0', initials:'RP', name:'RP Health Care Network',         code:'A2020-00100', meta:'A2020-00100',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Network', fields:[
+        {l:'Agency code',       v:'A2020-00100'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Werribee'},
+        {l:'Type',              v:'Health Care Network'},
+        {l:'Level',             v:'Network'},
+        {l:'Active placements', v:'5', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 31/12/2027'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a4', initials:'RM', name:'Royal Melbourne Hospital',       code:'A2021-00220', meta:'A2021-00220',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Network', fields:[
+        {l:'Agency code',       v:'A2021-00220'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Parkville'},
+        {l:'Type',              v:'Hospital Network'},
+        {l:'Level',             v:'Network'},
+        {l:'Active placements', v:'5', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a5', initials:'MH', name:'Monash Health',                  code:'A2022-00050', meta:'A2022-00050',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Network', fields:[
+        {l:'Agency code',       v:'A2022-00050'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Clayton'},
+        {l:'Type',              v:'Health Network'},
+        {l:'Level',             v:'Network'},
+        {l:'Active placements', v:'4', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 28/02/2027'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+
+    // ── FACILITY LEVEL (parent = network) ─────────────────────────────────
+    { id:'a1', initials:'RP', name:'RP Health Care Facility',        code:'A2021-00193', meta:'A2021-00193',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Facility', fields:[
         {l:'Agency code',       v:'A2021-00193'},
+        {l:'Parent',            v:'RP Health Care Network'},
         {l:'Region',            v:'Victoria'},
         {l:'Suburb',            v:'Werribee'},
         {l:'Type',              v:'Health Care Facility'},
@@ -1160,9 +1302,10 @@ const DATA = {
         {l:'Active placements', v:'3', cls:'link'},
         {l:'Agreement status',  v:'Current – expires 30/06/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a2', initials:'RP', name:'RP HealthCare Ward',           code:'A2021-00194', meta:'A2021-00194',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+    { id:'a2', initials:'RP', name:'RP HealthCare Ward',             code:'A2021-00194', meta:'A2021-00194',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Facility', fields:[
         {l:'Agency code',       v:'A2021-00194'},
+        {l:'Parent',            v:'RP Health Care Network'},
         {l:'Region',            v:'Victoria'},
         {l:'Suburb',            v:'Werribee'},
         {l:'Type',              v:'Health Care Facility'},
@@ -1170,9 +1313,10 @@ const DATA = {
         {l:'Active placements', v:'2', cls:'link'},
         {l:'Agreement status',  v:'Current – expires 31/12/2026'},
       ], actions:['View agency','View placements','View requests'] }},
-    { id:'a3', initials:'SV', name:'St Vincents Hospital',         code:'A2021-00210', meta:'A2021-00210',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+    { id:'a3', initials:'SV', name:'St Vincents Hospital',           code:'A2021-00210', meta:'A2021-00210',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Facility', fields:[
         {l:'Agency code',       v:'A2021-00210'},
+        {l:'Parent',            v:'St Vincents Health Australia'},
         {l:'Region',            v:'Victoria'},
         {l:'Suburb',            v:'Fitzroy'},
         {l:'Type',              v:'Hospital'},
@@ -1180,29 +1324,10 @@ const DATA = {
         {l:'Active placements', v:'2', cls:'link'},
         {l:'Agreement status',  v:'Current – expires 30/06/2027'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a4', initials:'RM', name:'Royal Melbourne Hospital',     code:'A2021-00220', meta:'A2021-00220',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Agency code',       v:'A2021-00220'},
-        {l:'Region',            v:'Victoria'},
-        {l:'Suburb',            v:'Parkville'},
-        {l:'Type',              v:'Hospital'},
-        {l:'Level',             v:'Network'},
-        {l:'Active placements', v:'5', cls:'link'},
-        {l:'Agreement status',  v:'Current – expires 30/09/2026'},
-      ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a5', initials:'MH', name:'Monash Health',                code:'A2022-00050', meta:'A2022-00050',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Agency code',       v:'A2022-00050'},
-        {l:'Region',            v:'Victoria'},
-        {l:'Suburb',            v:'Clayton'},
-        {l:'Type',              v:'Health Care Facility'},
-        {l:'Level',             v:'Network'},
-        {l:'Active placements', v:'4', cls:'link'},
-        {l:'Agreement status',  v:'Current – expires 28/02/2027'},
-      ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a6', initials:'AU', name:'Austin Health',                code:'A2022-00056', meta:'A2022-00056',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+    { id:'a6', initials:'AU', name:'Austin Health',                  code:'A2022-00056', meta:'A2022-00056',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Facility', fields:[
         {l:'Agency code',       v:'A2022-00056'},
+        {l:'Parent',            v:'Austin Health Network'},
         {l:'Region',            v:'Victoria'},
         {l:'Suburb',            v:'Heidelberg'},
         {l:'Type',              v:'Hospital'},
@@ -1210,19 +1335,10 @@ const DATA = {
         {l:'Active placements', v:'2', cls:'link'},
         {l:'Agreement status',  v:'Current – expires 30/06/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
-    { id:'a7', initials:'AL', name:'Albury Wodonga Health',        code:'A2022-00061', meta:'A2022-00061',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
-        {l:'Agency code',       v:'A2022-00061'},
-        {l:'Region',            v:'New South Wales'},
-        {l:'Suburb',            v:'Albury'},
-        {l:'Type',              v:'Hospital'},
-        {l:'Level',             v:'Facility'},
-        {l:'Active placements', v:'1', cls:'link'},
-        {l:'Agreement status',  v:'Expiring – 30/04/2026', cls:'err'},
-      ], actions:['View agency','View placements','View agreements'] }},
-    { id:'a8', initials:'BH', name:'Ballarat Health Services',     code:'A2023-00015', meta:'A2023-00015',       pill:null, pillClass:'',
-      panel:{ type:'Agency', sub:'Health Care Provider', fields:[
+    { id:'a8', initials:'BH', name:'Ballarat Health Services',       code:'A2023-00015', meta:'A2023-00015',       pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Facility', fields:[
         {l:'Agency code',       v:'A2023-00015'},
+        {l:'Parent',            v:'Ballarat Health Network'},
         {l:'Region',            v:'Victoria'},
         {l:'Suburb',            v:'Ballarat'},
         {l:'Type',              v:'Aged Care Facility'},
@@ -1230,12 +1346,63 @@ const DATA = {
         {l:'Active placements', v:'3', cls:'link'},
         {l:'Agreement status',  v:'Current – expires 31/12/2026'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
+
+    // ── WARD LEVEL (parent = facility) ────────────────────────────────────
+    { id:'a9',  initials:'RG', name:'Royal Melbourne — General Ward',    code:'A2021-00221', meta:'A2021-00221', pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Ward', fields:[
+        {l:'Agency code',       v:'A2021-00221'},
+        {l:'Parent',            v:'Royal Melbourne Hospital'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Parkville'},
+        {l:'Type',              v:'Hospital Ward'},
+        {l:'Level',             v:'Ward'},
+        {l:'Active placements', v:'2', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a10', initials:'RI', name:'Royal Melbourne — ICU',             code:'A2021-00222', meta:'A2021-00222', pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Ward', fields:[
+        {l:'Agency code',       v:'A2021-00222'},
+        {l:'Parent',            v:'Royal Melbourne Hospital'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Parkville'},
+        {l:'Type',              v:'Hospital Ward'},
+        {l:'Level',             v:'Ward'},
+        {l:'Active placements', v:'1', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a11', initials:'RE', name:'Royal Melbourne — Emergency Dept',  code:'A2021-00223', meta:'A2021-00223', pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Ward', fields:[
+        {l:'Agency code',       v:'A2021-00223'},
+        {l:'Parent',            v:'Royal Melbourne Hospital'},
+        {l:'Region',            v:'Victoria'},
+        {l:'Suburb',            v:'Parkville'},
+        {l:'Type',              v:'Hospital Ward'},
+        {l:'Level',             v:'Ward'},
+        {l:'Active placements', v:'2', cls:'link'},
+        {l:'Agreement status',  v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+
+    // ── INACTIVE ───────────────────────────────────────────────────────────
+    { id:'a7', initials:'AL', name:'Albury Wodonga Health',            code:'A2022-00061', meta:'A2022-00061',       pill:'Inactive', pillClass:'pill-error',
+      panel:{ type:'Agency', sub:'Facility', fields:[
+        {l:'Agency code',       v:'A2022-00061'},
+        {l:'Parent',            v:'Albury Wodonga Health Network'},
+        {l:'Region',            v:'New South Wales'},
+        {l:'Suburb',            v:'Albury'},
+        {l:'Type',              v:'Hospital'},
+        {l:'Level',             v:'Facility'},
+        {l:'Active placements', v:'1', cls:'link'},
+        {l:'Agreement status',  v:'Expiring – 30/04/2026', cls:'err'},
+      ], actions:['View agency','View placements','View agreements'] }},
   ],
   request: [
     { id:'r1', initials:'RQ', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', meta:'REQ-2026-0182 · Deakin',    pill:'Pending',       pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider', v:'Deakin University'},
+        {l:'Region',             v:'Victoria'},
         {l:'Discipline',         v:'Aged Care Nursing'},
+        {l:'Placement type',     v:'Aged Care'},
+        {l:'Year level',         v:'Year 1'},
         {l:'Students requested', v:'2'},
         {l:'Period',             v:'01/01/2026 – 31/12/2026'},
         {l:'Agency preference',  v:'RP Health Care Facility', cls:'link'},
@@ -1245,7 +1412,10 @@ const DATA = {
     { id:'r2', initials:'RQ', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', meta:'REQ-2026-0195 · Monash',    pill:'Allocated',     pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider', v:'Monash University'},
+        {l:'Region',             v:'Victoria'},
         {l:'Discipline',         v:'Physiotherapy'},
+        {l:'Placement type',     v:'Allied Health'},
+        {l:'Year level',         v:'Year 2'},
         {l:'Students requested', v:'1'},
         {l:'Period',             v:'16/02/2026 – 30/04/2026'},
         {l:'Agency preference',  v:'RP Health Care Facility', cls:'link'},
@@ -1255,7 +1425,10 @@ const DATA = {
     { id:'r3', initials:'RQ', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', meta:'REQ-2026-0210 · Melbourne Uni', pill:'Pending',    pillClass:'pill-warning',
       panel:{ type:'Request', sub:'Offer Published', fields:[
         {l:'Education provider', v:'University of Melbourne'},
+        {l:'Region',             v:'Victoria'},
         {l:'Discipline',         v:'Emergency Nursing'},
+        {l:'Placement type',     v:'Emergency'},
+        {l:'Year level',         v:'Year 3'},
         {l:'Students requested', v:'1'},
         {l:'Period',             v:'01/03/2026 – 31/08/2026'},
         {l:'Agency preference',  v:'St Vincents Hospital', cls:'link'},
@@ -1265,7 +1438,10 @@ const DATA = {
     { id:'r4', initials:'RQ', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', meta:'REQ-2026-0088 · La Trobe',  pill:'Completed',     pillClass:'pill-active',
       panel:{ type:'Request', sub:'Fulfilled', fields:[
         {l:'Education provider', v:'La Trobe University'},
+        {l:'Region',             v:'Victoria'},
         {l:'Discipline',         v:'Midwifery'},
+        {l:'Placement type',     v:'Antenatal'},
+        {l:'Year level',         v:'Year 2'},
         {l:'Students requested', v:'1'},
         {l:'Period',             v:'30/08/2025 – 08/03/2027'},
         {l:'Agency',             v:'8131 Educ Cycle 2', cls:'link'},
@@ -1304,359 +1480,274 @@ let currentQuery = '';
 let currentTab = 'all';
 
 // ── DOM REFS ───────────────────────────────────────────────────────────────
-const gsInput  = document.getElementById('gsInput');
-const gsDrop    = document.getElementById('gsDropdown');
-const gsBackdrop = document.getElementById('gsBackdrop');
+const gsInput   = document.getElementById('gsInput');
+const fsOverlay = document.getElementById('fsOverlay');
+const fsInput   = document.getElementById('fsInput');
+const fsClear   = document.getElementById('fsClear');
+const fsClose   = document.getElementById('fsClose');
+const fsCount   = document.getElementById('fsCount');
+const fsEmpty   = document.getElementById('fsEmpty');
+const fsResults = document.getElementById('fsResults');
 
-function openDropdown() {
-  gsDrop.classList.add('open');
-  gsBackdrop.classList.add('open');
-}
-function closeDropdown() {
-  gsDrop.classList.remove('open');
-  gsBackdrop.classList.remove('open');
-}
-// Clicking backdrop closes search
-gsBackdrop.addEventListener('click', closeDropdown);
-const overlay  = document.getElementById('overlay');
-const opInput  = document.getElementById('opInput');
-const opResults= document.getElementById('opResults');
-const opPanel  = document.getElementById('opPanel');
-
-// ── SEARCH LOGIC — match unique identifiers only ───────────────────────────
-// Per Felix: keep search specific. No broad attributes (discipline, region,
-// year level etc). Match only: name, email, student code, employee code,
-// placement ID, request ID, agency name, agency code, personnel name.
-function search(q, entityTypeHint) {
-  q = q.toLowerCase().trim();
-
-  if (!q || q.length < 2) {
-    const pool = entityTypeHint && entityTypeHint !== 'all'
-      ? ALL_ENTITIES.filter(e => e.entityType === entityTypeHint)
-      : ALL_ENTITIES;
-    return pool.slice(0, 10);
+// ── OPEN / CLOSE OVERLAY ───────────────────────────────────────────────────
+function openSearch(term) {
+  fsOverlay.classList.add('open');
+  if (term) {
+    fsInput.value = term;
+    fsClear.style.display = 'inline';
+    renderFSResults(term);
+  } else {
+    fsInput.value = '';
+    fsClear.style.display = 'none';
+    showEmpty();
   }
+  setTimeout(() => { fsInput.focus(); fsInput.select(); }, 50);
+}
 
+function closeSearch() {
+  fsOverlay.classList.remove('open');
+  fsInput.value = '';
+  gsInput.value = '';
+  fsClear.style.display = 'none';
+  showEmpty();
+}
+
+function showEmpty() {
+  fsEmpty.style.display = 'flex';
+  fsResults.style.display = 'none';
+  fsCount.textContent = '';
+}
+
+// ── SEARCH LOGIC — unique identifiers only ─────────────────────────────────
+function search(q) {
+  q = q.toLowerCase().trim();
+  if (!q || q.length < 2) return [];
   return ALL_ENTITIES.filter(e => {
-    // Always match on entity name (student name, agency name, personnel name etc.)
     if (e.name.toLowerCase().includes(q)) return true;
-    // Match on the unique code/ID stored in e.code
     if (e.code && e.code.toLowerCase().includes(q)) return true;
-    // Match on request ID for placements
     if (e.reqId && e.reqId.toLowerCase().includes(q)) return true;
-    // Match on placement group — supports both "2" and "group 2"
     if (e.group) {
-      const groupStr = e.group.toLowerCase();
-      const groupFull = `group ${groupStr}`;
-      if (groupStr.includes(q) || groupFull.includes(q)) return true;
+      const gs = e.group.toLowerCase();
+      if (gs.includes(q) || `group ${gs}`.includes(q)) return true;
     }
-    // Match on email stored in e.email
     if (e.email && e.email.toLowerCase().includes(q)) return true;
     return false;
   });
 }
 
-function filterByTab(results, tab) {
-  if (tab === 'all') return results;
-  return results.filter(e => e.entityType === tab);
-}
-
-// ── CARD DISPLAY — entity-aware field layout ───────────────────────────────
-// Per Felix: Placement/Request ID is most prominent for those entities.
-// Students: name primary, email + code + EP + discipline secondary.
-// Personnel: name primary, email + code + role secondary.
-// Agencies: name primary, code + region secondary.
-function cardPrimary(item) {
-  if (item.entityType === 'placement') return item.code || item.name;
-  if (item.entityType === 'request')   return item.code || item.name;
-  return item.name;
-}
-function cardSecondary(item) {
+// ── CARD FIELDS — 2-column grid per entity ─────────────────────────────────
+function getCardFields(item) {
   const f = (label) => {
     const field = item.panel && item.panel.fields && item.panel.fields.find(x => x.l === label);
     return field ? field.v : null;
   };
   switch (item.entityType) {
-    case 'student':
-      return [item.email, item.code, f('Education provider'), f('Discipline')]
-        .filter(Boolean).join(' · ');
-    case 'placement':
-      return [item.reqId, item.group ? `Group ${item.group}` : null, f('Agency'), f('Student') || f('Students')].filter(Boolean).join(' · ');
-    case 'agency':
-      return [item.code, f('Suburb'), f('Region')].filter(Boolean).join(' · ');
-    case 'request':
-      return [f('Education provider'), f('Agency preference') || f('Agency')]
-        .filter(Boolean).join(' · ');
-    default:
-      return item.meta || '';
+    case 'student': return [
+      { l:'Code',           v: item.code },
+      { l:'Email',          v: item.email },
+      { l:'Provider',       v: f('Education provider') },
+      { l:'Discipline',     v: f('Discipline') },
+      { l:'Course',         v: f('Course Type') },
+      { l:'Year level',     v: f('Year level') },
+    ].filter(x => x.v);
+    case 'placement': return [
+      { l:'Request ID', v: item.reqId },
+      { l:'Group',      v: item.group },
+      { l:'EP',         v: f('Education provider') },
+      { l:'Agency',     v: f('Agency') },
+      { l:'Discipline', v: f('Discipline') },
+      { l:'Dates',      v: item.dates },
+      { l:'Student',    v: f('Student') || f('Students') },
+    ].filter(x => x.v);
+    case 'agency': return [
+      { l:'Code',       v: item.code },
+      { l:'Parent',     v: f('Parent') },
+      { l:'Region',     v: f('Region') },
+      { l:'Type',       v: f('Type') },
+      { l:'Level',      v: f('Level') },
+    ].filter(x => x.v);    case 'request': return [
+      { l:'EP',             v: f('Education provider') },
+      { l:'Region',         v: f('Region') },
+      { l:'Agency',         v: f('Agency preference') || f('Agency') },
+      { l:'Discipline',     v: f('Discipline') },
+      { l:'Dates',          v: f('Period') || f('Dates') },
+    ].filter(x => x.v);
+    default: return [];
   }
 }
 
-// ── RENDER RESULTS ─────────────────────────────────────────────────────────
-function renderResults(q, tab) {
-  const all = search(q, tab);
-  const filtered = filterByTab(all, tab);
-  opResults.innerHTML = '';
+function cardName(item) {
+  if (item.entityType === 'placement') return item.code || item.name;
+  if (item.entityType === 'request')   return item.code || item.name;
+  return item.name;
+}
 
-  if (!filtered.length) {
-    opResults.innerHTML = '<div style="padding:24px 14px;color:var(--secondary-500);font-size:12px;text-align:center;">No results found</div>';
+// ── INACTIVE STATUS DETECTION ─────────────────────────────────────────────
+// Lifecycle entities (Students, Agencies): filter inactive by default
+// Workflow entities (Placements, Requests): show all statuses — status pill explains state
+function isInactive(item) {
+  if (item.entityType === 'student')  return item.pill === 'Inactive';
+  if (item.entityType === 'agency')   return item.pill === 'Inactive';
+  return false; // Placements and Requests always shown regardless of status
+}
+
+// ── RENDER FULL-SCREEN RESULTS ─────────────────────────────────────────────
+function renderFSResults(q) {
+  const results = search(q);
+  fsEmpty.style.display = 'none';
+
+  const activeResults = results.filter(e => !isInactive(e));
+  const inactiveResults = results.filter(e => isInactive(e));
+
+  if (!results.length) {
+    fsResults.style.display = 'block';
+    fsResults.innerHTML = `<div style="padding:40px;text-align:center;color:var(--secondary-500);font-size:13px;">No results for "${q}"</div>`;
+    fsCount.textContent = '';
     return;
   }
 
-  const groups = tab === 'all'
-    ? ['student','placement','agency','request']
-    : [tab];
+  fsCount.textContent = `${activeResults.length} result${activeResults.length !== 1 ? 's' : ''} found${inactiveResults.length ? ` · ${inactiveResults.length} inactive student${inactiveResults.length !== 1 ? 's/agencies' : '/agency'} hidden` : ''}`;
+  fsResults.style.display = 'block';
+  fsResults.innerHTML = '';
 
-  const PREVIEW = tab === 'all' ? 2 : 5; // show more when filtered to one type
-
-  groups.forEach(type => {
-    const items = filtered.filter(e => e.entityType === type);
-    if (!items.length) return;
-
-    // Group header with count
-    const lbl = document.createElement('div');
-    lbl.style.cssText = 'display:flex;align-items:center;gap:6px;padding:10px 14px 4px;';
-    lbl.innerHTML = `
-      <span class="op-glabel" style="margin:0;padding:0">${ENTITY_META[type].label}</span>
-      <span style="font-size:10px;font-weight:600;background:var(--primary-100);color:var(--primary-700);border-radius:10px;padding:1px 7px;">${items.length}</span>`;
-    opResults.appendChild(lbl);
-
-    const rendered = [];
-    items.forEach((item, idx) => {
-      const row = document.createElement('div');
-      row.className = 'op-item';
-      if (idx >= PREVIEW) row.style.display = 'none';
-      row.setAttribute('data-id', item.id);
-      row.onclick = () => selectItem(row, item);
-
-      const pill = item.pill
-        ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
-      const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
-      row.innerHTML = `
-        <div class="op-ico ${ENTITY_META[type].icoClass}">${item.initials}</div>
-        <div class="op-main">
-          <div class="op-name">${cardPrimary(item)}</div>
-          <div class="op-meta">${cardSecondary(item)}</div>
-          ${flag}
-        </div>
-        ${pill}`;
-
-      opResults.appendChild(row);
-      rendered.push(row);
-    });
-
-    // View More / Show Less toggle
-    if (items.length > PREVIEW) {
-      const toggle = document.createElement('div');
-      toggle.style.cssText = 'padding:6px 14px 8px;font-size:11px;color:var(--primary-600);cursor:pointer;font-weight:500;';
-      toggle.textContent = `View more (${items.length - PREVIEW} additional)`;
-      let expanded = false;
-      toggle.onclick = () => {
-        expanded = !expanded;
-        rendered.forEach((r, i) => {
-          if (i >= PREVIEW) r.style.display = expanded ? 'flex' : 'none';
-        });
-        toggle.textContent = expanded
-          ? 'Show less'
-          : `View more (${items.length - PREVIEW} additional)`;
-      };
-      opResults.appendChild(toggle);
-    }
-
-    const div = document.createElement('div');
-    div.className = 'op-divider';
-    opResults.appendChild(div);
-  });
-}
-
-// ── RENDER PANEL (removed — click navigates to detail page) ───────────────
-
-function selectItem(el, item) {
-  navigateTo(item);
-}
-
-// ── OVERLAY OPEN / CLOSE ───────────────────────────────────────────────────
-function closeOverlay() { overlay.classList.remove('open'); }
-function handleOverlay(e) { if (e.target === overlay) closeOverlay(); }
-
-// ── SEARCH INPUT (overlay) ─────────────────────────────────────────────────
-opInput.addEventListener('input', () => {
-  currentQuery = opInput.value;
-  renderResults(currentQuery, currentTab);
-});
-
-// ── TAB SWITCHING ──────────────────────────────────────────────────────────
-document.querySelectorAll('.op-tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.op-tab').forEach(x => x.classList.remove('on'));
-    t.classList.add('on');
-    currentTab = t.dataset.tab;
-    renderResults(currentQuery, currentTab);
-  });
-});
-
-// ── GLOBAL SEARCH BAR ─────────────────────────────────────────────────────
-let ddActiveChip = 'all'; // tracks which chip is active in the dropdown
-
-// ── CARD FIELDS — 2-column grid per entity type (matches Lachlan's prototype) ─
-function renderDropdown(q) {
-  const results = search(q, ddActiveChip);
-  const filtered = ddActiveChip === 'all'
-    ? results
-    : results.filter(e => e.entityType === ddActiveChip);
-
-  const grouped = {};
-  filtered.forEach(e => {
-    if (!grouped[e.entityType]) grouped[e.entityType] = [];
-    grouped[e.entityType].push(e);
-  });
-
-  gsDrop.querySelectorAll('.dd-group').forEach(g => g.remove());
-
-  const order = ['student','placement','agency','request'];
-  let totalItems = 0;
-  const PREVIEW = 2;
+  const order = ['placement','request','student','agency'];
+  const PREVIEW = 3;
 
   order.forEach(type => {
-    const items = grouped[type];
-    if (!items || !items.length) return;
-    totalItems += items.length;
+    const active   = activeResults.filter(e => e.entityType === type);
+    const inactive = inactiveResults.filter(e => e.entityType === type);
+    if (!active.length && !inactive.length) return;
 
     const grp = document.createElement('div');
-    grp.className = 'dd-group';
+    grp.className = 'fs-group';
 
-    // Header: label + count
-    const hdr = document.createElement('div');
-    hdr.className = 'dd-glabel';
-    hdr.innerHTML = `${ENTITY_META[type].label} <span style="font-size:10px;font-weight:600;background:var(--primary-100);color:var(--primary-700);border-radius:10px;padding:1px 7px;">${items.length}</span>`;
-    grp.appendChild(hdr);
+    // Group header — count shows active only
+    const meta = ENTITY_META[type];
+    grp.innerHTML = `
+      <div class="fs-glabel">
+        <span class="fs-glabel-icon ${meta.icoClass}">${type[0].toUpperCase()}</span>
+        ${meta.label}
+        <span class="fs-count-badge">${active.length}</span>
+      </div>`;
 
+    // Render active cards
     const rendered = [];
-    items.forEach((item, idx) => {
-      const d = document.createElement('div');
-      d.className = 'dd-item';
-      if (idx >= PREVIEW) d.style.display = 'none';
-
-      const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
-      const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
-
-      d.innerHTML = `
-        <div class="dd-item-row">
-          <div class="dd-name">${cardPrimary(item)}</div>
-          ${pill}
-        </div>
-        <div class="dd-meta">${cardSecondary(item)}</div>
-        ${flag}`;
-      d.onclick = (e) => { e.stopPropagation(); closeDropdown(); navigateTo(item); };
-      grp.appendChild(d);
-      rendered.push(d);
+    active.forEach((item, idx) => {
+      const card = buildCard(item);
+      if (idx >= PREVIEW) card.style.display = 'none';
+      grp.appendChild(card);
+      rendered.push(card);
     });
 
-    // View more link
-    if (items.length > PREVIEW) {
-      const lnk = document.createElement('div');
-      lnk.className = 'dd-view-more-link';
-      lnk.textContent = `View more (${items.length - PREVIEW} additional)`;
+    // View More for active
+    if (active.length > PREVIEW) {
+      const btn = document.createElement('button');
+      btn.className = 'fs-view-more';
+      btn.textContent = `View More (${active.length - PREVIEW} additional)`;
       let expanded = false;
-      lnk.onclick = (e) => {
-        e.stopPropagation();
+      btn.onclick = () => {
         expanded = !expanded;
-        rendered.forEach((d, i) => {
-          if (i >= PREVIEW) d.style.display = expanded ? 'block' : 'none';
+        rendered.forEach((c, i) => {
+          if (i >= PREVIEW) c.style.display = expanded ? 'block' : 'none';
         });
-        lnk.textContent = expanded ? 'Show less' : `View more (${items.length - PREVIEW} additional)`;
+        btn.textContent = expanded ? 'Show Less' : `View More (${active.length - PREVIEW} additional)`;
       };
-      grp.appendChild(lnk);
+      grp.appendChild(btn);
     }
 
-    gsDrop.appendChild(grp);
-  });
+    // Show inactive progressive reveal
+    if (inactive.length) {
+      const inactiveCards = inactive.map(item => {
+        const card = buildCard(item);
+        card.style.display = 'none';
+        card.style.opacity = '0.6';
+        return card;
+      });
 
-  if (totalItems === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'dd-group';
-    empty.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:var(--secondary-500);">No results for "${q}"</div>`;
-    gsDrop.appendChild(empty);
-  }
+      const revealBtn = document.createElement('button');
+      revealBtn.className = 'fs-view-more';
+      revealBtn.style.cssText = 'color:var(--secondary-500);margin-top:4px;';
+      revealBtn.textContent = `Show ${inactive.length} inactive record${inactive.length !== 1 ? 's' : ''}`;
+      let shown = false;
+      revealBtn.onclick = () => {
+        shown = !shown;
+        inactiveCards.forEach(c => { c.style.display = shown ? 'block' : 'none'; grp.appendChild(c); });
+        revealBtn.textContent = shown
+          ? 'Hide inactive records'
+          : `Show ${inactive.length} inactive record${inactive.length !== 1 ? 's' : ''}`;
+      };
+      grp.appendChild(revealBtn);
+    }
+
+    fsResults.appendChild(grp);
+  });
 }
 
-gsInput.addEventListener('focus', () => {
-  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); openDropdown(); }
+function buildCard(item) {
+  const card = document.createElement('div');
+  card.className = 'fs-card';
+  const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
+  const flag = item.flag ? `<div class="fs-card-flag">⚠ ${item.flag}</div>` : '';
+  const fields = getCardFields(item);
+  const fieldHTML = fields.map(f =>
+    `<div class="fs-card-field"><span class="fs-card-field-label">${f.l}: </span>${f.v}</div>`
+  ).join('');
+  card.innerHTML = `
+    <div class="fs-card-header">
+      <div class="fs-card-name">${cardName(item)}</div>
+      ${pill}
+    </div>
+    <div class="fs-card-fields">${fieldHTML}</div>
+    ${flag}`;
+  card.onclick = () => { closeSearch(); navigateTo(item); };
+  return card;
+}
+
+// ── EVENTS ─────────────────────────────────────────────────────────────────
+// Clicking the top nav search bar focuses it — overlay opens on first keystroke
+gsInput.addEventListener('click', () => gsInput.focus());
+gsInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.key === 'Tab' || e.metaKey || e.ctrlKey) return;
+  if (!fsOverlay.classList.contains('open')) {
+    openSearch();
+    setTimeout(() => {
+      if (e.key.length === 1) {
+        fsInput.value = e.key;
+        fsClear.style.display = 'inline';
+        if (e.key.length >= 1) renderFSResults(e.key);
+      }
+      fsInput.focus();
+    }, 60);
+  }
 });
-gsInput.addEventListener('input', () => {
-  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); openDropdown(); }
-  else closeDropdown();
+
+// Typing in the full-screen input
+fsInput.addEventListener('input', () => {
+  const q = fsInput.value.trim();
+  fsClear.style.display = q ? 'inline' : 'none';
+  if (q.length >= 2) renderFSResults(q);
+  else showEmpty();
 });
-gsInput.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeDropdown(); gsInput.blur(); }
+
+// Clear button — resets query but keeps overlay open
+fsClear.addEventListener('click', () => {
+  fsInput.value = '';
+  fsClear.style.display = 'none';
+  showEmpty();
+  fsInput.focus();
 });
-document.addEventListener('click', e => {
-  const inWrap = gsInput.closest('.gs-wrap').contains(e.target);
-  const inDrop = gsDrop.contains(e.target);
-  if (!inWrap && !inDrop) closeDropdown();
-});
+
+// × Close button — exits overlay entirely
+fsClose.addEventListener('click', closeSearch);
+
+// Keyboard shortcuts
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSearch();
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault(); gsInput.focus(); gsInput.select();
-    if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); openDropdown(); }
-  }
-  if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
-});
-
-// ── FILTER CHIPS (dropdown) — now actually filter results ──────────────────
-document.querySelectorAll('.dd-chip:not(.assigned)').forEach(c => {
-  c.addEventListener('click', (e) => {
-    e.stopPropagation();
-    document.querySelectorAll('.dd-chip:not(.assigned)').forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-
-    // Map chip text to entity type key
-    const chipMap = {
-      'All':'all', 'Students':'student', 'Placements':'placement',
-      'Agencies':'agency', 'Requests':'request'
-    };
-    ddActiveChip = chipMap[c.textContent.trim()] || 'all';
-
-    // Re-render dropdown with new filter
-    if (gsInput.value.length >= 2) {
-      renderDropdown(gsInput.value);
-      openDropdown();
-    }
-  });
-});
-
-// Assigned to me toggle — filters to only items with "Me" / Veena context
-document.querySelector('.dd-chip.assigned').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const chip = e.currentTarget;
-  chip.classList.toggle('on');
-  // For prototype: "Assigned to me" shows Raquel Lacey + placements at RP Health Care
-  if (chip.classList.contains('on')) {
-    gsInput.value = 'RP Health Care';
-    ddActiveChip = 'all';
-    document.querySelectorAll('.dd-chip:not(.assigned)').forEach(x => x.classList.remove('on'));
-    document.querySelector('.dd-chip:not(.assigned)').classList.add('on');
-    renderDropdown('RP Health Care');
-    openDropdown();
-  } else {
-    renderDropdown(gsInput.value || 'raquel');
-    openDropdown();
+    e.preventDefault();
+    openSearch();
   }
 });
-
-// ── OVERLAY OPEN — now accepts tab hint from dropdown chip ─────────────────
-function openOverlay(q, tabHint) {
-  closeDropdown();
-  overlay.classList.add('open');
-  currentQuery = q || gsInput.value || '';
-  currentTab = tabHint || 'all';
-  opInput.value = currentQuery;
-  document.querySelectorAll('.op-tab').forEach(t =>
-    t.classList.toggle('on', t.dataset.tab === currentTab)
-  );
-  renderResults(currentQuery, currentTab);
-  opInput.focus();
-}
 
 // ── TEST DATA DRAWER ───────────────────────────────────────────────────────
 function toggleTestData() {
@@ -1672,10 +1763,21 @@ function toggleTestData() {
 
 function testSearch(term) {
   toggleTestData();
-  gsInput.value = term;
-  renderDropdown(term);
-  openDropdown();
-  gsInput.focus();
+  openSearch(term);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+
+// ── TEST DATA DRAWER ───────────────────────────────────────────────────────
+function toggleTestData() {
+  const drawer  = document.getElementById('testDrawer');
+  const overlay = document.getElementById('testOverlay');
+  const btn     = document.getElementById('tdBtn');
+  const open = drawer.style.right === '0px';
+  drawer.style.right  = open ? '-380px' : '0px';
+  overlay.style.display = open ? 'none' : 'block';
+  btn.style.color = open ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,1)';
+  btn.style.background = open ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.18)';
 }
 
 gsInput.value = '';
@@ -1956,7 +2058,7 @@ function genericDetailPage(item) {
 }
 
 function navigateTo(item) {
-  closeOverlay();
+  closeSearch();
   const dp = document.getElementById('detailPage');
   const dc = document.getElementById('detailContent');
   const breadcrumb2 = document.getElementById('detailBreadcrumb2');
