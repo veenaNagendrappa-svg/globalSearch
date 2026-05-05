@@ -84,6 +84,7 @@
     padding: 0 16px;
     gap: 14px;
     flex-shrink: 0;
+    position: relative;
     z-index: 200;
   }
 
@@ -151,18 +152,26 @@
     pointer-events: none;
   }
 
-  /* DROPDOWN */
+  /* DROPDOWN — matches screenshot width/layout */
   .gs-dropdown {
-    position: absolute; top: calc(100% + 4px);
-    left: 0; right: 0;
+    position: fixed; top: var(--top-h);
+    left: var(--leftnav-w); right: 0;
     background: var(--white);
-    border: 1px solid var(--secondary-300);
-    border-radius: 4px;
-    box-shadow: 0 8px 32px rgba(0,25,62,0.16);
-    z-index: 999; overflow: hidden;
+    border: 1px solid var(--secondary-200);
+    border-top: none;
+    box-shadow: 0 8px 24px rgba(0,25,62,0.14);
+    z-index: 400; overflow-y: auto;
+    max-height: calc(100vh - var(--top-h) - 40px);
     display: none;
+    max-width: 640px;
   }
   .gs-dropdown.open { display: block; }
+  .gs-backdrop {
+    display: none; position: fixed; inset: 0;
+    top: var(--top-h); background: rgba(0,25,62,0.3);
+    z-index: 399;
+  }
+  .gs-backdrop.open { display: block; }
 
   .dd-filters {
     display: flex; gap: 6px;
@@ -199,22 +208,28 @@
   .dd-group { padding: 4px 0; }
   .dd-group + .dd-group { border-top: 1px solid var(--secondary-200); }
   .dd-glabel {
-    font-size: 10px; font-weight: 500;
+    font-size: 10px; font-weight: 600;
     letter-spacing: 0.07em; text-transform: uppercase;
     color: var(--secondary-600);
-    padding: 4px 12px 2px;
+    padding: 6px 16px 3px;
+    display: flex; align-items: center; gap: 6px;
   }
   .dd-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 6px 12px; cursor: pointer;
+    padding: 7px 16px; cursor: pointer;
     transition: background 0.1s;
+    border-bottom: 1px solid var(--secondary-100);
   }
   .dd-item:hover { background: var(--primary-050); }
-  .dd-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .dd-main { flex: 1; min-width: 0; }
+  .dd-item-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
   .dd-name { font-size: 13px; font-weight: 500; color: var(--primary-900); }
-  .dd-meta { font-size: 11px; color: var(--secondary-600); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .dd-flag { font-size: 10px; color: var(--error); margin-top: 2px; font-weight: 500; }
+  .dd-meta { font-size: 11px; color: var(--secondary-600); margin-top: 2px; line-height: 1.5; white-space: normal; }
+  .dd-flag { font-size: 10px; color: var(--error); margin-top: 3px; font-weight: 500; }
+  .dd-view-more-link {
+    padding: 5px 16px 6px;
+    font-size: 11px; font-weight: 500;
+    color: var(--primary-600); cursor: pointer;
+  }
+  .dd-view-more-link:hover { text-decoration: underline; }
 
   .status-pill {
     font-size: 10px; font-weight: 500;
@@ -224,17 +239,6 @@
   .pill-active   { background: var(--success-light); color: var(--success-dark); }
   .pill-warning  { background: var(--warning-light); color: #5a3e00; }
   .pill-error    { background: var(--error-light); color: var(--error-dark); }
-
-  .dd-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 7px 12px;
-    border-top: 1px solid var(--secondary-200);
-    background: var(--secondary-100);
-  }
-  .dd-see-all {
-    font-size: 12px; font-weight: 500;
-    color: var(--primary-700); cursor: pointer;
-  }
   .dd-hint { font-size: 11px; color: var(--secondary-600); }
 
   /* TOP NAV RIGHT */
@@ -602,12 +606,9 @@
         <div class="dd-chip">Requests</div>
         <div class="dd-chip assigned">Assigned to me</div>
       </div>
-      <div class="dd-footer">
-        <span class="dd-see-all">See all results →</span>
-        <span class="dd-hint">↵ to expand</span>
-      </div>
     </div>
   </div>
+  <div class="gs-backdrop" id="gsBackdrop"></div>
 
   <div class="tn-right">
     <button class="tn-btn" title="Notifications">
@@ -661,6 +662,7 @@
     <div class="td-row" onclick="testSearch('PL-2026-82716')"><span class="td-term">PL-2026-82716</span><span class="td-desc">no student assigned</span></div>
     <div class="td-row" onclick="testSearch('RP Health')"><span class="td-term">RP Health</span><span class="td-desc">agency name → placements</span></div>
     <div class="td-row" onclick="testSearch('REQ-2026-0182')"><span class="td-term">REQ-2026-0182</span><span class="td-desc">request ID → request + placement</span></div>
+    <div class="td-row" onclick="testSearch('Group 2')"><span class="td-term">Group 2</span><span class="td-desc">placement group search</span></div>
 
     <!-- AGENCIES -->
     <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Agencies</div>
@@ -1062,7 +1064,7 @@ const DATA = {
       ], actions:['View student profile','Jump to placement','View roster'] }},
   ],
   placement: [
-    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Accepted',         pillClass:'pill-active',  flag:null,
+    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1',
       reqId:'REQ-2026-0099',
       panel:{ type:'Placement', sub:'General Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0099', cls:'link'},
@@ -1076,7 +1078,7 @@ const DATA = {
         {l:'Roster',          v:'Mon–Fri 07:00–15:00'},
         {l:'Outstanding',     v:'None'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Published',        pillClass:'pill-active',  flag:'Supervisor required',
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Published',        pillClass:'pill-active',  flag:'Supervisor required', group:'2',
       reqId:'REQ-2026-0182',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0182', cls:'link'},
@@ -1090,7 +1092,7 @@ const DATA = {
         {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Accepted',         pillClass:'pill-active',  flag:'Supervisor required · Roster required',
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Accepted',         pillClass:'pill-active',  flag:'Supervisor required · Roster required', group:'2',
       reqId:'REQ-2026-0195',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0195', cls:'link'},
@@ -1104,7 +1106,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Accepted',         pillClass:'pill-active',  flag:null,
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1',
       reqId:'REQ-2026-0088',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
         {l:'Request ID',      v:'REQ-2026-0088', cls:'link'},
@@ -1118,7 +1120,7 @@ const DATA = {
         {l:'Roster',          v:'Not specified'},
         {l:'Outstanding',     v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Incomplete',       pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required',
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Incomplete',       pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required', group:'3',
       reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
         {l:'Request ID',      v:'REQ-2026-0210', cls:'link'},
@@ -1132,7 +1134,7 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Accepted',         pillClass:'pill-active',  flag:null,
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Accepted',         pillClass:'pill-active',  flag:null,   group:'1',
       reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
         {l:'Request ID',      v:'REQ-2026-0210', cls:'link'},
@@ -1303,7 +1305,19 @@ let currentTab = 'all';
 
 // ── DOM REFS ───────────────────────────────────────────────────────────────
 const gsInput  = document.getElementById('gsInput');
-const gsDrop   = document.getElementById('gsDropdown');
+const gsDrop    = document.getElementById('gsDropdown');
+const gsBackdrop = document.getElementById('gsBackdrop');
+
+function openDropdown() {
+  gsDrop.classList.add('open');
+  gsBackdrop.classList.add('open');
+}
+function closeDropdown() {
+  gsDrop.classList.remove('open');
+  gsBackdrop.classList.remove('open');
+}
+// Clicking backdrop closes search
+gsBackdrop.addEventListener('click', closeDropdown);
 const overlay  = document.getElementById('overlay');
 const opInput  = document.getElementById('opInput');
 const opResults= document.getElementById('opResults');
@@ -1330,6 +1344,12 @@ function search(q, entityTypeHint) {
     if (e.code && e.code.toLowerCase().includes(q)) return true;
     // Match on request ID for placements
     if (e.reqId && e.reqId.toLowerCase().includes(q)) return true;
+    // Match on placement group — supports both "2" and "group 2"
+    if (e.group) {
+      const groupStr = e.group.toLowerCase();
+      const groupFull = `group ${groupStr}`;
+      if (groupStr.includes(q) || groupFull.includes(q)) return true;
+    }
     // Match on email stored in e.email
     if (e.email && e.email.toLowerCase().includes(q)) return true;
     return false;
@@ -1361,7 +1381,7 @@ function cardSecondary(item) {
       return [item.email, item.code, f('Education provider'), f('Discipline')]
         .filter(Boolean).join(' · ');
     case 'placement':
-      return [item.reqId, f('Agency'), f('Student') || f('Students')].filter(Boolean).join(' · ');
+      return [item.reqId, item.group ? `Group ${item.group}` : null, f('Agency'), f('Student') || f('Students')].filter(Boolean).join(' · ');
     case 'agency':
       return [item.code, f('Suburb'), f('Region')].filter(Boolean).join(' · ');
     case 'request':
@@ -1383,31 +1403,34 @@ function renderResults(q, tab) {
     return;
   }
 
-  // Group by entity type
   const groups = tab === 'all'
     ? ['student','placement','agency','request']
     : [tab];
 
-  let firstItem = null;
+  const PREVIEW = tab === 'all' ? 2 : 5; // show more when filtered to one type
 
   groups.forEach(type => {
     const items = filtered.filter(e => e.entityType === type);
     if (!items.length) return;
 
+    // Group header with count
     const lbl = document.createElement('div');
-    lbl.className = 'op-glabel';
-    lbl.textContent = ENTITY_META[type].label;
+    lbl.style.cssText = 'display:flex;align-items:center;gap:6px;padding:10px 14px 4px;';
+    lbl.innerHTML = `
+      <span class="op-glabel" style="margin:0;padding:0">${ENTITY_META[type].label}</span>
+      <span style="font-size:10px;font-weight:600;background:var(--primary-100);color:var(--primary-700);border-radius:10px;padding:1px 7px;">${items.length}</span>`;
     opResults.appendChild(lbl);
 
+    const rendered = [];
     items.forEach((item, idx) => {
       const row = document.createElement('div');
-      row.className = 'op-item' + (firstItem === null ? ' sel' : '');
+      row.className = 'op-item';
+      if (idx >= PREVIEW) row.style.display = 'none';
       row.setAttribute('data-id', item.id);
       row.onclick = () => selectItem(row, item);
 
       const pill = item.pill
         ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
-
       const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
       row.innerHTML = `
         <div class="op-ico ${ENTITY_META[type].icoClass}">${item.initials}</div>
@@ -1419,15 +1442,31 @@ function renderResults(q, tab) {
         ${pill}`;
 
       opResults.appendChild(row);
-      if (firstItem === null) { firstItem = { row, item }; }
+      rendered.push(row);
     });
+
+    // View More / Show Less toggle
+    if (items.length > PREVIEW) {
+      const toggle = document.createElement('div');
+      toggle.style.cssText = 'padding:6px 14px 8px;font-size:11px;color:var(--primary-600);cursor:pointer;font-weight:500;';
+      toggle.textContent = `View more (${items.length - PREVIEW} additional)`;
+      let expanded = false;
+      toggle.onclick = () => {
+        expanded = !expanded;
+        rendered.forEach((r, i) => {
+          if (i >= PREVIEW) r.style.display = expanded ? 'flex' : 'none';
+        });
+        toggle.textContent = expanded
+          ? 'Show less'
+          : `View more (${items.length - PREVIEW} additional)`;
+      };
+      opResults.appendChild(toggle);
+    }
 
     const div = document.createElement('div');
     div.className = 'op-divider';
     opResults.appendChild(div);
   });
-
-  // No auto-select — clicks navigate to detail page
 }
 
 // ── RENDER PANEL (removed — click navigates to detail page) ───────────────
@@ -1459,28 +1498,24 @@ document.querySelectorAll('.op-tab').forEach(t => {
 // ── GLOBAL SEARCH BAR ─────────────────────────────────────────────────────
 let ddActiveChip = 'all'; // tracks which chip is active in the dropdown
 
+// ── CARD FIELDS — 2-column grid per entity type (matches Lachlan's prototype) ─
 function renderDropdown(q) {
   const results = search(q, ddActiveChip);
-
-  // Filter by active chip
   const filtered = ddActiveChip === 'all'
     ? results
     : results.filter(e => e.entityType === ddActiveChip);
 
-  // Group — up to 3 per type when chip-filtered, up to 2 for "all"
-  const perTypeCap = ddActiveChip === 'all' ? 2 : 3;
   const grouped = {};
   filtered.forEach(e => {
     if (!grouped[e.entityType]) grouped[e.entityType] = [];
-    if (grouped[e.entityType].length < perTypeCap) grouped[e.entityType].push(e);
+    grouped[e.entityType].push(e);
   });
 
-  // Rebuild dropdown groups dynamically
   gsDrop.querySelectorAll('.dd-group').forEach(g => g.remove());
-  const footer = gsDrop.querySelector('.dd-footer');
 
   const order = ['student','placement','agency','request'];
   let totalItems = 0;
+  const PREVIEW = 2;
 
   order.forEach(type => {
     const items = grouped[type];
@@ -1489,63 +1524,84 @@ function renderDropdown(q) {
 
     const grp = document.createElement('div');
     grp.className = 'dd-group';
-    grp.innerHTML = `<div class="dd-glabel">${ENTITY_META[type].label}</div>`;
 
-    items.forEach(item => {
-      const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
-      const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
+    // Header: label + count
+    const hdr = document.createElement('div');
+    hdr.className = 'dd-glabel';
+    hdr.innerHTML = `${ENTITY_META[type].label} <span style="font-size:10px;font-weight:600;background:var(--primary-100);color:var(--primary-700);border-radius:10px;padding:1px 7px;">${items.length}</span>`;
+    grp.appendChild(hdr);
+
+    const rendered = [];
+    items.forEach((item, idx) => {
       const d = document.createElement('div');
       d.className = 'dd-item';
+      if (idx >= PREVIEW) d.style.display = 'none';
+
+      const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
+      const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
+
       d.innerHTML = `
-        <div class="dd-dot" style="background:var(--primary-600)"></div>
-        <div class="dd-main">
+        <div class="dd-item-row">
           <div class="dd-name">${cardPrimary(item)}</div>
-          <div class="dd-meta">${cardSecondary(item)}</div>
-          ${flag}
-        </div>${pill}`;
-      // clicking a row goes directly to the detail page — no intermediate overlay
-      d.onclick = (e) => { e.stopPropagation(); gsDrop.classList.remove('open'); navigateTo(item); };
+          ${pill}
+        </div>
+        <div class="dd-meta">${cardSecondary(item)}</div>
+        ${flag}`;
+      d.onclick = (e) => { e.stopPropagation(); closeDropdown(); navigateTo(item); };
       grp.appendChild(d);
+      rendered.push(d);
     });
-    gsDrop.insertBefore(grp, footer);
+
+    // View more link
+    if (items.length > PREVIEW) {
+      const lnk = document.createElement('div');
+      lnk.className = 'dd-view-more-link';
+      lnk.textContent = `View more (${items.length - PREVIEW} additional)`;
+      let expanded = false;
+      lnk.onclick = (e) => {
+        e.stopPropagation();
+        expanded = !expanded;
+        rendered.forEach((d, i) => {
+          if (i >= PREVIEW) d.style.display = expanded ? 'block' : 'none';
+        });
+        lnk.textContent = expanded ? 'Show less' : `View more (${items.length - PREVIEW} additional)`;
+      };
+      grp.appendChild(lnk);
+    }
+
+    gsDrop.appendChild(grp);
   });
 
-  // Empty state
   if (totalItems === 0) {
     const empty = document.createElement('div');
     empty.className = 'dd-group';
-    empty.innerHTML = `<div style="padding:12px 12px;font-size:12px;color:var(--secondary-500)">No results for "${q}"</div>`;
-    gsDrop.insertBefore(empty, footer);
+    empty.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:var(--secondary-500);">No results for "${q}"</div>`;
+    gsDrop.appendChild(empty);
   }
-
-  const chipLabel = ddActiveChip === 'all' ? q : ENTITY_META[ddActiveChip].label.toLowerCase();
-  footer.querySelector('.dd-see-all').textContent = `See all results for "${chipLabel}" \u2192`;
 }
 
 gsInput.addEventListener('focus', () => {
-  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); gsDrop.classList.add('open'); }
+  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); openDropdown(); }
 });
 gsInput.addEventListener('input', () => {
-  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); gsDrop.classList.add('open'); }
-  else gsDrop.classList.remove('open');
+  if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); openDropdown(); }
+  else closeDropdown();
 });
 gsInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') { openOverlay(gsInput.value, ddActiveChip); }
-  if (e.key === 'Escape') { gsDrop.classList.remove('open'); gsInput.blur(); }
+  if (e.key === 'Escape') { closeDropdown(); gsInput.blur(); }
 });
 document.addEventListener('click', e => {
-  if (!gsInput.closest('.gs-wrap').contains(e.target)) gsDrop.classList.remove('open');
+  const inWrap = gsInput.closest('.gs-wrap').contains(e.target);
+  const inDrop = gsDrop.contains(e.target);
+  if (!inWrap && !inDrop) closeDropdown();
 });
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault(); gsInput.focus(); gsInput.select();
-    if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); gsDrop.classList.add('open'); }
+    if (gsInput.value.length >= 2) { renderDropdown(gsInput.value); openDropdown(); }
   }
   if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
 });
-
-// Dropdown "see all" footer
-gsDrop.querySelector('.dd-see-all').onclick = () => openOverlay(gsInput.value, ddActiveChip);
 
 // ── FILTER CHIPS (dropdown) — now actually filter results ──────────────────
 document.querySelectorAll('.dd-chip:not(.assigned)').forEach(c => {
@@ -1564,7 +1620,7 @@ document.querySelectorAll('.dd-chip:not(.assigned)').forEach(c => {
     // Re-render dropdown with new filter
     if (gsInput.value.length >= 2) {
       renderDropdown(gsInput.value);
-      gsDrop.classList.add('open');
+      openDropdown();
     }
   });
 });
@@ -1581,16 +1637,16 @@ document.querySelector('.dd-chip.assigned').addEventListener('click', (e) => {
     document.querySelectorAll('.dd-chip:not(.assigned)').forEach(x => x.classList.remove('on'));
     document.querySelector('.dd-chip:not(.assigned)').classList.add('on');
     renderDropdown('RP Health Care');
-    gsDrop.classList.add('open');
+    openDropdown();
   } else {
     renderDropdown(gsInput.value || 'raquel');
-    gsDrop.classList.add('open');
+    openDropdown();
   }
 });
 
 // ── OVERLAY OPEN — now accepts tab hint from dropdown chip ─────────────────
 function openOverlay(q, tabHint) {
-  gsDrop.classList.remove('open');
+  closeDropdown();
   overlay.classList.add('open');
   currentQuery = q || gsInput.value || '';
   currentTab = tabHint || 'all';
@@ -1618,7 +1674,7 @@ function testSearch(term) {
   toggleTestData();
   gsInput.value = term;
   renderDropdown(term);
-  gsDrop.classList.add('open');
+  openDropdown();
   gsInput.focus();
 }
 
