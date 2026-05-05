@@ -214,6 +214,7 @@
   .dd-main { flex: 1; min-width: 0; }
   .dd-name { font-size: 13px; font-weight: 500; color: var(--primary-900); }
   .dd-meta { font-size: 11px; color: var(--secondary-600); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dd-flag { font-size: 10px; color: var(--error); margin-top: 2px; font-weight: 500; }
 
   .status-pill {
     font-size: 10px; font-weight: 500;
@@ -532,7 +533,6 @@
   }
   .ico-stu  { background: var(--primary-100); color: var(--primary-800); }
   .ico-pl   { background: var(--success-light); color: var(--success-dark); }
-  .ico-per  { background: var(--other-light); color: var(--other-dark); }
   .ico-ag   { background: var(--warning-light); color: #5a3e00; }
   .ico-req  { background: var(--error-light); color: var(--error-dark); }
   .op-main  { flex: 1; min-width: 0; }
@@ -591,14 +591,13 @@
 
   <div class="gs-wrap">
     <svg class="gs-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
-    <input class="gs-input" id="gsInput" type="text" placeholder="Search students, placements, agencies, personnel, requests…" autocomplete="off" />
+    <input class="gs-input" id="gsInput" type="text" placeholder="Search students, placements, agencies, requests…" autocomplete="off" />
     <span class="gs-kbd">Ctrl K</span>
     <div class="gs-dropdown" id="gsDropdown">
       <div class="dd-filters">
         <div class="dd-chip on">All</div>
         <div class="dd-chip">Students</div>
         <div class="dd-chip">Placements</div>
-        <div class="dd-chip">Personnel</div>
         <div class="dd-chip">Agencies</div>
         <div class="dd-chip">Requests</div>
         <div class="dd-chip assigned">Assigned to me</div>
@@ -661,14 +660,7 @@
     <div class="td-row" onclick="testSearch('1234')"><span class="td-term">1234</span><span class="td-desc">clashes with code 12345678</span></div>
     <div class="td-row" onclick="testSearch('PL-2026-82716')"><span class="td-term">PL-2026-82716</span><span class="td-desc">no student assigned</span></div>
     <div class="td-row" onclick="testSearch('RP Health')"><span class="td-term">RP Health</span><span class="td-desc">agency name → placements</span></div>
-
-    <!-- PERSONNEL -->
-    <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Personnel</div>
-    <div class="td-row" onclick="testSearch('Rachel Andrews')"><span class="td-term">Rachel Andrews</span><span class="td-desc">name</span></div>
-    <div class="td-row" onclick="testSearch('EMP-0041')"><span class="td-term">EMP-0041</span><span class="td-desc">employee code</span></div>
-    <div class="td-row" onclick="testSearch('r.andrews@rmh')"><span class="td-term">r.andrews@rmh</span><span class="td-desc">email</span></div>
-    <div class="td-row" onclick="testSearch('Ramon')"><span class="td-term">Ramon</span><span class="td-desc">name — Ra prefix</span></div>
-    <div class="td-row" onclick="testSearch('5419')"><span class="td-term">5419</span><span class="td-desc">personnel code</span></div>
+    <div class="td-row" onclick="testSearch('REQ-2026-0182')"><span class="td-term">REQ-2026-0182</span><span class="td-desc">request ID → request + placement</span></div>
 
     <!-- AGENCIES -->
     <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Agencies</div>
@@ -944,14 +936,13 @@
   <div class="overlay-panel" onclick="event.stopPropagation()">
     <div class="op-search">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--secondary-500)" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5" stroke-linecap="round"/></svg>
-      <input class="op-input" id="opInput" type="text" placeholder="Search students, placements, agencies, personnel, requests…" autocomplete="off" />
+      <input class="op-input" id="opInput" type="text" placeholder="Search students, placements, agencies, requests…" autocomplete="off" />
       <button class="op-esc" onclick="closeOverlay()">Esc</button>
     </div>
     <div class="op-tabs">
       <div class="op-tab on" data-tab="all">All</div>
       <div class="op-tab" data-tab="student">Students</div>
       <div class="op-tab" data-tab="placement">Placements</div>
-      <div class="op-tab" data-tab="personnel">Personnel</div>
       <div class="op-tab" data-tab="agency">Agencies</div>
       <div class="op-tab" data-tab="request">Requests</div>
     </div>
@@ -999,7 +990,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s3', initials:'RC', name:'Raquel Chriz',    code:'S22501234', email:'raquel.chriz@student.deakin.edu.au',    meta:'S22501234 · Deakin',          pill:'Supervisor needed', pillClass:'pill-error',
+    { id:'s3', initials:'RC', name:'Raquel Chriz',    code:'S22501234', email:'raquel.chriz@student.deakin.edu.au',    meta:'S22501234 · Deakin',          pill:'Active',            pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 1', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Campus',             v:'Geelong Waterfront'},
@@ -1013,7 +1004,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor'] }},
-    { id:'s4', initials:'RS', name:'Raquel Student',  code:'19876543',  email:'raquel.student@student.latrobe.edu.au', meta:'19876543 · La Trobe',          pill:'No course',         pillClass:'pill-warning',
+    { id:'s4', initials:'RS', name:'Raquel Student',  code:'19876543',  email:'raquel.student@student.latrobe.edu.au', meta:'19876543 · La Trobe',          pill:'Active',            pillClass:'pill-active',
       panel:{ type:'Student', sub:'No course assigned', fields:[
         {l:'Education provider', v:'La Trobe University'},
         {l:'Campus',             v:'Bundoora'},
@@ -1041,7 +1032,7 @@ const DATA = {
         {l:'Roster',             v:'Roster required', cls:'err'},
         {l:'Outstanding tasks',  v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
-    { id:'s6', initials:'SP', name:'Sarah Patel',     code:'10088765',  email:'sarah.patel@student.unimelb.edu.au',   meta:'10088765 · Melbourne Uni',    pill:'Pending',          pillClass:'pill-warning',
+    { id:'s6', initials:'SP', name:'Sarah Patel',     code:'10088765',  email:'sarah.patel@student.unimelb.edu.au',   meta:'10088765 · Melbourne Uni',    pill:'Active',           pillClass:'pill-active',
       panel:{ type:'Student', sub:'MN Year 1', fields:[
         {l:'Education provider', v:'University of Melbourne'},
         {l:'Campus',             v:'Parkville'},
@@ -1071,8 +1062,10 @@ const DATA = {
       ], actions:['View student profile','Jump to placement','View roster'] }},
   ],
   placement: [
-    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Active',           pillClass:'pill-active',
+    { id:'p0', initials:'PL', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',   meta:'PL-2026-1234',   pill:'Accepted',         pillClass:'pill-active',  flag:null,
+      reqId:'REQ-2026-0099',
       panel:{ type:'Placement', sub:'General Nursing', fields:[
+        {l:'Request ID',      v:'REQ-2026-0099', cls:'link'},
         {l:'Agency',          v:'Royal Melbourne Hospital', cls:'link'},
         {l:'Ward / unit',     v:'General Ward'},
         {l:'Discipline',      v:'General Nursing'},
@@ -1083,8 +1076,10 @@ const DATA = {
         {l:'Roster',          v:'Mon–Fri 07:00–15:00'},
         {l:'Outstanding',     v:'None'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Active',           pillClass:'pill-active',
+    { id:'p1', initials:'PL', name:'RP Health Care Facility — Facility Centre', code:'PL-2026-76408', meta:'PL-2026-76408',  pill:'Published',        pillClass:'pill-active',  flag:'Supervisor required',
+      reqId:'REQ-2026-0182',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
+        {l:'Request ID',      v:'REQ-2026-0182', cls:'link'},
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Facility Centre'},
         {l:'Discipline',      v:'Aged Care Nursing'},
@@ -1095,8 +1090,10 @@ const DATA = {
         {l:'Roster',          v:'Mon–Wed 06:00–17:30'},
         {l:'Outstanding',     v:'Supervisor allocation required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Active',           pillClass:'pill-active',
+    { id:'p2', initials:'PL', name:'RP HealthCare Ward — Ward 1 Centre',        code:'PL-2026-76421', meta:'PL-2026-76421',  pill:'Accepted',         pillClass:'pill-active',  flag:'Supervisor required · Roster required',
+      reqId:'REQ-2026-0195',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
+        {l:'Request ID',      v:'REQ-2026-0195', cls:'link'},
         {l:'Agency',          v:'RP HealthCare Ward', cls:'link'},
         {l:'Ward / unit',     v:'Ward 1 Centre'},
         {l:'Discipline',      v:'Aged Care Nursing'},
@@ -1107,8 +1104,10 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Supervisor allocation, roster required', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Active',           pillClass:'pill-active',
+    { id:'p3', initials:'PL', name:'Antenatal — La Trobe (Midwifery)',          code:'PL-2026-08401', meta:'PL-2026-08401',  pill:'Accepted',         pillClass:'pill-active',  flag:null,
+      reqId:'REQ-2026-0088',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
+        {l:'Request ID',      v:'REQ-2026-0088', cls:'link'},
         {l:'Agency',          v:'8131 Educ Cycle 2', cls:'link'},
         {l:'Ward / unit',     v:'Antenatal'},
         {l:'Discipline',      v:'Midwifery'},
@@ -1119,8 +1118,10 @@ const DATA = {
         {l:'Roster',          v:'Not specified'},
         {l:'Outstanding',     v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Roster required',  pillClass:'pill-warning',
+    { id:'p4', initials:'PL', name:'10208 – RP Health Care (Physiotherapy)',    code:'PL-2026-82716', meta:'PL-2026-82716',  pill:'Incomplete',       pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required',
+      reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
+        {l:'Request ID',      v:'REQ-2026-0210', cls:'link'},
         {l:'Agency',          v:'RP Health Care Facility', cls:'link'},
         {l:'Ward / unit',     v:'Prerequisite (10208)'},
         {l:'Discipline',      v:'Physiotherapy'},
@@ -1131,8 +1132,10 @@ const DATA = {
         {l:'Roster',          v:'Roster required', cls:'err'},
         {l:'Outstanding',     v:'Student allocation, supervisor, roster', cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Active',           pillClass:'pill-active',
+    { id:'p5', initials:'PL', name:'St Vincents ICU — Emergency Nursing',       code:'PL-2026-08400', meta:'PL-2026-08400',  pill:'Accepted',         pillClass:'pill-active',  flag:null,
+      reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
+        {l:'Request ID',      v:'REQ-2026-0210', cls:'link'},
         {l:'Agency',          v:'St Vincents Hospital', cls:'link'},
         {l:'Ward / unit',     v:'Intensive Care Unit'},
         {l:'Discipline',      v:'Emergency Nursing'},
@@ -1143,68 +1146,6 @@ const DATA = {
         {l:'Roster',          v:'Tue–Fri 07:00–15:00'},
         {l:'Outstanding',     v:'Timesheet unapproved (Week 3)'},
       ], actions:['View placement','Edit placement','View roster','Approve timesheet'] }},
-  ],
-  personnel: [
-    { id:'pe1', initials:'RA', name:'Rachel Andrews',   code:'EMP-0041', email:'r.andrews@rmh.org.au',            meta:'EMP-0041 · Royal Melbourne',  pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
-        {l:'Organisation',     v:'Royal Melbourne Hospital'},
-        {l:'Campus',           v:'Parkville'},
-        {l:'Personnel role',   v:'Agency Supervisor'},
-        {l:'Discipline',       v:'Aged Care Nursing'},
-        {l:'Active placements',v:'3', cls:'link'},
-        {l:'Students',         v:'Raquel Lacey, Raquel Racey, Raquel Chriz', cls:'link'},
-        {l:'Prerequisite status', v:'Completed'},
-      ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe2', initials:'RB', name:'Ramon Baxter',      code:'EMP-0088', email:'r.baxter@rphealthcare.com.au',   meta:'EMP-0088 · RP Health Care',   pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
-        {l:'Organisation',     v:'RP Health Care Facility'},
-        {l:'Campus',           v:'Werribee'},
-        {l:'Personnel role',   v:'Agency Supervisor'},
-        {l:'Discipline',       v:'Allied Health'},
-        {l:'Active placements',v:'2', cls:'link'},
-        {l:'Students',         v:'James Mitchell', cls:'link'},
-        {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
-      ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe3', initials:'5419', name:'Personnel HEI 5419', code:'5419', email:'personnel5419@latrobe.edu.au',   meta:'5419 · La Trobe',             pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
-        {l:'Organisation',     v:'La Trobe University'},
-        {l:'Campus',           v:'Bundoora'},
-        {l:'Personnel role',   v:'Agency Supervisor'},
-        {l:'Discipline',       v:'Midwifery'},
-        {l:'Active placements',v:'1 (Antenatal)', cls:'link'},
-        {l:'Students',         v:'Raquel Student', cls:'link'},
-        {l:'Prerequisite status', v:'Completed'},
-      ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe4', initials:'LT', name:'Dr. Linda Tran',     code:'EMP-0112', email:'l.tran@svh.org.au',             meta:'EMP-0112 · St Vincents',      pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'Agency Supervisor', fields:[
-        {l:'Organisation',     v:'St Vincents Hospital'},
-        {l:'Campus',           v:'Fitzroy'},
-        {l:'Personnel role',   v:'Agency Supervisor'},
-        {l:'Discipline',       v:'Emergency Nursing'},
-        {l:'Active placements',v:'2', cls:'link'},
-        {l:'Students',         v:'Sarah Patel, James Mitchell', cls:'link'},
-        {l:'Prerequisite status', v:'Completed'},
-      ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe5', initials:'MK', name:'Mark Kowalski',      code:'EMP-0203', email:'m.kowalski@monashhealth.org',   meta:'EMP-0203 · Monash Health',    pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'EP Supervisor', fields:[
-        {l:'Organisation',     v:'Monash Health'},
-        {l:'Campus',           v:'Clayton'},
-        {l:'Personnel role',   v:'EP Supervisor'},
-        {l:'Discipline',       v:'Physiotherapy'},
-        {l:'Active placements',v:'1', cls:'link'},
-        {l:'Students',         v:'James Mitchell', cls:'link'},
-        {l:'Prerequisite status', v:'Outstanding (1)', cls:'err'},
-      ], actions:['View profile','View supervised placements','Send message'] }},
-    { id:'pe6', initials:'RP', name:'Raj Patel',          code:'EMP-0055', email:'r.patel@deakin.edu.au',         meta:'EMP-0055 · Deakin',           pill:'Active', pillClass:'pill-active',
-      panel:{ type:'Personnel', sub:'EP Coordinator', fields:[
-        {l:'Organisation',     v:'Deakin University'},
-        {l:'Campus',           v:'Burwood'},
-        {l:'Personnel role',   v:'EP Coordinator'},
-        {l:'Discipline',       v:'Nursing'},
-        {l:'Active placements',v:'4', cls:'link'},
-        {l:'Students',         v:'Raquel Lacey, Raquel Racey, Raquel Chriz, Sarah Patel', cls:'link'},
-        {l:'Prerequisite status', v:'Completed'},
-      ], actions:['View profile','View supervised placements','Send message'] }},
   ],
   agency: [
     { id:'a1', initials:'RP', name:'RP Health Care Facility',      code:'A2021-00193', meta:'A2021-00193',       pill:null, pillClass:'',
@@ -1289,7 +1230,7 @@ const DATA = {
       ], actions:['View agency','View placements','View requests','View agreements'] }},
   ],
   request: [
-    { id:'r1', initials:'RQ', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', meta:'REQ-2026-0182 · Deakin',    pill:'Open',      pillClass:'pill-active',
+    { id:'r1', initials:'RQ', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', meta:'REQ-2026-0182 · Deakin',    pill:'Pending',       pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider', v:'Deakin University'},
         {l:'Discipline',         v:'Aged Care Nursing'},
@@ -1299,7 +1240,7 @@ const DATA = {
         {l:'Status',             v:'Offer published – pending response'},
         {l:'Linked placements',  v:'PL-2026-0088, PL-2026-0089', cls:'link'},
       ], actions:['View request','Approve','Reject','View linked placements'] }},
-    { id:'r2', initials:'RQ', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', meta:'REQ-2026-0195 · Monash',    pill:'Open',      pillClass:'pill-active',
+    { id:'r2', initials:'RQ', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', meta:'REQ-2026-0195 · Monash',    pill:'Allocated',     pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider', v:'Monash University'},
         {l:'Discipline',         v:'Physiotherapy'},
@@ -1309,7 +1250,7 @@ const DATA = {
         {l:'Status',             v:'No student assigned', cls:'err'},
         {l:'Linked placements',  v:'PL-2026-0104', cls:'link'},
       ], actions:['View request','Assign student','Reject'] }},
-    { id:'r3', initials:'RQ', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', meta:'REQ-2026-0210 · Melbourne Uni', pill:'Published', pillClass:'pill-warning',
+    { id:'r3', initials:'RQ', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', meta:'REQ-2026-0210 · Melbourne Uni', pill:'Pending',    pillClass:'pill-warning',
       panel:{ type:'Request', sub:'Offer Published', fields:[
         {l:'Education provider', v:'University of Melbourne'},
         {l:'Discipline',         v:'Emergency Nursing'},
@@ -1319,7 +1260,7 @@ const DATA = {
         {l:'Status',             v:'Pending student response'},
         {l:'Linked placements',  v:'PL-2026-0112', cls:'link'},
       ], actions:['View request','Withdraw offer','View linked placements'] }},
-    { id:'r4', initials:'RQ', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', meta:'REQ-2026-0088 · La Trobe',  pill:'Fulfilled', pillClass:'pill-active',
+    { id:'r4', initials:'RQ', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', meta:'REQ-2026-0088 · La Trobe',  pill:'Completed',     pillClass:'pill-active',
       panel:{ type:'Request', sub:'Fulfilled', fields:[
         {l:'Education provider', v:'La Trobe University'},
         {l:'Discipline',         v:'Midwifery'},
@@ -1336,7 +1277,6 @@ const DATA = {
 const ALL_ENTITIES = [
   ...DATA.student.map(e => ({...e, entityType:'student'})),
   ...DATA.placement.map(e => ({...e, entityType:'placement'})),
-  ...DATA.personnel.map(e => ({...e, entityType:'personnel'})),
   ...DATA.agency.map(e => ({...e, entityType:'agency'})),
   ...DATA.request.map(e => ({...e, entityType:'request'})),
 ];
@@ -1344,7 +1284,6 @@ const ALL_ENTITIES = [
 const ENTITY_META = {
   student:   { label:'Students',  icoClass:'ico-stu' },
   placement: { label:'Placements',icoClass:'ico-pl'  },
-  personnel: { label:'Personnel', icoClass:'ico-per' },
   agency:    { label:'Agencies',  icoClass:'ico-ag'  },
   request:   { label:'Requests',  icoClass:'ico-req' },
 };
@@ -1389,6 +1328,8 @@ function search(q, entityTypeHint) {
     if (e.name.toLowerCase().includes(q)) return true;
     // Match on the unique code/ID stored in e.code
     if (e.code && e.code.toLowerCase().includes(q)) return true;
+    // Match on request ID for placements
+    if (e.reqId && e.reqId.toLowerCase().includes(q)) return true;
     // Match on email stored in e.email
     if (e.email && e.email.toLowerCase().includes(q)) return true;
     return false;
@@ -1420,9 +1361,7 @@ function cardSecondary(item) {
       return [item.email, item.code, f('Education provider'), f('Discipline')]
         .filter(Boolean).join(' · ');
     case 'placement':
-      return [f('Agency'), f('Student') || f('Students')].filter(Boolean).join(' · ');
-    case 'personnel':
-      return [item.email, item.code, f('Personnel role')].filter(Boolean).join(' · ');
+      return [item.reqId, f('Agency'), f('Student') || f('Students')].filter(Boolean).join(' · ');
     case 'agency':
       return [item.code, f('Suburb'), f('Region')].filter(Boolean).join(' · ');
     case 'request':
@@ -1446,7 +1385,7 @@ function renderResults(q, tab) {
 
   // Group by entity type
   const groups = tab === 'all'
-    ? ['student','placement','personnel','agency','request']
+    ? ['student','placement','agency','request']
     : [tab];
 
   let firstItem = null;
@@ -1469,11 +1408,13 @@ function renderResults(q, tab) {
       const pill = item.pill
         ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
 
+      const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
       row.innerHTML = `
         <div class="op-ico ${ENTITY_META[type].icoClass}">${item.initials}</div>
         <div class="op-main">
           <div class="op-name">${cardPrimary(item)}</div>
           <div class="op-meta">${cardSecondary(item)}</div>
+          ${flag}
         </div>
         ${pill}`;
 
@@ -1538,7 +1479,7 @@ function renderDropdown(q) {
   gsDrop.querySelectorAll('.dd-group').forEach(g => g.remove());
   const footer = gsDrop.querySelector('.dd-footer');
 
-  const order = ['student','placement','agency','personnel','request'];
+  const order = ['student','placement','agency','request'];
   let totalItems = 0;
 
   order.forEach(type => {
@@ -1552,6 +1493,7 @@ function renderDropdown(q) {
 
     items.forEach(item => {
       const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
+      const flag = item.flag ? `<div class="dd-flag">⚠ ${item.flag}</div>` : '';
       const d = document.createElement('div');
       d.className = 'dd-item';
       d.innerHTML = `
@@ -1559,6 +1501,7 @@ function renderDropdown(q) {
         <div class="dd-main">
           <div class="dd-name">${cardPrimary(item)}</div>
           <div class="dd-meta">${cardSecondary(item)}</div>
+          ${flag}
         </div>${pill}`;
       // clicking a row goes directly to the detail page — no intermediate overlay
       d.onclick = (e) => { e.stopPropagation(); gsDrop.classList.remove('open'); navigateTo(item); };
@@ -1614,7 +1557,7 @@ document.querySelectorAll('.dd-chip:not(.assigned)').forEach(c => {
     // Map chip text to entity type key
     const chipMap = {
       'All':'all', 'Students':'student', 'Placements':'placement',
-      'Personnel':'personnel', 'Agencies':'agency', 'Requests':'request'
+      'Agencies':'agency', 'Requests':'request'
     };
     ddActiveChip = chipMap[c.textContent.trim()] || 'all';
 
@@ -1937,7 +1880,6 @@ function genericDetailPage(item) {
     <div style="display:flex;align-items:center;gap:16px;background:var(--white);padding:16px 24px;border-bottom:1px solid var(--secondary-300);">
       <div class="dp-avatar" style="background:${
         item.entityType==='placement'?'var(--success-dark)':
-        item.entityType==='personnel'?'var(--other-dark)':
         item.entityType==='agency'?'#5a3e00':
         'var(--error-dark)'}">${item.initials}</div>
       <div>
@@ -1967,7 +1909,7 @@ function navigateTo(item) {
   // Set breadcrumb
   const breadcrumbMap = {
     student:'Manage Student', placement:'Manage Placement',
-    personnel:'Manage Personnel', agency:'Manage Agency', request:'Manage Request'
+    agency:'Manage Agency', request:'Manage Request'
   };
   if (breadcrumb2) breadcrumb2.textContent = breadcrumbMap[item.entityType] || 'Administration';
   if (pageTitle) pageTitle.textContent = item.name;
