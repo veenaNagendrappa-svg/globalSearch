@@ -202,28 +202,28 @@
     border-bottom: 1px solid var(--secondary-200);
   }
   .fs-tab {
-    font-size: 12px; font-weight: 400;
+    font-size: 0.875rem; font-weight: 400;
     padding: 10px 14px 9px; cursor: pointer;
-    color: #003179;
+    color: #00193e;
     border-bottom: 2px solid transparent;
     white-space: nowrap; transition: all 0.12s;
     display: flex; align-items: center; gap: 5px;
     margin-bottom: -1px;
   }
-  .fs-tab:hover { color: #00193e; }
-  .fs-tab.active { color: #003179; border-bottom-color: #003179; font-weight: 500; }
+  .fs-tab:hover { color: #00193e; opacity: 0.7; }
+  .fs-tab.active { color: #00193e; border-bottom-color: #00193e; font-weight: 500; }
   .fs-tab-count {
     font-size: 10px; font-weight: 400;
-    background: var(--secondary-200); color: #003179;
+    background: var(--secondary-200); color: #00193e;
     border-radius: 8px; padding: 1px 6px; line-height: 1.4;
   }
-  .fs-tab.active .fs-tab-count { background: var(--primary-100); color: #003179; }
+  .fs-tab.active .fs-tab-count { background: var(--primary-100); color: #00193e; }
 
   /* Count / inactive bar */
   .fs-count-bar {
     display: flex; align-items: center; justify-content: space-between;
     padding: 6px 0 14px;
-    font-size: 12px; font-weight: 400; color: #003179;
+    font-size: 0.875rem; font-weight: 400; color: #00193e;
   }
   /* Inactive toggle — subtle pill, clearly interactive */
   .fs-inactive-toggle {
@@ -355,15 +355,16 @@
   }
   .fs-view-more:hover { text-decoration: underline; }
 
-  /* Status pills — semantic colours per state */
+  /* Status pills — v2_44 style: single colour, no semantic variation */
   .status-pill {
-    font-size: 12px; font-weight: 500;
-    padding: 2px 10px; border-radius: 10px;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 8px; border-radius: 12px;
     flex-shrink: 0; white-space: nowrap;
+    background: var(--primary-050); color: var(--primary-900);
   }
-  .pill-active  { background: var(--success-light);  color: var(--success-dark); }
-  .pill-warning { background: var(--warning-light);  color: #7a4f00; }
-  .pill-error   { background: var(--error-light);    color: var(--error-dark); }
+  .pill-active  { background: var(--primary-050); color: var(--primary-900); }
+  .pill-warning { background: var(--primary-050); color: var(--primary-900); }
+  .pill-error   { background: var(--primary-050); color: var(--primary-900); }
 
   /* Inactive toggle */
   .toggle-switch {
@@ -1402,12 +1403,12 @@ function renderStudentRow(item) {
   const q = currentQuery;
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-type-icon">${TYPE_ICONS.student}</div></td>
     <td><div class="fs-row-name">${hl(item.name, q)}</div><div class="fs-row-sub">${hl(pf(item,'Education provider'), q)}</div></td>
-    <td class="mono">${hl(item.code, q)}</td>
-    <td class="muted">${pf(item,'Discipline')}</td>
+    <td class="muted">${hl(item.code, q)}</td>
+    <td class="muted">${pf(item,'Discipline') || '—'}</td>
+    <td class="muted">${pf(item,'Course Type') || '—'}</td>
     <td class="muted">${pf(item,'Year level') || '—'}</td>
-    <td class="muted">${pf(item,'Current placement') || '—'}</td>
+    <td class="muted">${pf(item,'Student type') || pf(item,'Student Type') || '—'}</td>
     <td>${pill}</td>
     <td><button class="fs-row-cta">View</button></td>`;
 }
@@ -1416,15 +1417,20 @@ function renderPlacementRow(item) {
   const q = currentQuery;
   const student = pf(item,'Student') || pf(item,'Students') || '—';
   const noStu = student === '—' || student.startsWith('No');
-  const flag = item.flag;
+  const flag = item.flag ? ' <span style="color:var(--error)" title="'+item.flag+'">⚑</span>' : '';
+  const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-type-icon">${TYPE_ICONS.placement}</div></td>
     <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${pf(item,'Discipline')}</div></td>
-    <td class="mono muted">${item.group || '—'}</td>
-    <td class="muted">${hl(pf(item,'Education provider'), q)}</td>
-    <td class="muted">${hl(pf(item,'Agency'), q)}</td>
+    <td class="muted">${hl(item.reqId, q) || '—'}</td>
+    <td class="muted">${item.group || '—'}</td>
+    <td class="muted">${hl(pf(item,'Education provider'), q) || '—'}</td>
+    <td class="muted">${hl(pf(item,'Agency'), q) || '—'}</td>
+    <td class="muted">${pf(item,'Placement type') || pf(item,'Type') || '—'}</td>
+    <td class="muted">${pf(item,'Year level') || '—'}</td>
+    <td class="muted">${pf(item,'Duration') || '—'}</td>
     <td class="muted">${item.dates || '—'}</td>
-    <td class="${noStu?'warn':'muted'}">${hl(student, q)}${flag ? ' <span style="color:var(--error)" title="'+flag+'">⚑</span>' : ''}</td>
+    <td class="${noStu?'warn':'muted'}">${hl(student, q)}${flag}</td>
+    <td>${pill}</td>
     <td><button class="fs-row-cta">View</button></td>`;
 }
 
@@ -1432,9 +1438,8 @@ function renderAgencyRow(item) {
   const q = currentQuery;
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-type-icon">${TYPE_ICONS.agency}</div></td>
     <td><div class="fs-row-name">${hl(item.name, q)}</div><div class="fs-row-sub">${pf(item,'Type') || pf(item,'Level') || ''}</div></td>
-    <td class="mono">${hl(item.code, q)}</td>
+    <td class="muted">${hl(item.code, q)}</td>
     <td class="muted">${pf(item,'Parent') || '—'}</td>
     <td class="muted">${pf(item,'Region') || '—'}</td>
     <td class="muted">${pf(item,'Type') || '—'}</td>
@@ -1447,11 +1452,14 @@ function renderRequestRow(item) {
   const q = currentQuery;
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-type-icon">${TYPE_ICONS.request}</div></td>
     <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${pf(item,'Discipline')}</div></td>
-    <td class="muted">${hl(pf(item,'Education provider'), q)}</td>
+    <td class="muted">${hl(pf(item,'Education provider'), q) || '—'}</td>
     <td class="muted">${pf(item,'Region') || '—'}</td>
-    <td class="muted">${hl(pf(item,'Agency preference') || pf(item,'Agency'), q)}</td>
+    <td class="muted">${hl(pf(item,'Agency preference') || pf(item,'Agency'), q) || '—'}</td>
+    <td class="muted">${pf(item,'Discipline') || '—'}</td>
+    <td class="muted">${pf(item,'Placement type') || '—'}</td>
+    <td class="muted">${pf(item,'Year level') || '—'}</td>
+    <td class="muted">${pf(item,'Duration') || '—'}</td>
     <td class="muted">${pf(item,'Period') || pf(item,'Dates') || '—'}</td>
     <td>${pill}</td>
     <td><button class="fs-row-cta">View</button></td>`;
@@ -1460,10 +1468,10 @@ function renderRequestRow(item) {
 const ROW_RENDERERS = { student: renderStudentRow, placement: renderPlacementRow, agency: renderAgencyRow, request: renderRequestRow };
 
 const COL_DEFS = {
-  placement: ['', 'ID / Discipline', 'Group', 'EP', 'Agency', 'Dates', 'Student', ''],
-  request:   ['', 'ID / Discipline', 'Provider', 'Region', 'Agency', 'Dates', 'Status', ''],
-  student:   ['', 'Name / Provider', 'Code', 'Discipline', 'Year', 'Current Placement', 'Status', ''],
-  agency:    ['', 'Name / Type', 'Code', 'Parent', 'Region', 'Type', 'Level', 'Status', ''],
+  placement: ['ID / Discipline', 'Request ID', 'Group', 'EP Code', 'Agency', 'Placement Type', 'Year Level', 'Duration', 'Dates', 'Student', 'Status', ''],
+  request:   ['ID / Discipline', 'EP Code', 'Region', 'Agency', 'Discipline', 'Placement Type', 'Year Level', 'Duration', 'Dates', 'Status', ''],
+  student:   ['Name / Provider', 'Code', 'Discipline', 'Course', 'Year Level', 'Student Type', 'Status', ''],
+  agency:    ['Name / Type', 'Code', 'Parent', 'Region', 'Type', 'Level', 'Status', ''],
 };
 
 const ENTITY_META = {
@@ -1554,7 +1562,7 @@ function renderFSResults(q) {
     hdg.className = 'fs-group-heading';
     const inactiveBadge = inactiveItems.length > 0
       ? `<span class="fs-row-inactive-badge">${inactiveItems.length} inactive</span>` : '';
-    hdg.innerHTML = `<span class="type-dot ${meta.dotClass}"></span><span class="fs-group-heading-label">${meta.label}</span><span class="fs-group-badge">${activeItems.length}</span>${inactiveBadge}`;
+    hdg.innerHTML = `<span class="fs-type-icon" style="width:22px;height:22px;border-radius:4px;background:var(--primary-100);color:var(--primary-600);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${TYPE_ICONS[type]}</span><span class="fs-group-heading-label">${meta.label}</span><span class="fs-group-badge">${activeItems.length}</span>${inactiveBadge}`;
     grp.appendChild(hdg);
 
     // Table
@@ -2035,6 +2043,19 @@ const DETAIL_PAGES = {
       {name:'COVID Vaccinations (optional)',     status:'Outstanding'},
     ],
     placement:'Not yet assigned', placementDates:'TBC', supervisor:'Not allocated',
+  }),
+  s7: () => studentDetailPage({ name:'Tom Ward', initials:'TW', code:'TW-2024-007',
+    email:'t.ward@student.rmit.edu.au', status:'Inactive', firstName:'Tom', lastName:'Ward', gender:'Male', dob:'19/04/2000',
+    mobile:'+61 411 222 333', address:'22 Swanston Street, Melbourne VIC 3000',
+    ep:'RMIT University', campus:'City', studentCode:'12345678', discipline:'General Nursing', courseType:'Bachelor of Nursing', yearLevel:'Year 3', studentType:'Domestic',
+    epContact:'Linda Tran', epEmail:'l.tran@rmit.edu.au', epPhone:'+61 3 9925 2000',
+    prereqs:[
+      {name:'Public Liability Insurance Cover', status:'Completed'},
+      {name:'CPR Certificate',                  status:'Completed'},
+      {name:'Immunisation Record Checklist',    status:'Completed'},
+      {name:'COVID Vaccinations (optional)',     status:'Completed'},
+    ],
+    placement:'Royal Melbourne Hospital – General Ward', placementDates:'01/02/2026 – 30/06/2026', supervisor:'Rachel Andrews',
   }),
 };
 
