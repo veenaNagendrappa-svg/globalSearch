@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InPlace Network — Global Search Prototype v2_48</title>
+<title>InPlace Network — Global Search Prototype v2_49</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -187,11 +187,11 @@
   .fs-empty-title { font-size: 14px; font-weight: 500; color: var(--text-high); }
   .fs-empty-sub { font-size: 13px; color: var(--secondary-600); text-align: center; }
 
-  /* Content column — max 900px, left-leaning with comfortable left pad */
+  /* Content column — centred, symmetric padding */
   .fs-inner {
-    max-width: 960px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 32px 60px 48px;
+    padding: 0 40px 60px 40px;
   }
 
   /* Tabs — left-aligned with content, no full-width border */
@@ -274,6 +274,7 @@
   }
   .fs-list-head th:first-child { padding-left: 12px; width: 44px; }
   .fs-list-head th:last-child  { width: 60px; }
+  .fs-list-head th.flag-col    { width: 36px; text-align: center; color: var(--secondary-500); }
 
   /* Data rows — generous padding, hairline dividers, no zebra */
   .fs-row {
@@ -1160,7 +1161,7 @@ const DATA = {
         {l:'Dates',v:'01/02/2026 – 30/06/2026'},{l:'Student',v:'Tom Ward',cls:'link'},
         {l:'Supervisor',v:'Rachel Andrews',cls:'link'},{l:'Roster',v:'Mon–Fri 07:00–15:00'},{l:'Outstanding',v:'None'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p1', name:'RP Health Care Facility — Facility Centre',   code:'PL-2026-76408', pill:'Published',   pillClass:'pill-active',  flag:'Supervisor required', group:'2', dates:'01/01/2026 – 31/10/2026', reqId:'REQ-2026-0182',
+    { id:'p1', name:'RP Health Care Facility — Facility Centre',   code:'PL-2026-76408', ep:'DEA', pill:'Published',   pillClass:'pill-active',  flag:'Supervisor required', group:'2', dates:'01/01/2026 – 31/10/2026', reqId:'REQ-2026-0182',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Request ID',v:'REQ-2026-0182',cls:'link'},{l:'Agency',v:'RP Health Care Facility',cls:'link'},
         {l:'Ward / unit',v:'Facility Centre'},{l:'Discipline',v:'Aged Care Nursing'},
@@ -1168,7 +1169,7 @@ const DATA = {
         {l:'Student',v:'Raquel Lacey',cls:'link'},{l:'Supervisor',v:'Not allocated',cls:'err'},
         {l:'Roster',v:'Mon–Wed 06:00–17:30'},{l:'Outstanding',v:'Supervisor allocation required',cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p2', name:'RP HealthCare Ward — Ward 1 Centre',          code:'PL-2026-76421', pill:'Accepted',   pillClass:'pill-active',  flag:'Supervisor required · Roster required', group:'2', dates:'01/01/2026 – 31/12/2026', reqId:'REQ-2026-0195',
+    { id:'p2', name:'RP HealthCare Ward — Ward 1 Centre',          code:'PL-2026-76421', ep:'DEA', pill:'Accepted',   pillClass:'pill-active',  flag:'Supervisor required · Roster required', group:'2', dates:'01/01/2026 – 31/12/2026', reqId:'REQ-2026-0195',
       panel:{ type:'Placement', sub:'Aged Care Nursing', fields:[
         {l:'Request ID',v:'REQ-2026-0195',cls:'link'},{l:'Agency',v:'RP HealthCare Ward',cls:'link'},
         {l:'Ward / unit',v:'Ward 1 Centre'},{l:'Discipline',v:'Aged Care Nursing'},{l:'Placement type',v:'Aged Care'},
@@ -1176,7 +1177,7 @@ const DATA = {
         {l:'Students',v:'Raquel Racey, Raquel Chriz',cls:'link'},{l:'Supervisor',v:'Not allocated',cls:'err'},
         {l:'Roster',v:'Roster required',cls:'err'},{l:'Outstanding',v:'Supervisor allocation, roster required',cls:'err'},
       ], actions:['View placement','Edit placement','Allocate supervisor','View roster'] }},
-    { id:'p3', name:'Antenatal — La Trobe (Midwifery)',            code:'PL-2026-08401', pill:'Accepted',   pillClass:'pill-active',  flag:null,   group:'1', dates:'30/08/2025 – 08/03/2027', reqId:'REQ-2026-0088',
+    { id:'p3', name:'Antenatal — La Trobe (Midwifery)',            code:'PL-2026-08401', ep:'LTU', pill:'Accepted',   pillClass:'pill-active',  flag:null,   group:'1', dates:'30/08/2025 – 08/03/2027', reqId:'REQ-2026-0088',
       panel:{ type:'Placement', sub:'Midwifery', fields:[
         {l:'Request ID',v:'REQ-2026-0088',cls:'link'},{l:'Agency',v:'8131 Educ Cycle 2',cls:'link'},
         {l:'Ward / unit',v:'Antenatal'},{l:'Discipline',v:'Midwifery'},{l:'Placement type',v:'Antenatal'},
@@ -1184,7 +1185,7 @@ const DATA = {
         {l:'Student',v:'Raquel Student',cls:'link'},{l:'Supervisor',v:'Personnel HEI 5419',cls:'link'},
         {l:'Roster',v:'Not specified'},{l:'Outstanding',v:'Assessment report submitted'},
       ], actions:['View placement','Edit placement','View roster'] }},
-    { id:'p4', name:'10208 – RP Health Care (Physiotherapy)',      code:'PL-2026-82716', pill:'Incomplete', pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required', group:'3', dates:'16/02/2026 – 30/04/2026', reqId:'REQ-2026-0210',
+    { id:'p4', name:'10208 – RP Health Care (Physiotherapy)',      code:'PL-2026-82716', ep:'MON', pill:'Incomplete', pillClass:'pill-warning', flag:'No student assigned · Supervisor required · Roster required', group:'3', dates:'16/02/2026 – 30/04/2026', reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Allied Health assistance', fields:[
         {l:'Request ID',v:'REQ-2026-0210',cls:'link'},{l:'Agency',v:'RP Health Care Facility',cls:'link'},
         {l:'Ward / unit',v:'Prerequisite (10208)'},{l:'Discipline',v:'Physiotherapy'},{l:'Placement type',v:'Allied Health'},
@@ -1192,7 +1193,7 @@ const DATA = {
         {l:'Student',v:'No student assigned',cls:'err'},{l:'Supervisor',v:'Not allocated',cls:'err'},
         {l:'Roster',v:'Roster required',cls:'err'},{l:'Outstanding',v:'Student allocation, supervisor, roster',cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
-    { id:'p5', name:'St Vincents ICU — Emergency Nursing',         code:'PL-2026-08400', pill:'Accepted',   pillClass:'pill-active',  flag:null,   group:'1', dates:'01/03/2026 – 31/08/2026', reqId:'REQ-2026-0210',
+    { id:'p5', name:'St Vincents ICU — Emergency Nursing',         code:'PL-2026-08400', ep:'UNIM', pill:'Accepted',   pillClass:'pill-active',  flag:null,   group:'1', dates:'01/03/2026 – 31/08/2026', reqId:'REQ-2026-0210',
       panel:{ type:'Placement', sub:'Emergency Nursing', fields:[
         {l:'Request ID',v:'REQ-2026-0210',cls:'link'},{l:'Agency',v:'St Vincents Hospital',cls:'link'},
         {l:'Ward / unit',v:'Intensive Care Unit'},{l:'Discipline',v:'Emergency Nursing'},{l:'Placement type',v:'Emergency'},
@@ -1200,7 +1201,7 @@ const DATA = {
         {l:'Student',v:'Sarah Patel',cls:'link'},{l:'Supervisor',v:'Dr. Linda Tran',cls:'link'},
         {l:'Roster',v:'Tue–Fri 07:00–15:00'},{l:'Outstanding',v:'Timesheet unapproved (Week 3)'},
       ], actions:['View placement','Edit placement','View roster','Approve timesheet'] }},
-    { id:'p6', name:'Austin Health — General Ward',                code:'PL-2025-44201', pill:'Cancelled',  pillClass:'pill-error',   flag:null,   group:'1', dates:'01/06/2025 – 30/11/2025', reqId:'REQ-2025-0310',
+    { id:'p6', name:'Austin Health — General Ward',                code:'PL-2025-44201', ep:'RMIT', pill:'Cancelled',  pillClass:'pill-error',   flag:null,   group:'1', dates:'01/06/2025 – 30/11/2025', reqId:'REQ-2025-0310',
       panel:{ type:'Placement', sub:'General Nursing — Cancelled', fields:[
         {l:'Request ID',v:'REQ-2025-0310',cls:'link'},{l:'Agency',v:'Austin Health',cls:'link'},
         {l:'Ward / unit',v:'General Ward'},{l:'Discipline',v:'General Nursing'},{l:'Placement type',v:'Clinical'},
@@ -1265,7 +1266,7 @@ const DATA = {
       ], actions:['View agency','View placements','View agreements'] }},
   ],
   request: [
-    { id:'r1', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', pill:'Pending',   pillClass:'pill-active',
+    { id:'r1', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', ep:'DEA', pill:'Pending',   pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider',v:'Deakin University'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Aged Care Nursing'},{l:'Placement type',v:'Aged Care'},{l:'Year level',v:'Year 1'},
@@ -1273,7 +1274,7 @@ const DATA = {
         {l:'Agency preference',v:'RP Health Care Facility',cls:'link'},{l:'Status',v:'Offer published – pending response'},
         {l:'Linked placements',v:'PL-2026-0088, PL-2026-0089',cls:'link'},
       ], actions:['View request','Approve','Reject','View linked placements'] }},
-    { id:'r2', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', pill:'Allocated', pillClass:'pill-active',
+    { id:'r2', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', ep:'MON', pill:'Allocated', pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider',v:'Monash University'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Physiotherapy'},{l:'Placement type',v:'Allied Health'},{l:'Year level',v:'Year 2'},
@@ -1281,7 +1282,7 @@ const DATA = {
         {l:'Agency preference',v:'RP Health Care Facility',cls:'link'},{l:'Status',v:'No student assigned',cls:'err'},
         {l:'Linked placements',v:'PL-2026-0104',cls:'link'},
       ], actions:['View request','Assign student','Reject'] }},
-    { id:'r3', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', pill:'Pending',   pillClass:'pill-warning',
+    { id:'r3', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', ep:'UNIM', pill:'Pending',   pillClass:'pill-warning',
       panel:{ type:'Request', sub:'Offer Published', fields:[
         {l:'Education provider',v:'University of Melbourne'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Emergency Nursing'},{l:'Placement type',v:'Emergency'},{l:'Year level',v:'Year 3'},
@@ -1289,7 +1290,7 @@ const DATA = {
         {l:'Agency preference',v:'St Vincents Hospital',cls:'link'},{l:'Status',v:'Pending student response'},
         {l:'Linked placements',v:'PL-2026-0112',cls:'link'},
       ], actions:['View request','Withdraw offer','View linked placements'] }},
-    { id:'r4', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', pill:'Completed', pillClass:'pill-active',
+    { id:'r4', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', ep:'LTU', pill:'Completed', pillClass:'pill-active',
       panel:{ type:'Request', sub:'Fulfilled', fields:[
         {l:'Education provider',v:'La Trobe University'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Midwifery'},{l:'Placement type',v:'Antenatal'},{l:'Year level',v:'Year 2'},
@@ -1297,7 +1298,7 @@ const DATA = {
         {l:'Agency',v:'8131 Educ Cycle 2',cls:'link'},{l:'Status',v:'Placement active'},
         {l:'Linked placements',v:'Antenatal – La Trobe',cls:'link'},
       ], actions:['View request','View linked placements'] }},
-    { id:'r5', name:'REQ-2025-0310 — General Nursing',           code:'REQ-2025-0310', pill:'Cancelled', pillClass:'pill-error',
+    { id:'r5', name:'REQ-2025-0310 — General Nursing',           code:'REQ-2025-0310', ep:'AH', pill:'Cancelled', pillClass:'pill-error',
       panel:{ type:'Request', sub:'Cancelled', fields:[
         {l:'Education provider',v:'Austin Health'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'General Nursing'},{l:'Placement type',v:'Clinical'},{l:'Year level',v:'Year 2'},
@@ -1417,20 +1418,23 @@ function renderPlacementRow(item) {
   const q = currentQuery;
   const student = pf(item,'Student') || pf(item,'Students') || '—';
   const noStu = student === '—' || student.startsWith('No');
-  const flag = item.flag ? ' <span style="color:var(--error)" title="'+item.flag+'">⚑</span>' : '';
+  const epCode = item.ep || pf(item,'EP Code') || '—';
+  const flagHtml = item.flag
+    ? `<span title="${item.flag}" style="color:var(--error);font-size:13px;cursor:default;">⚑</span>`
+    : '';
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${pf(item,'Discipline')}</div></td>
+    <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${epCode}</div></td>
     <td class="muted">${hl(item.reqId, q) || '—'}</td>
     <td class="muted">${item.group || '—'}</td>
-    <td class="muted">${hl(pf(item,'Education provider'), q) || '—'}</td>
     <td class="muted">${hl(pf(item,'Agency'), q) || '—'}</td>
     <td class="muted">${pf(item,'Placement type') || pf(item,'Type') || '—'}</td>
     <td class="muted">${pf(item,'Year level') || '—'}</td>
     <td class="muted">${pf(item,'Duration') || '—'}</td>
     <td class="muted">${item.dates || '—'}</td>
-    <td class="${noStu?'warn':'muted'}">${hl(student, q)}${flag}</td>
+    <td class="${noStu?'warn':'muted'}">${hl(student, q)}</td>
     <td>${pill}</td>
+    <td style="text-align:center;width:36px;">${flagHtml}</td>
     <td><button class="fs-row-cta">View</button></td>`;
 }
 
@@ -1438,8 +1442,7 @@ function renderAgencyRow(item) {
   const q = currentQuery;
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-row-name">${hl(item.name, q)}</div><div class="fs-row-sub">${pf(item,'Type') || pf(item,'Level') || ''}</div></td>
-    <td class="muted">${hl(item.code, q)}</td>
+    <td><div class="fs-row-name">${hl(item.name, q)}</div><div class="fs-row-sub">${hl(item.code, q)}</div></td>
     <td class="muted">${pf(item,'Parent') || '—'}</td>
     <td class="muted">${pf(item,'Region') || '—'}</td>
     <td class="muted">${pf(item,'Type') || '—'}</td>
@@ -1450,10 +1453,10 @@ function renderAgencyRow(item) {
 
 function renderRequestRow(item) {
   const q = currentQuery;
+  const epCode = item.ep || pf(item,'EP Code') || '—';
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
   return `
-    <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${pf(item,'Discipline')}</div></td>
-    <td class="muted">${hl(pf(item,'Education provider'), q) || '—'}</td>
+    <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${epCode}</div></td>
     <td class="muted">${pf(item,'Region') || '—'}</td>
     <td class="muted">${hl(pf(item,'Agency preference') || pf(item,'Agency'), q) || '—'}</td>
     <td class="muted">${pf(item,'Discipline') || '—'}</td>
@@ -1468,10 +1471,10 @@ function renderRequestRow(item) {
 const ROW_RENDERERS = { student: renderStudentRow, placement: renderPlacementRow, agency: renderAgencyRow, request: renderRequestRow };
 
 const COL_DEFS = {
-  placement: ['ID / Discipline', 'Request ID', 'Group', 'EP Code', 'Agency', 'Placement Type', 'Year Level', 'Duration', 'Dates', 'Student', 'Status', ''],
-  request:   ['ID / Discipline', 'EP Code', 'Region', 'Agency', 'Discipline', 'Placement Type', 'Year Level', 'Duration', 'Dates', 'Status', ''],
+  placement: ['ID / EP Code', 'Request ID', 'Group', 'Agency', 'Placement Type', 'Year Level', 'Duration', 'Dates', 'Student', 'Status', '⚑', ''],
+  request:   ['ID / EP Code', 'Region', 'Agency', 'Discipline', 'Placement Type', 'Year Level', 'Duration', 'Dates', 'Status', ''],
   student:   ['Name / Provider', 'Code', 'Discipline', 'Course', 'Year Level', 'Student Type', 'Status', ''],
-  agency:    ['Name / Type', 'Code', 'Parent', 'Region', 'Type', 'Level', 'Status', ''],
+  agency:    ['Name / Code', 'Parent', 'Region', 'Type', 'Level', 'Status', ''],
 };
 
 const ENTITY_META = {
@@ -1577,6 +1580,7 @@ function renderFSResults(q) {
       const th = document.createElement('th');
       th.textContent = col;
       if (i === 0) th.style.paddingLeft = '16px';
+      if (col === '⚑') th.className = 'flag-col';
       colRow.appendChild(th);
     });
     thead.appendChild(colRow);
