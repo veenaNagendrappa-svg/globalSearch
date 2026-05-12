@@ -791,13 +791,14 @@
     <div class="td-row" onclick="testSearch('Raquel Lacey')"><span class="td-term">Raquel Lacey</span><span class="td-desc">name</span></div>
     <div class="td-row" onclick="testSearch('S22448871')"><span class="td-term">S22448871</span><span class="td-desc">student code</span></div>
     <div class="td-row" onclick="testSearch('raquel.lacey@student.deakin.edu.au')"><span class="td-term">raquel.lacey@…deakin</span><span class="td-desc">email</span></div>
-    <div class="td-row" onclick="testSearch('James Mitchell')"><span class="td-term">James Mitchell</span><span class="td-desc">name</span></div>
+    <div class="td-row" onclick="testSearch('Austin Mitchell')"><span class="td-term">Austin Mitchell</span><span class="td-desc">name</span></div>
     <div class="td-row" onclick="testSearch('30912345')"><span class="td-term">30912345</span><span class="td-desc">student code</span></div>
     <div class="td-row" onclick="testSearch('Sarah Patel')"><span class="td-term">Sarah Patel</span><span class="td-desc">no placement</span></div>
     <div class="td-row" onclick="testSearch('Austin Ward')"><span class="td-term">Austin Ward</span><span class="td-desc">inactive student</span></div>
     <div class="td-row" onclick="testSearch('12345678')"><span class="td-term">12345678</span><span class="td-desc">code clashes with PL-1234</span></div>
     <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('Royal')"><span class="td-term">Royal ⭐</span><span class="td-desc">all 4 entities</span></div>
-    <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('Austin')"><span class="td-term">Austin ⭐</span><span class="td-desc">all 4 entities</span></div>
+    <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('Austin')"><span class="td-term">Austin ⭐</span><span class="td-desc">all 4 + inactive toggle</span></div>
+    <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('Albury')"><span class="td-term">Albury ⭐</span><span class="td-desc">active + inactive agency toggle</span></div>
     <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('St')"><span class="td-term">St ⭐</span><span class="td-desc">all 4 entities</span></div>
 
     <!-- PLACEMENTS -->
@@ -1126,7 +1127,7 @@ const DATA = {
         {l:'Agency',v:'8131 Educ Cycle 2',cls:'link'},{l:'Supervisor',v:'Personnel HEI 5419',cls:'link'},
         {l:'Roster',v:'Not specified'},{l:'Outstanding tasks',v:'Assessment report submitted'},
       ], actions:['View student profile','Jump to placement','View roster'] }},
-    { id:'s5', initials:'JM', name:'James Mitchell',  code:'30912345',  email:'james.mitchell@student.monash.edu',
+    { id:'s5', initials:'AM', name:'Austin Mitchell',  code:'30912345',  email:'austin.mitchell@student.monash.edu',
       pill:'Active', pillClass:'pill-active',
       panel:{ type:'Student', sub:'BN Year 2', fields:[
         {l:'Education provider',v:'Monash University'},{l:'Campus',v:'Clayton'},
@@ -1277,6 +1278,12 @@ const DATA = {
         {l:'Agency code',v:'A2023-00015'},{l:'Region',v:'Victoria'},{l:'Suburb',v:'Ballarat'},
         {l:'Type',v:'Aged Care Facility'},{l:'Level',v:'Facility'},
         {l:'Active placements',v:'3',cls:'link'},{l:'Agreement status',v:'Current – expires 31/12/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a10', name:'Albury Wodonga Aged Care',      code:'A2023-00088', pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Facility', fields:[
+        {l:'Agency code',v:'A2023-00088'},{l:'Parent',v:'Albury Wodonga Health Network'},
+        {l:'Region',v:'New South Wales'},{l:'Suburb',v:'Albury'},{l:'Type',v:'Aged Care Facility'},{l:'Level',v:'Facility'},
+        {l:'Active placements',v:'2',cls:'link'},{l:'Agreement status',v:'Current – expires 31/12/2027'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
     { id:'a7', name:'Albury Wodonga Health',          code:'A2022-00061', pill:'Inactive', pillClass:'pill-error', inactive: true,
       panel:{ type:'Agency', sub:'Facility — Inactive', fields:[
@@ -2051,7 +2058,7 @@ const DETAIL_PAGES = {
     ],
     placement:'Antenatal – La Trobe', placementDates:'30/08/2025 – 08/03/2027', supervisor:'Personnel HEI 5419',
   }),
-  s5: () => studentDetailPage({ name:'James Mitchell', initials:'JM', code:'JM-2024-005',
+  s5: () => studentDetailPage({ name:'Austin Mitchell', initials:'AM', code:'AM-2024-005',
     email:'james.mitchell@student.monash.edu', status:'Active', firstName:'James', lastName:'Mitchell', gender:'Male', dob:'12/09/2001',
     mobile:'+61 455 888 999', address:'18 Wellington Road, Clayton VIC 3168',
     ep:'Monash University', campus:'Clayton', studentCode:'30912345', discipline:'Physiotherapy', courseType:'Bachelor of Physiotherapy', yearLevel:'Year 2', studentType:'Domestic',
