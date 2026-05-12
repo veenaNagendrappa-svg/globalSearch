@@ -794,8 +794,11 @@
     <div class="td-row" onclick="testSearch('James Mitchell')"><span class="td-term">James Mitchell</span><span class="td-desc">name</span></div>
     <div class="td-row" onclick="testSearch('30912345')"><span class="td-term">30912345</span><span class="td-desc">student code</span></div>
     <div class="td-row" onclick="testSearch('Sarah Patel')"><span class="td-term">Sarah Patel</span><span class="td-desc">no placement</span></div>
-    <div class="td-row" onclick="testSearch('Tom Ward')"><span class="td-term">Tom Ward</span><span class="td-desc">disambiguation student</span></div>
+    <div class="td-row" onclick="testSearch('Austin Ward')"><span class="td-term">Austin Ward</span><span class="td-desc">inactive student</span></div>
     <div class="td-row" onclick="testSearch('12345678')"><span class="td-term">12345678</span><span class="td-desc">code clashes with PL-1234</span></div>
+    <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('Royal')"><span class="td-term">Royal ⭐</span><span class="td-desc">all 4 entities</span></div>
+    <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('Austin')"><span class="td-term">Austin ⭐</span><span class="td-desc">all 4 entities</span></div>
+    <div class="td-row" style="background:var(--color-background-info,#e8f0fe);font-weight:500;" onclick="testSearch('St')"><span class="td-term">St ⭐</span><span class="td-desc">all 4 entities</span></div>
 
     <!-- PLACEMENTS -->
     <div style="padding:10px 16px 4px;font-size:10px;font-weight:500;letter-spacing:0.07em;color:rgba(255,255,255,0.35);text-transform:uppercase;">Placements</div>
@@ -1128,9 +1131,9 @@ const DATA = {
       panel:{ type:'Student', sub:'BN Year 2', fields:[
         {l:'Education provider',v:'Monash University'},{l:'Campus',v:'Clayton'},
         {l:'Discipline',v:'Physiotherapy'},{l:'Course Type',v:'Bachelor of Physiotherapy'},
-        {l:'Year level',v:'Year 2'},{l:'Current placement',v:'10208 – RP Health Care Facility',cls:'link'},
+        {l:'Year level',v:'Year 2'},{l:'Current placement',v:'Royal Park Hospital – Physio Ward',cls:'link'},
         {l:'Placement dates',v:'16/02/2026 – 30/04/2026'},{l:'Region',v:'Metro Melbourne'},
-        {l:'Agency',v:'RP Health Care Facility',cls:'link'},{l:'Supervisor',v:'Not allocated',cls:'err'},
+        {l:'Agency',v:'Royal Park Hospital',cls:'link'},{l:'Supervisor',v:'Not allocated',cls:'err'},
         {l:'Roster',v:'Roster required',cls:'err'},{l:'Outstanding tasks',v:'None'},
       ], actions:['View student profile','Jump to placement','Allocate supervisor','View roster'] }},
     { id:'s6', initials:'SP', name:'Sarah Patel',     code:'10088765',  email:'sarah.patel@student.unimelb.edu.au',
@@ -1143,22 +1146,32 @@ const DATA = {
         {l:'Supervisor',v:'Not allocated',cls:'err'},{l:'Roster',v:'Not set'},
         {l:'Outstanding tasks',v:'Prerequisite documents pending'},
       ], actions:['View student profile','Assign to placement'] }},
-    { id:'s7', initials:'TW', name:'Tom Ward',         code:'12345678',  email:'t.ward@student.rmit.edu.au',
+    { id:'s7', initials:'AW', name:'Austin Ward',        code:'12345678',  email:'a.ward@student.rmit.edu.au',
       pill:'Inactive', pillClass:'pill-error', inactive: true,
       panel:{ type:'Student', sub:'BN Year 3 — Withdrawn', fields:[
         {l:'Education provider',v:'RMIT University'},{l:'Campus',v:'City'},
         {l:'Discipline',v:'General Nursing'},{l:'Course Type',v:'Bachelor of Nursing'},
         {l:'Year level',v:'Year 3'},{l:'Region',v:'Metro Melbourne'},
-        {l:'Agency',v:'Royal Melbourne Hospital',cls:'link'},{l:'Supervisor',v:'Rachel Andrews',cls:'link'},
+        {l:'Agency',v:'Austin Health',cls:'link'},{l:'Supervisor',v:'Rachel Andrews',cls:'link'},
         {l:'Roster',v:'Mon–Fri 07:00–15:00'},{l:'Outstanding tasks',v:'None'},
       ], actions:['View student profile'] }},
+    { id:'s8', initials:'ST', name:'Stephanie Thomas',   code:'S22501299',  email:'stephanie.thomas@student.unimelb.edu.au',
+      pill:'Active', pillClass:'pill-active',
+      panel:{ type:'Student', sub:'MN Year 2', fields:[
+        {l:'Education provider',v:'University of Melbourne'},{l:'Campus',v:'Parkville'},
+        {l:'Discipline',v:'Emergency Nursing'},{l:'Course Type',v:'Master of Nursing'},
+        {l:'Year level',v:'Year 2'},{l:'Current placement',v:'St Vincents Hospital – ICU',cls:'link'},
+        {l:'Placement dates',v:'01/03/2026 – 31/08/2026'},{l:'Region',v:'Metro Melbourne'},
+        {l:'Agency',v:'St Vincents Hospital',cls:'link'},{l:'Supervisor',v:'Dr Linda Tran',cls:'link'},
+        {l:'Roster',v:'Tue–Fri 07:00–15:00'},{l:'Outstanding tasks',v:'None'},
+      ], actions:['View student profile','Jump to placement','View roster'] }},
   ],
   placement: [
     { id:'p0', name:'Royal Melbourne — General Ward',              code:'PL-2026-1234',  pill:'Accepted',   pillClass:'pill-active',  flag:null,   group:'1', dates:'01/02/2026 – 30/06/2026', reqId:'REQ-2026-0099',
       panel:{ type:'Placement', sub:'General Nursing', fields:[
         {l:'Request ID',v:'REQ-2026-0099',cls:'link'},{l:'Agency',v:'Royal Melbourne Hospital',cls:'link'},
         {l:'Ward / unit',v:'General Ward'},{l:'Discipline',v:'General Nursing'},{l:'Placement type',v:'Clinical'},
-        {l:'Dates',v:'01/02/2026 – 30/06/2026'},{l:'Student',v:'Tom Ward',cls:'link'},
+        {l:'Dates',v:'01/02/2026 – 30/06/2026'},{l:'Student',v:'Austin Ward',cls:'link'},
         {l:'Supervisor',v:'Rachel Andrews',cls:'link'},{l:'Roster',v:'Mon–Fri 07:00–15:00'},{l:'Outstanding',v:'None'},
       ], actions:['View placement','Edit placement','View roster'] }},
     { id:'p1', name:'RP Health Care Facility — Facility Centre',   code:'PL-2026-76408', ep:'DEA', pill:'Published',   pillClass:'pill-active',  flag:'Supervisor required', group:'2', dates:'01/01/2026 – 31/10/2026', reqId:'REQ-2026-0182',
@@ -1190,7 +1203,7 @@ const DATA = {
         {l:'Request ID',v:'REQ-2026-0210',cls:'link'},{l:'Agency',v:'RP Health Care Facility',cls:'link'},
         {l:'Ward / unit',v:'Prerequisite (10208)'},{l:'Discipline',v:'Physiotherapy'},{l:'Placement type',v:'Allied Health'},
         {l:'Year level',v:'Year 2'},{l:'Region',v:'Metro Melbourne – Werribee'},{l:'Dates',v:'16/02/2026 – 30/04/2026'},
-        {l:'Student',v:'No student assigned',cls:'err'},{l:'Supervisor',v:'Not allocated',cls:'err'},
+        {l:'Student',v:'',cls:'err'},{l:'Supervisor',v:'Not allocated',cls:'err'},
         {l:'Roster',v:'Roster required',cls:'err'},{l:'Outstanding',v:'Student allocation, supervisor, roster',cls:'err'},
       ], actions:['View placement','Edit placement','Allocate student','Allocate supervisor'] }},
     { id:'p5', name:'St Vincents ICU — Emergency Nursing',         code:'PL-2026-08400', ep:'UNIM', pill:'Accepted',   pillClass:'pill-active',  flag:null,   group:'1', dates:'01/03/2026 – 31/08/2026', reqId:'REQ-2026-0210',
@@ -1221,6 +1234,13 @@ const DATA = {
         {l:'Agency code',v:'A2021-00220'},{l:'Region',v:'Victoria'},{l:'Suburb',v:'Parkville'},
         {l:'Type',v:'Hospital Network'},{l:'Level',v:'Network'},
         {l:'Active placements',v:'5',cls:'link'},{l:'Agreement status',v:'Current – expires 30/09/2026'},
+      ], actions:['View agency','View placements','View requests','View agreements'] }},
+    { id:'a9', name:'Royal Park Hospital',            code:'A2021-00215', pill:null, pillClass:'',
+      panel:{ type:'Agency', sub:'Hospital', fields:[
+        {l:'Agency code',v:'A2021-00215'},{l:'Parent',v:'Royal Melbourne Hospital',cls:'link'},
+        {l:'Region',v:'Victoria'},{l:'Suburb',v:'Parkville'},
+        {l:'Type',v:'Hospital'},{l:'Level',v:'Facility'},
+        {l:'Active placements',v:'3',cls:'link'},{l:'Agreement status',v:'Current – expires 31/12/2027'},
       ], actions:['View agency','View placements','View requests','View agreements'] }},
     { id:'a5', name:'Monash Health',                  code:'A2022-00050', pill:null, pillClass:'',
       panel:{ type:'Agency', sub:'Network', fields:[
@@ -1266,7 +1286,7 @@ const DATA = {
       ], actions:['View agency','View placements','View agreements'] }},
   ],
   request: [
-    { id:'r1', name:'REQ-2026-0182 — Aged Care Nursing',         code:'REQ-2026-0182', ep:'DEA', pill:'Pending',   pillClass:'pill-active',
+    { id:'r1', name:'Royal Park Hospital — Aged Care Nursing',      code:'REQ-2026-0182', ep:'DEA', pill:'Pending',   pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider',v:'Deakin University'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Aged Care Nursing'},{l:'Placement type',v:'Aged Care'},{l:'Year level',v:'Year 1'},
@@ -1274,7 +1294,7 @@ const DATA = {
         {l:'Agency preference',v:'RP Health Care Facility',cls:'link'},{l:'Status',v:'Offer published – pending response'},
         {l:'Linked placements',v:'PL-2026-0088, PL-2026-0089',cls:'link'},
       ], actions:['View request','Approve','Reject','View linked placements'] }},
-    { id:'r2', name:'REQ-2026-0195 — Physiotherapy',             code:'REQ-2026-0195', ep:'MON', pill:'Allocated', pillClass:'pill-active',
+    { id:'r2', name:'Royal Park Hospital — Physiotherapy',           code:'REQ-2026-0195', ep:'MON', pill:'Allocated', pillClass:'pill-active',
       panel:{ type:'Request', sub:'Open Request', fields:[
         {l:'Education provider',v:'Monash University'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Physiotherapy'},{l:'Placement type',v:'Allied Health'},{l:'Year level',v:'Year 2'},
@@ -1282,7 +1302,7 @@ const DATA = {
         {l:'Agency preference',v:'RP Health Care Facility',cls:'link'},{l:'Status',v:'No student assigned',cls:'err'},
         {l:'Linked placements',v:'PL-2026-0104',cls:'link'},
       ], actions:['View request','Assign student','Reject'] }},
-    { id:'r3', name:'REQ-2026-0210 — Emergency Nursing',         code:'REQ-2026-0210', ep:'UNIM', pill:'Pending',   pillClass:'pill-warning',
+    { id:'r3', name:'St Vincents Hospital — Emergency Nursing',      code:'REQ-2026-0210', ep:'UNIM', pill:'Pending',   pillClass:'pill-warning',
       panel:{ type:'Request', sub:'Offer Published', fields:[
         {l:'Education provider',v:'University of Melbourne'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Emergency Nursing'},{l:'Placement type',v:'Emergency'},{l:'Year level',v:'Year 3'},
@@ -1290,7 +1310,7 @@ const DATA = {
         {l:'Agency preference',v:'St Vincents Hospital',cls:'link'},{l:'Status',v:'Pending student response'},
         {l:'Linked placements',v:'PL-2026-0112',cls:'link'},
       ], actions:['View request','Withdraw offer','View linked placements'] }},
-    { id:'r4', name:'REQ-2026-0088 — Midwifery Antenatal',       code:'REQ-2026-0088', ep:'LTU', pill:'Completed', pillClass:'pill-active',
+    { id:'r4', name:'8131 Educ Cycle 2 — Midwifery Antenatal',      code:'REQ-2026-0088', ep:'LTU', pill:'Completed', pillClass:'pill-active',
       panel:{ type:'Request', sub:'Fulfilled', fields:[
         {l:'Education provider',v:'La Trobe University'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'Midwifery'},{l:'Placement type',v:'Antenatal'},{l:'Year level',v:'Year 2'},
@@ -1298,7 +1318,7 @@ const DATA = {
         {l:'Agency',v:'8131 Educ Cycle 2',cls:'link'},{l:'Status',v:'Placement active'},
         {l:'Linked placements',v:'Antenatal – La Trobe',cls:'link'},
       ], actions:['View request','View linked placements'] }},
-    { id:'r5', name:'REQ-2025-0310 — General Nursing',           code:'REQ-2025-0310', ep:'AH', pill:'Cancelled', pillClass:'pill-error',
+    { id:'r5', name:'Austin Health — General Nursing',               code:'REQ-2025-0310', ep:'AH', pill:'Cancelled', pillClass:'pill-error',
       panel:{ type:'Request', sub:'Cancelled', fields:[
         {l:'Education provider',v:'Austin Health'},{l:'Region',v:'Victoria'},
         {l:'Discipline',v:'General Nursing'},{l:'Placement type',v:'Clinical'},{l:'Year level',v:'Year 2'},
@@ -1378,18 +1398,26 @@ const TYPE_ICONS = {
 };
 
 // ── SEARCH LOGIC ───────────────────────────────────────────────────────────
+function matchesQuery(text, q) {
+  if (!text) return false;
+  const t = text.toLowerCase();
+  // Match at start of any word in the string
+  return t === q || t.startsWith(q) || t.includes(' ' + q) || t.includes('–' + q) || t.includes('— ' + q);
+}
+
 function search(q) {
   q = q.toLowerCase().trim();
   if (!q || q.length < 2) return [];
   return ALL_ENTITIES.filter(e => {
-    if (e.name.toLowerCase().includes(q)) return true;
-    if (e.code && e.code.toLowerCase().includes(q)) return true;
-    if (e.reqId && e.reqId.toLowerCase().includes(q)) return true;
-    if (e.group) {
-      const gs = e.group.toLowerCase();
-      if (gs.includes(q) || ('group ' + gs).includes(q)) return true;
-    }
-    if (e.email && e.email.toLowerCase().includes(q)) return true;
+    // Name — match at word boundaries only
+    if (matchesQuery(e.name, q)) return true;
+    // Student code — match from start
+    if (e.code && e.code.toLowerCase().startsWith(q)) return true;
+    // Placement/Request IDs — only match if query looks like a code (contains digit or dash)
+    if (e.code && /[\d-]/.test(q) && e.code.toLowerCase().includes(q)) return true;
+    if (e.reqId && /[\d-]/.test(q) && e.reqId.toLowerCase().includes(q)) return true;
+    // Email — match from start
+    if (e.email && e.email.toLowerCase().startsWith(q)) return true;
     return false;
   });
 }
@@ -1416,13 +1444,14 @@ function renderStudentRow(item) {
 
 function renderPlacementRow(item) {
   const q = currentQuery;
-  const student = pf(item,'Student') || pf(item,'Students') || '—';
-  const noStu = student === '—' || student.startsWith('No');
+  const student = pf(item,'Student') || pf(item,'Students') || '';
+  const noStu = !student || student.startsWith('No');
   const epCode = item.ep || pf(item,'EP Code') || '—';
   const flagHtml = item.flag
     ? `<span title="${item.flag}" style="color:var(--error);font-size:13px;cursor:default;">⚑</span>`
     : '';
   const pill = item.pill ? `<span class="status-pill ${item.pillClass}">${item.pill}</span>` : '';
+  const studentDisplay = noStu ? '—' : hl(student, q);
   return `
     <td><div class="fs-row-name" style="font-weight:600;color:#00193e">${hl(item.code, q)}</div><div class="fs-row-sub">${epCode}</div></td>
     <td class="muted">${hl(item.reqId, q) || '—'}</td>
@@ -1432,7 +1461,7 @@ function renderPlacementRow(item) {
     <td class="muted">${pf(item,'Year level') || '—'}</td>
     <td class="muted">${pf(item,'Duration') || '—'}</td>
     <td class="muted">${item.dates || '—'}</td>
-    <td class="${noStu?'warn':'muted'}">${hl(student, q)}</td>
+    <td class="muted">${studentDisplay}</td>
     <td>${pill}</td>
     <td style="text-align:center;width:36px;">${flagHtml}</td>
     <td><button class="fs-row-cta">View</button></td>`;
